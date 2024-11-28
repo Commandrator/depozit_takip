@@ -6,7 +6,7 @@ Bu bölümde, projenizin hangi sürümlerinin güvenlik güncellemeleriyle deste
 
 | Sürüm   | Destekleniyor      |
 | ------- | ------------------ |
-| 0.1.0   | :white_check_mark: |
+| 0.1.0   | alpha@depozito_takip |
 
 ## Güvenlik Açığı Bildirimi
 Bir güvenlik açığı bildirmek için bu bölümü kullanabilirsiniz.
