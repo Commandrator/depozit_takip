@@ -15,7 +15,3 @@ Güvenlik açığınızı nereye bildireceğinizi, bildirilen bir açığın ne 
 - Güvenlik açığınızı [talha_6152@hotmail.com](mailto:talha_6152@hotmail.com) adresine bildirebilirsiniz.
 - Bildirim aldıktan sonra 72 saat içinde geri dönüş sağlanacaktır.
 - Güvenlik açığınız kabul edilirse, mümkün olan en kısa sürede bir güncelleme yayımlanacaktır. Reddedilen bildirimlerde, açığın geçerli olmadığı veya çözülmesinin gereksiz olduğu belirtilecektir.
-
----
-
-Bu metin, güvenlik açığı bildirim sürecini ve desteklenen sürümleri anlatan bir güvenlik politikasının temel öğelerini içeriyor. İhtiyaçlarınıza göre özelleştirebilirsiniz.
