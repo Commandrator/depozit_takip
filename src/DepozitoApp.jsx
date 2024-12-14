@@ -2,19 +2,24 @@ import { Delete, Edit, Search, Check } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import { Box, Button, Grid, IconButton, Input } from "@mui/joy";
-import { Table, TableBody, TableHead, TableRow, TableCell, TableFooter, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Table, TableBody, TableHead, TableRow, TableCell, TableFooter, Menu, MenuItem, ListItemIcon, ListItemText, TableContainer } from "@mui/material";
 import { useCallback, useEffect, useState } from 'react';
 import useDate from './hooks/useDate.tsx';
-import useApp from './hooks/useApp.tsx';
+import useApp from './hooks/useApp.jsx';
 
 const DepozitoApp = () => {
     const [filterIsActive] = useState(false);
-    const { setList } = useApp();    
+    // const [customers, setCustomers] = useState();
+    const [value, setValue] = useState("");
+    const { setList } = useApp();
     const getListMemoized = useCallback(setList, [setList]);
     useEffect(() => {
         const load = async () => await getListMemoized();
         load();
     }, [getListMemoized]);
+    const handleChange = (e) => {
+        setValue(e.target.value)
+    }
     return (
         <Grid
             contianer
@@ -23,6 +28,8 @@ const DepozitoApp = () => {
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 2 }}>
                     <Input
                         fullWidth
+                        value={value}
+                        onChange={handleChange}
                         placeholder="Ad-soyad, telelfon, kimlik numarası ya da vergi numarası ile arayın..." />
                     <IconButton sx={{
                         ml: -5,
@@ -55,34 +62,38 @@ const DepozitoApp = () => {
                 </Box>
             </Grid>
             <Grid>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                Tarih
-                            </TableCell>
-                            <TableCell>
-                                Müşteri
-                            </TableCell>
-                            <TableCell>
-                                Depozito
-                            </TableCell>
-                            <TableCell>
-                                Adet
-                            </TableCell>
-                            <TableCell>
-                                İşlemler
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
+                <TableContainer sx={{ maxHeight: "75vh", overflowY: 'auto' }}>
+                    <Table size="small" stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell width="30px">
+                                    İndex
+                                </TableCell>
+                                <TableCell>
+                                    Tarih
+                                </TableCell>
+                                <TableCell>
+                                    Müşteri
+                                </TableCell>
+                                <TableCell>
+                                    Depozito
+                                </TableCell>
+                                <TableCell>
+                                    Adet
+                                </TableCell>
+                                <TableCell>
+                                    İşlemler
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <Load />
+                        </TableBody>
+                        <TableFooter>
 
-                        <Load />
-                    </TableBody>
-                    <TableFooter>
-
-                    </TableFooter>
-                </Table>
+                        </TableFooter>
+                    </Table>
+                </TableContainer>
             </Grid>
         </Grid>
     )
@@ -99,9 +110,9 @@ const Load = () => {
         load();
     }, [getListMemoized]);
     if (rowData.length > 0)
-        return rowData.map((udt, i) => <UserDataRow udt={udt} key={i} />);
+        return rowData.map((udt, i) => <UserDataRow udt={udt} key={i} i={i} />);
 }
-const UserDataRow = ({ udt }) => {
+const UserDataRow = ({ udt, i }) => {
     const [status, setStatus] = useState(0);
     const { comparisonOfTheDay, addDaysToDate } = useDate();
     //new Date(yıl,ay,gün,saat,dakika,saniye).toLocaleString()
@@ -126,6 +137,9 @@ const UserDataRow = ({ udt }) => {
                 status === 2 ? "yellow" :
                     status === 3 ? "red" : "transparent"
         }}>
+            <TableCell>
+                {i}
+            </TableCell>
             <TableCell>
                 {udt.date.toLocaleString()}
             </TableCell>

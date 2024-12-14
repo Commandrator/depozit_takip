@@ -1,14 +1,19 @@
-import App from '../conexts';
+import {AppProvider} from '../providers/index.tsx';
+import App from "../App/index.tsx"
 import DepozitoApp from '../DepozitoApp';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <App/>,
+      element: <AppProvider/>,
       children: [
         {
           index: true,
           element: <DepozitoApp />
+        },
+        {
+          path:"depozite",
+          element:<App/>
         }
       ]
     }
