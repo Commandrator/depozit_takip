@@ -1,6 +1,15 @@
-import {StrictMode} from 'react';
-import "./index.css"
+import {StrictMode, createElement} from 'react';
+import "./index.css";
 import {createRoot} from 'react-dom/client';
 import { routerProvider } from './router';
-const root = createRoot(document.getElementById('root'));
-root.render(<StrictMode children={routerProvider}/>);
+const root = document.createElement("div");
+root.id = "root";
+const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+root.style.backgroundColor = mediaQuery.matches ? "#023535" : "white";
+root.style.color = mediaQuery.matches ? "white" : "black";
+const portal = document.createElement("div");
+portal.id = "portal";
+const rootElement = createRoot(root);
+rootElement.render(createElement(StrictMode, {children:routerProvider}));
+document.body.appendChild(portal);
+document.body.appendChild(root);

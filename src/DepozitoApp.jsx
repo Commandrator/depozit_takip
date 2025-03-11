@@ -9,7 +9,6 @@ import useApp from './hooks/useApp.jsx';
 
 const DepozitoApp = () => {
     const [filterIsActive] = useState(false);
-    // const [customers, setCustomers] = useState();
     const [value, setValue] = useState("");
     const { setList } = useApp();
     const getListMemoized = useCallback(setList, [setList]);

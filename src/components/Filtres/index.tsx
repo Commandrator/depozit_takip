@@ -2,24 +2,17 @@ import React, { useState } from "react";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PropTypes from "prop-types";
-
-interface FilterItem {
-  label: string;
-  id: string;
-  value: string;
-}
-
-interface MultipleChociesProps {
-  title: string;
-  view: boolean;
-  items: FilterItem[];
-  filters: string[];
-  setFilters: (filters: any) => void;
-  notFount: React.ReactNode;
-  id: string;
-}
-
-const MultipleChocies: React.FC<MultipleChociesProps> = ({ title, view, items, filters, setFilters, notFount, id }) => {
+import MultipleChociesProps from "../../interfaces/MultipleChociesProps";
+import CreateSelectItemsWithCheckboxProps from "../../interfaces/CreateSelectItemsWithCheckboxProps";
+const MultipleChocies: React.FC<MultipleChociesProps> = ({
+  title,
+  view,
+  items,
+  filters,
+  setFilters,
+  notFount,
+  id,
+}) => {
   const [currentView, setView] = useState<boolean>(view);
 
   // Toggle the view state
@@ -29,7 +22,6 @@ const MultipleChocies: React.FC<MultipleChociesProps> = ({ title, view, items, f
 
   // Handle filter change, updates the selected filters
   const handleFilterChange = (filterValue: string) => {
-    // Directly set the new array of filters
     setFilters((prevFilters) => {
       const newFilters = [...prevFilters];
       const index = newFilters.indexOf(filterValue);
@@ -38,10 +30,22 @@ const MultipleChocies: React.FC<MultipleChociesProps> = ({ title, view, items, f
       } else {
         newFilters.push(filterValue); // Add filter if not selected
       }
-      return newFilters; // Return the updated filters array
+      return newFilters;
     });
   };
 
+  // Handle 'Select All' functionality
+  const handleSelectAll = () => {
+    // Check if all filters are currently selected
+    if (filters.length === items.length) {
+      // If all are selected, clear all
+      setFilters([]);
+    } else {
+      // If not all are selected, select all
+      const allValues = items.map((item) => item.value);
+      setFilters(allValues);
+    }
+  };
   return (
     <div className="px-2">
       <div className="flex justify-between items-center mb-1">
@@ -59,36 +63,42 @@ const MultipleChocies: React.FC<MultipleChociesProps> = ({ title, view, items, f
         </div>
       </div>
 
-      {currentView ? items.length ? (
-        <div
-          id="select-items"
-          className="border border-black w-full min-h-[25px] max-h-[200px] overflow-y-auto"
-        >
-          <ul>
-            {items.map((item, i) => (
+      {currentView ? (
+        items.length ? (
+          <div
+            id="select-items"
+            className="border border-black w-full min-h-[25px] max-h-[200px] overflow-y-auto"
+          >
+            <ul>
               <CreateSelectItemsWithCheckbox
-                label={item.label}
-                checked={filters.includes(item.value)}
-                value={item.value}
-                key={i}
-                onChange={handleFilterChange} // Pass the handler to child component
+                label={
+                  filters.length === items.length
+                    ? "Seçimleri Kaldır"
+                    : "Hepsini Seç"
+                }
+                checked={filters.length === items.length}
+                value="all"
+                onChange={handleSelectAll}
               />
-            ))}
-          </ul>
-        </div>
-      ) : (
-        notFount
-      ): null}
+              {/* Other Items */}
+              {items.map((item) => (
+                <CreateSelectItemsWithCheckbox
+                  label={item.label}
+                  checked={filters.includes(item.value)}
+                  value={item.value}
+                  key={item.id}
+                  onChange={handleFilterChange}
+                />
+              ))}
+            </ul>
+          </div>
+        ) : (
+          notFount
+        )
+      ) : null}
     </div>
   );
 };
-
-interface CreateSelectItemsWithCheckboxProps {
-  checked: boolean;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}
 
 const CreateSelectItemsWithCheckbox: React.FC<CreateSelectItemsWithCheckboxProps> = ({
   checked,

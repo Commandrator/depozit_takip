@@ -5,7 +5,6 @@ const App = () => {
     const [filters, setFilters] = useState<string[]>(['all']);
 
     const items = [
-      { label: "Hepsi", id: "1", value: "all" },
       { label: "İsim Soyisim", id: "2", value: "nameSurname" },
       { label: "Kimlik Numarası", id: "3", value: "tcId" },
       { label: "Vergi Numarası", id: "4", value: "taxId" },
@@ -22,7 +21,7 @@ const App = () => {
                         filters={filters}
                         setFilters={setFilters}
                         items={items}
-                        view={false}
+                        view={true}
                         notFount={<div>Bulunamadı</div>}/>
 
                 </div>

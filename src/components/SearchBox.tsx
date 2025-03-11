@@ -13,10 +13,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ filters }) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set("q", value); 
-    const filterType = urlParams.get("filters");
-    if (!filterType || filterType === "all") {
-      urlParams.set("filters", "all");
-    }
     const url = `${window.location.pathname}?${urlParams.toString()}`;
     window.history.pushState({}, "", url);
   },[value]);
