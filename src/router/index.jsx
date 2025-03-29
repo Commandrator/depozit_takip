@@ -10,6 +10,7 @@ import { Login, Panel, Register } from "../Auth/index.jsx";
 import AuthLayer from "../layers/AuthLayer.tsx";
 import PrivateLayer from "../layers/PrivateLayer.tsx";
 import CompanyMangement from "../Modules/DTS/company.management/index.tsx";
+import CompanyNav from "../components/SideBar/navbars/navbar.company.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -40,7 +41,8 @@ const router = createBrowserRouter([
               },
               {
                 path:"company",
-                element:<CompanyMangement/>
+                element:<CompanyMangement/>,
+                handle:{ nav: <CompanyNav /> }
               }
             ]
           }

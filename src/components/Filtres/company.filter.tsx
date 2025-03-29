@@ -5,7 +5,7 @@ import {
   AccountCircle,
   AdminPanelSettings,
 } from "@mui/icons-material";
-
+import {langPack} from "../..";
 interface CompanyFilterProps {
   readonly className?: string;
 }
@@ -33,7 +33,7 @@ export default function CompanyFilter({
         <div className="flex items-center gap-2">
           <Business fontSize="small" className="text-white" />
           <Typography variant="body1" className="text-white">
-            Hepsi
+            {langPack.all}
           </Typography>
         </div>
       </MenuItem>
@@ -41,7 +41,7 @@ export default function CompanyFilter({
         <div className="flex items-center gap-2">
           <AccountCircle fontSize="small" className="text-white" />
           <Typography variant="body1" className="text-white">
-            Sahip
+            {langPack.ownership}
           </Typography>
         </div>
       </MenuItem>
@@ -49,7 +49,7 @@ export default function CompanyFilter({
         <div className="flex items-center gap-2">
           <AdminPanelSettings fontSize="small" className="text-white" />
           <Typography variant="body1" className="text-white">
-            Yönetici
+            {langPack.executive}
           </Typography>
         </div>
       </MenuItem>

@@ -7,6 +7,8 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import useCompany from "../../hooks/useCompany";
+import { langPack, theme } from "../..";
 
 interface CreateCompanyDialogProps {
   dialogOpen: boolean;
@@ -17,58 +19,85 @@ const CreateCompanyDialog: React.FC<CreateCompanyDialogProps> = ({
   dialogOpen,
   handleDialogAction,
 }) => {
-  const [companyName, setCompanyName] = useState("");
-  const [companyAbout, setCompanyAbout] = useState("");
-  const [error, setError] = useState<string>("");
+  const [companyName, setCompanyName] = useState<string>("");
+  const [companyAbout, setCompanyAbout] = useState<string>("");
+  const [errors, setErrors] = useState<{ companyName?: string }>({});
+  const { createCompany } = useCompany();
 
-  const handleSave = () => {
-    if (!companyName || !companyAbout) {
-      setError("Şirket adı ve hakkında kısmı boş olamaz!");
+  // Save the company and handle errors
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent form refresh
+
+    let newErrors: { companyName?: string } = {};
+
+    // Validate company name
+    if (!companyName.trim()) {
+      newErrors.companyName = "Şirket adı boş olamaz!";
+    }
+
+    // If validation errors exist, update errors state
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
-    // Kaydetme işlemi burada yapılacak
-    console.log("Company Name:", companyName);
-    console.log("Company About:", companyAbout);
-    
-    // Dialogu kapat
-    handleDialogAction();
+    // Proceed with company creation
+    await createCompany({ name: companyName, about: companyAbout });
+    setErrors({}); // Reset errors after successful save
+    handleDialogAction(); // Close the dialog
   };
 
   return (
-    <Dialog open={dialogOpen} onClose={handleDialogAction} fullWidth maxWidth="md">
-      <DialogTitle>Şirket Oluştur</DialogTitle>
-      <DialogContent>
+    <Dialog
+      open={dialogOpen}
+      onClose={handleDialogAction}
+      fullWidth
+      maxWidth="md"
+    >
+      <DialogTitle
+        sx={{
+          backgroundColor: theme.background,
+          color: theme.text,
+          borderBottom: `1px solid ${theme.border}`,
+        }}
+      >
+        {langPack.create_company}
+      </DialogTitle>
+      <DialogContent
+        sx={{
+          backgroundColor: theme.background,
+          color: theme.text,
+        }}
+      >
         <TextField
+          required
           autoFocus
           margin="dense"
-          label="Şirket Adı"
+          label={langPack.company_name}
           type="text"
           fullWidth
           variant="outlined"
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
-          error={!!error}
-          helperText={error && error.includes("Şirket adı") ? error : ""}
+          error={!!errors.companyName}
+          helperText={errors.companyName}
         />
         <TextField
           margin="dense"
-          label="Hakkında"
+          label={langPack.about}
           type="text"
           fullWidth
           variant="outlined"
           value={companyAbout}
           onChange={(e) => setCompanyAbout(e.target.value)}
-          error={!!error}
-          helperText={error && error.includes("hakkında") ? error : ""}
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ backgroundColor: theme.background }}>
         <Button onClick={handleDialogAction} color="secondary">
-          İptal
+          {langPack.cancel}
         </Button>
         <Button onClick={handleSave} color="primary">
-          Kaydet
+          {langPack.save}
         </Button>
       </DialogActions>
     </Dialog>

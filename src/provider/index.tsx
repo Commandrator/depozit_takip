@@ -7,13 +7,13 @@ import { GlobalAlert } from "../components/Alert/index.tsx";
 import DetailDTO from "../interfaces/alert.detil.dto.ts";
 import useApp from "../hooks/useApp.jsx";
 const AppProvider: React.FC = () => {
-  const {validateSession} = useApp();
+  const { validateSession } = useApp();
   const [depositList, setDepositList] = useState<any[]>();
   const [auth, setAuth] = useState<UserDTO>();
   const [usable, setUsable] = useState(false);
   const [open, setOpen] = useState(false);
   const [detail, setDetail] = useState<DetailDTO>();
-  const [navchildern, setNavchildern] = useState<React.ReactNode | undefined>();
+  const [change, setChange] = useState(false);
   useEffect(() => {
     const loadData = async () => {
       const verified = await validateSession();
@@ -22,7 +22,7 @@ const AppProvider: React.FC = () => {
         if (authData) {
           try {
             const parsedAuth = JSON.parse(authData);
-            if (typeof parsedAuth === 'object' && parsedAuth !== null) {
+            if (typeof parsedAuth === "object" && parsedAuth !== null) {
               setAuth(parsedAuth);
             } else {
               throw new Error("Geçersiz auth verisi");
@@ -45,10 +45,10 @@ const AppProvider: React.FC = () => {
       setAuth,
       setOpen,
       setDetail,
-      navchildern,
-      setNavchildern
+      change,
+      setChange,
     }),
-    [depositList, navchildern, setNavchildern, auth, setOpen, setDetail]
+    [depositList, auth, setOpen, setDetail, change, setChange]
   );
   return (
     <AppContext.Provider value={value}>

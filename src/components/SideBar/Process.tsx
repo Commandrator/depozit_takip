@@ -2,12 +2,9 @@ import React, { ReactNode, useState } from "react";
 import { Divider, List, ListItem, ListItemButton, ListItemIcon } from "@mui/material";
 import { Folder, NavigateNext } from "@mui/icons-material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import useApp from "../../hooks/useApp";
 const ProcessList = ({ processes, sidebarClose, level = 0 }) => {
   const [viewList, setViewList] = useState<boolean>(false);
-  const {setNavchildern} = useApp();
   const handleClick = (path: string | undefined, nav:ReactNode | undefined) => {
-    if(nav) setNavchildern(nav);
     if (path) sidebarClose(path);
     else setViewList((prev) => !prev);
   };

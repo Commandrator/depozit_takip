@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from "react-router-dom";
 const useApp = () => {
   const navigate = useNavigate();
-  const { depositList, setDepositList, navchildern, setNavchildern } = useContext(AppContext);
+  const { depositList, setDepositList} = useContext(AppContext);
   const { addDaysToDate } = useDate();
   const getList = useCallback(() => {
     return depositList;
@@ -98,9 +98,7 @@ const useApp = () => {
     getList,
     setList,
     navigate,
-    CreatePortal,
-    navchildern,
-    setNavchildern
+    CreatePortal
   };
 };
 

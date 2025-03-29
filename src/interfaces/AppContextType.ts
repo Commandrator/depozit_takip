@@ -5,10 +5,11 @@ interface AppContextType {
     depositList: any[] | undefined;
     setDepositList: React.Dispatch<React.SetStateAction<any[] | undefined>>;
     auth: User | undefined;
+    change: boolean;
     setAuth: React.Dispatch<React.SetStateAction<User | undefined>>;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;    
+    setChange: React.Dispatch<React.SetStateAction<boolean>>;
     setDetail: React.Dispatch<React.SetStateAction<DetailDTO | undefined>>;
-    navchildern: React.ReactNode | undefined;
-    setNavchildern: React.Dispatch<React.SetStateAction<React.ReactNode | undefined>>;
+
 }
 export default AppContextType;

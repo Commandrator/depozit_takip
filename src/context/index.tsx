@@ -7,8 +7,8 @@ const AppContext = React.createContext<AppContextType>({
   setAuth: () => {}, // Başlangıçta boş fonksiyon
   setOpen: () => {}, // Başlangıçta boş fonksiyon
   setDetail: () => {}, // Başlangıçta boş fonksiyon
-  navchildern: undefined, // Başlangıçta undefined
-  setNavchildern: () => {}, // Başlangıçta boş fonksiyon
+  change: false, // Başlangıçta false
+  setChange: () => {}, // Başlangıçta boş fonksiyon
 });
 
 export default AppContext;

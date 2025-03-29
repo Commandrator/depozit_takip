@@ -14,13 +14,12 @@ import useApp from "../../hooks/useApp.jsx";
 import ProcessList from "./Process.tsx";
 import paths from "./paths/paths.dts.tsx";
 interface DrawerScrollableSideBarProps {
-  readonly childern?: ReactNode;
+  readonly children?: ReactNode;
 }
-function DrawerScrollableSideBar({ childern }: DrawerScrollableSideBarProps) {
+function DrawerScrollableSideBar({ children }: DrawerScrollableSideBarProps) {
   const { auth, logout } = useApp();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-
   const sidebarClose = (path: string | undefined) => {
     if (path) navigate(path);
     setOpen(false);
@@ -38,7 +37,7 @@ function DrawerScrollableSideBar({ childern }: DrawerScrollableSideBarProps) {
             </IconButton>
           </div>
           <div id="secound">
-          {childern}
+          {children}
           </div>
         </div>
       </div>

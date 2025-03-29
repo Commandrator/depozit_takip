@@ -20,7 +20,7 @@ const LoginForm = () => {
           onChange={(e) => setUserInfo(e.target.value)}
           type="text"
           className="mt-5 w-full rounded-lg h-[40px] text-xl p-2 text-black"
-          placeholder="Kullanıcı adı veya e-posta adresi text-black"
+          placeholder="Kullanıcı adı veya e-posta adresi"
         />
         <input
           type="password"
