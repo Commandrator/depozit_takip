@@ -32,7 +32,9 @@ const packages ={
         "company_management":"Şirket Yönetimi",
         "all":"Hepsi",
         "ownership":"Sahip",
-        "executive":"Yönetici"
+        "executive":"Yönetici",
+        "enter_letters_and_numbers_only":"Yalnızca harf ve rakam giriniz.",
+        "company_name_cannot_be_blank":"Şirket adı boş olamaz!"
     },
     "en":{
         

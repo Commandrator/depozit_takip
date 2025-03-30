@@ -1,20 +1,8 @@
 import { useCallback, useContext } from "react";
 import AppContext from "../context/index.tsx";
-
+import returnSeverity from "./useAPI.ts"
 const useCompany = () => {
   const { setOpen, setDetail, change, setChange } = useContext(AppContext);
-  const returnSeverity = (status) => {
-    switch (status) {
-      case 400:
-        return "warning";
-      case 500:
-        return "error";
-      default:
-        return "error";
-    }
-  };
-
-
   const listCompanys = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:3000/app/admin/company", {
@@ -190,5 +178,5 @@ const useCompany = () => {
     setChange
   };
 };
-
+export {returnSeverity}
 export default useCompany;

@@ -5,7 +5,7 @@ import {
   AccountCircle,
   AdminPanelSettings,
 } from "@mui/icons-material";
-import {langPack} from "../..";
+import {langPack, theme} from "../..";
 interface CompanyFilterProps {
   readonly className?: string;
 }
@@ -23,8 +23,8 @@ export default function CompanyFilter({
       MenuProps={{
         PaperProps: {
           sx: {
-            bgcolor: "rgb(30, 41, 59)", // Tailwind slate-700 rengini kullandım
-            color: "white",
+            bgcolor: theme.background,
+            color: theme.text
           },
         },
       }}
