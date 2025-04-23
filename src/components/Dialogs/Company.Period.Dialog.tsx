@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Close, Add } from "@mui/icons-material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Paper,
   Typography,
-  TextField
+  TextField,
+  ButtonGroup,
+  Tooltip,
+  IconButton,
+  Button,
+  Stack,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Divider,
 } from "@mui/material";
 import { langPack, theme } from "../../index.jsx";
 import usePeriod from "../../hooks/usePeriod.tsx";
@@ -16,15 +26,27 @@ import PeriodDTO from "../../interfaces/period.dto.ts";
 const CompanyPeriodDialog = ({
   dialogOpen,
   handleDialogAction,
-  company,
+  // company,
   selectedCompanyId,
 }) => {
-  const { listPeriods, change, setChange } = usePeriod();
+  const { listPeriods, change, setChange, createPeriod } = usePeriod();
   const [periods, setPeriods] = useState<PeriodDTO[] | undefined>();
   const [viewCreate, setViewCreate] = useState<boolean>(false);
-    // const [companyName, setCompanyName] = useState<string>("");
-    // const [companyAbout, setCompanyAbout] = useState<string>("");
-    // const [errors, setErrors] = useState<{ companyName?: string, companyAbout?:string }>({});
+  const [deadline, setDeadline] = useState<string>(() => {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() + 1);
+    return date.toISOString().split("T")[0]; // YYYY-MM-DD formatı
+  });
+  const [periodName, setperiodName] = useState<string>(() => {
+    const currentYear = new Date().getFullYear();
+    return `${currentYear} - ${currentYear + 1} `.concat(
+      langPack.working_period
+    );
+  });
+  const [errors, setErrors] = useState<{
+    deadline?: string;
+    periodName?: string;
+  }>({});
   useEffect(() => {
     const loader = async () => {
       if (change) {
@@ -36,47 +58,41 @@ const CompanyPeriodDialog = ({
       }
     };
     loader();
-  }, [listPeriods, setPeriods]);
-    // Save the company and handle errors
-    // const handleSave = async (e: React.FormEvent) => {
-    //   e.preventDefault(); // Prevent form refresh
-  
-    //   let newErrors: { companyName?: string } = {};
-  
-    //   // Validate company name
-    //   if (!companyName.trim()) {
-    //     newErrors.companyName = langPack.company_name_cannot_be_blank;
-    //   }
-  
-    //   // If validation errors exist, update errors state
-    //   if (Object.keys(newErrors).length > 0) {
-    //     setErrors(newErrors);
-    //     return;
-    //   }
-  
-    //   // Proceed with company creation
-    //   // await createCompany({ name: companyName, about: companyAbout });
-    //   setErrors({}); // Reset errors after successful save
-    //   handleDialogAction(); // Close the dialog
-    // };
-    // const isValidCompanyName = (
-    //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    //   setvalueSetter: (value: string) => void,
-    //   errorOption:string,
-    //   message:string
-    // ) => {
-    //   const value = e.target.value;
-    //   const regex = /^[a-zA-ZçğıöşüÇĞİÖŞÜ0-9 ]+$/; // Boş girişleri ve sadece boşlukları engelle
-    //   if (regex.test(value)) {
-    //     setvalueSetter(value);
-    //     setErrors((prev) => ({ ...prev, [errorOption]: "" })); // Hata varsa kaldır
-    //   } else {
-    //     setErrors((prev) => ({
-    //       ...prev,
-    //       [errorOption]: message,
-    //     }));
-    //   }
-    // };
+  }, [listPeriods, setPeriods, setChange, change, selectedCompanyId]);
+  // Save the company and handle errors
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let newErrors: { deadline?: string; periodName?: string } = {};
+
+    if (!periodName.trim())
+      newErrors.periodName = langPack.company_name_cannot_be_blank;
+
+    if (!deadline.trim())
+      newErrors.deadline = langPack.company_name_cannot_be_blank;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    await createPeriod(selectedCompanyId, { name: periodName, deadline });
+    setErrors({});
+    handleDialogAction();
+  };
+  const isValidCompanyName = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    setValue: (value: string) => void,
+    errorKey: string,
+    message: string,
+    regex: RegExp // düzeltildi: string değil RegExp
+  ) => {
+    const value = e.target.value;
+    const isValid = regex.test(value);
+    setValue(value);
+    setErrors((prev) => ({
+      ...prev,
+      [errorKey]: isValid ? "" : message,
+    }));
+  };
   return (
     <Dialog
       open={dialogOpen}
@@ -96,16 +112,26 @@ const CompanyPeriodDialog = ({
         }}
       >
         <span>{langPack.company_periods}</span>
-
-        <Button
-          endIcon={viewCreate ? <Close /> : <Add />}
-          color="inherit"
-          onClick={() => {
-            setViewCreate((prev) => !prev);
-          }}
-        >
-          <Typography>{viewCreate ? "Vazgeç" : "Oluştur"}</Typography>
-        </Button>
+        <ButtonGroup>
+          <Tooltip title={langPack[viewCreate ? "back" : "create"]}>
+            <IconButton
+              sx={{ mb: 2, mr: 2, color: theme.menuItem.color }}
+              onClick={() => {
+                setViewCreate((prev) => !prev);
+              }}
+            >
+              {viewCreate ? <ChevronLeftIcon /> : <Add />}
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={langPack.close}>
+            <IconButton
+              sx={{ mb: 2, mr: 2, color: theme.menuItem.color }}
+              onClick={handleDialogAction}
+            >
+              <Close />
+            </IconButton>
+          </Tooltip>
+        </ButtonGroup>
       </DialogTitle>
       {viewCreate ? (
         <DialogContent
@@ -115,7 +141,7 @@ const CompanyPeriodDialog = ({
             color: theme.text,
           }}
         >
-           <Paper
+          <Paper
             elevation={3}
             sx={{
               p: 2,
@@ -125,39 +151,61 @@ const CompanyPeriodDialog = ({
               border: `1px solid ${theme.border}`,
             }}
           >
-             {/* <TextField
-                  sx={{ "& .MuiInputBase-input": { color: theme.text } }}
-                  required
-                  autoFocus
-                  margin="dense"
-                  autoComplete="off"
-                  label={langPack.company_name}
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={companyName}
-                  onChange={(e) => isValidCompanyName(e, setCompanyName, "companyName", langPack.enter_letters_and_numbers_only)}
-                  error={!!errors.companyName}
-                  helperText={errors.companyName}
-                />
-                 <TextField
-                  sx={{ "& .MuiInputBase-input": { color: theme.text } }}
-                  required
-                  autoFocus
-                  margin="dense"
-                  autoComplete="off"
-                  label={langPack.company_name}
-                  type="date"
-                  fullWidth
-                  variant="outlined"
-                  value={companyName}
-                  onChange={(e) => isValidCompanyName(e, setCompanyName, "companyName", langPack.enter_letters_and_numbers_only)}
-                  error={!!errors.companyName}
-                  helperText={errors.companyName}
-                /> */}
+            <TextField
+              sx={{ "& .MuiInputBase-input": { color: theme.text } }}
+              required
+              autoFocus
+              margin="dense"
+              autoComplete="off"
+              label={langPack.period_name}
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={periodName}
+              onChange={(e) =>
+                isValidCompanyName(
+                  e,
+                  setperiodName,
+                  "periodName",
+                  langPack.enter_letters_and_numbers_only,
+                  /^[a-zA-ZçğıöşüÇĞİÖŞÜ0-9 ]+$/
+                )
+              }
+              error={!!errors.periodName}
+              helperText={errors.periodName}
+            />
+            <TextField
+              sx={{ "& .MuiInputBase-input": { color: theme.text } }}
+              required
+              autoFocus
+              margin="dense"
+              autoComplete="off"
+              label={langPack.expiration_date}
+              type="date"
+              fullWidth
+              variant="outlined"
+              value={deadline}
+              onClick={(e) => {
+                const input = e.currentTarget.querySelector("input");
+                if (input && "showPicker" in input) {
+                  (input as any).showPicker();
+                }
+              }}
+              onChange={(e) =>
+                isValidCompanyName(
+                  e,
+                  setDeadline,
+                  "deadline",
+                  langPack.invalid_date_format,
+                  /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
+                )
+              }
+              error={!!errors.deadline}
+              helperText={errors.deadline}
+            />
           </Paper>
         </DialogContent>
-        ) : (
+      ) : (
         <DialogContent
           className="space-y-5"
           sx={{
@@ -189,28 +237,29 @@ const CompanyPeriodDialog = ({
               border: `1px solid ${theme.border}`,
             }}
           >
-            {periods
-              ? periods.map((period) => (
-                  <PeriodItem period={period} key={period.id} />
-                ))
-              : null}
+            <Stack spacing={2}>
+              {periods?.map((period) => (
+                <PeriodItem key={period.id} period={period} />
+              ))}
+            </Stack>
           </Paper>
         </DialogContent>
       )}
-      <DialogActions sx={{ backgroundColor: theme.background }}>
-        <Button
-          endIcon={<Close />}
-          color="error"
-          variant="contained"
-          sx={{
-            mb: 2,
-            mr: 2,
-          }}
-          onClick={handleDialogAction}
-        >
-          {langPack.close}
-        </Button>
-      </DialogActions>
+      {viewCreate ? (
+        <DialogActions sx={{ backgroundColor: theme.background }}>
+          <Button
+            variant="outlined"
+            color="inherit"
+            sx={{
+              borderRadius: "20px", // Modern, yumuşak köşeler için ideal
+              right: "14px",
+              color: theme.text,
+            }}
+            onClick={handleSave}
+            children={langPack.save}
+          />
+        </DialogActions>
+      ) : null}
     </Dialog>
   );
 };
@@ -224,24 +273,64 @@ const PeriodItem: React.FC<{ period: PeriodDTO }> = ({ period }) => {
   ); // Negatif olmamalı
 
   return (
-    <div className="relative backdrop-blur-sm hover:bg-opacity-25 bg-opacity-10 bg-white text-white rounded-lg shadow-md p-2">
-      <h3 className="text-lg font-semibold text-white">{period.name}</h3>
-      <div className="mt-1 text-sm">
-        <Typography sx={{ color: theme.text }} variant="body2">
-          <span className="text-gray-400">Oluşturulma:</span>{" "}
-          {new Date(period.creation_date).toLocaleDateString()}
-        </Typography>
-        <Typography sx={{ color: theme.text }} variant="body2">
-          <span className="text-gray-400">Güncelleme:</span>{" "}
-          {new Date(period.last_update).toLocaleDateString()}
-        </Typography>
-        <Typography sx={{ color: theme.text }} variant="body2">
-          <span className="text-gray-400">Son Tarih:</span>{" "}
-          {new Date(period.deadline).toLocaleDateString()} ({daysRemaining} gün
-          kaldı)
-        </Typography>
-      </div>
-    </div>
+    <Accordion
+      sx={{
+        backgroundColor: theme.card.backgroundColor, // Accordion arka plan rengi
+        color: theme.text, // Yazı rengi
+        borderRadius: "12px",
+        border: `1px solid ${theme.border}`, // Border rengi
+        "&.Mui-expanded": {
+          backgroundColor: theme.background, // Açıldığında Accordion tüm kısmı aynı arka planı alır
+        },
+      }}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        sx={{
+          backgroundColor: theme.card.backgroundColor, // Summary kısmının arka plan rengi
+          color: theme.text, // Yazı rengi
+          borderRadius: "12px",
+          padding: "4px 16px", // Padding
+          opacity: 0.5, // Soluk başlangıç
+          transition: "opacity 0.3s ease", // Yalnızca opacity geçişi
+          "&:hover": {
+            opacity: 1, // Hover durumunda netleşme
+          },
+          "&.Mui-expanded": {
+            opacity: 1,
+            backgroundColor: theme.background, // Açıldığında Accordion tüm kısmı aynı arka planı alır
+          },
+        }}
+      >
+        <Typography component="span">{period.name} 
+        <Divider
+          sx={{ borderColor: theme.text, borderWidth: 1, elevation: 12 }}
+        /></Typography>
+      </AccordionSummary>
+      <AccordionDetails
+        sx={{
+          backgroundColor: theme.background, // Details kısmının arka plan rengi (Summary ile aynı)
+          color: theme.text, // Yazı rengi
+          padding: "10px 16px",
+        }}
+      >
+        <div className="mt-1 text-sm">
+          <Typography sx={{ color: theme.text }} variant="body2">
+            <span className="text-gray-400">Oluşturulma:</span>{" "}
+            {new Date(period.creation_date).toLocaleDateString()}
+          </Typography>
+          <Typography sx={{ color: theme.text }} variant="body2">
+            <span className="text-gray-400">Güncelleme:</span>{" "}
+            {new Date(period.last_update).toLocaleDateString()}
+          </Typography>
+          <Typography sx={{ color: theme.text }} variant="body2">
+            <span className="text-gray-400">Son Tarih:</span>{" "}
+            {new Date(period.deadline).toLocaleDateString()} ({daysRemaining}{" "}
+            gün kaldı)
+          </Typography>
+        </div>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 

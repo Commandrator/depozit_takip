@@ -101,7 +101,7 @@ const MenuItemComponent: React.FC<{ item: any; handleAction: any }> = ({
   <MenuItem
     onClick={() => handleAction(item.action)}
     sx={{
-      color: item.color ? item.color : theme.menuItem,
+      color: item.color ?? theme.menuItem,
     }}
   >
     <ListItemIcon

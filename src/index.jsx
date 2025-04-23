@@ -9,6 +9,7 @@ root.id = "root";
 const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 document.body.style.backgroundColor = mediaQuery.matches ? "#023535" : "white";
 document.body.style.color = mediaQuery.matches ? "white" : "black";
+document.body.classList.add("custom-scrollbar");
 const browserLanguage = navigator.language;
 const portal = document.createElement("div");
 portal.id = "portal";

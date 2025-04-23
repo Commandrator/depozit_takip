@@ -34,7 +34,12 @@ const packages ={
         "ownership":"Sahip",
         "executive":"Yönetici",
         "enter_letters_and_numbers_only":"Yalnızca harf ve rakam giriniz.",
-        "company_name_cannot_be_blank":"Şirket adı boş olamaz!"
+        "company_name_cannot_be_blank":"Şirket adı boş olamaz!",
+        "period_name":"Dönem Başlığı",
+        "expiration_date":"Sonlanma Tarihi",
+        "create":"Oluştur",
+        "back":"Geri",
+        "working_period":"Çalışma Dönemi"
     },
     "en":{
         
