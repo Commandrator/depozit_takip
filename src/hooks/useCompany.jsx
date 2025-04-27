@@ -26,8 +26,6 @@ const useCompany = () => {
       return null;
     }
   }, [setOpen, setDetail, setChange]);
-
-
   const getCompanyDetail = useCallback(
     async (id) => {
       try {

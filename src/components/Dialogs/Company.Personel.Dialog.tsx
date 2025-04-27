@@ -14,7 +14,16 @@ const PersonelDialog = (props: PersonelDialogProps) => {
   const { dialogOpen, handleDialogAction, selectedCompanyId, company } = props;
 
   return (
-    <Dialog open={dialogOpen} onClose={handleDialogAction}>
+    <Dialog
+      open={dialogOpen}
+      onClose={handleDialogAction}
+      maxWidth="md"
+      sx={{
+        "& .MuiDialog-paper": {
+          minWidth: "400px",
+        },
+      }}
+    >
       <DialogTitle
         sx={{
           backgroundColor: theme.background,
@@ -22,7 +31,7 @@ const PersonelDialog = (props: PersonelDialogProps) => {
           borderBottom: `1px solid ${theme.border}`,
         }}
       >
-        {company.name}
+        {company.name}asdasds
       </DialogTitle>
       <DialogContent
         sx={{

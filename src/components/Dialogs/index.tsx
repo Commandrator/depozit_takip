@@ -34,7 +34,6 @@ const CompanyDialog = ({
           <CompanyPeriodDialog
             dialogOpen={dialogOpen}
             handleDialogAction={handleDialogAction}
-            company={company}
             selectedCompanyId={selectedCompanyId}
           />
         );

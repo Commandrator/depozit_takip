@@ -39,7 +39,11 @@ const packages ={
         "expiration_date":"Sonlanma Tarihi",
         "create":"Oluştur",
         "back":"Geri",
-        "working_period":"Çalışma Dönemi"
+        "working_period":"Çalışma Dönemi",
+        "number_of_days_remaining":"Kalan Gün Sayısı",
+        "period_delete_message":"Dönemin silinebilmesi için, sağ alt köşede bulunan \"Proje Başlığı\" alanının eksiksiz şekilde doldurulması gerekmektedir. Silme işlemi tamamlandıktan sonra geri alınamaz.",
+        "add_a_period_title":"Henüz bir dönem bulunamadı",
+        "add_a_period_subtitle":"Yeni bir dönem oluşturmak için yukarıdaki butona tıklayın."
     },
     "en":{
         
