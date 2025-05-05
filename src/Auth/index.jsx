@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth.tsx";
 import { LoginForm, LoginWithSavedAccounts } from "../components/Forms/index.tsx";
-import useApp from "../hooks/useApp.jsx";
+import useApp from "../hooks/useApp.tsx";
 const Login = () => {
   const { auth } = useAuth();
   const {validateSession} = useApp();

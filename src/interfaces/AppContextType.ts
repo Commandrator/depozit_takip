@@ -13,6 +13,9 @@ interface AppContextType {
     setDetail: React.Dispatch<React.SetStateAction<DetailDTO | undefined>>;    
     selectedOption: Role;
     setSelectedOption: React.Dispatch<React.SetStateAction<Role>>;
-
+    dialogOpen:boolean;
+    setDialogOpen:React.Dispatch<React.SetStateAction<boolean>>;
+    defaultNavActive:boolean;
+    setDefaultNavActive:React.Dispatch<React.SetStateAction<boolean>>;
 }
 export default AppContextType;

@@ -3,7 +3,7 @@ import React from "react";
 import {
   Business,
   AccountCircle,
-  AdminPanelSettings,
+  Edit
 } from "@mui/icons-material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { langPack, theme } from "../..";
@@ -45,9 +45,9 @@ export default function CompanyFilter({
       </MenuItem>
       <MenuItem value="editor">
         <div className="flex items-center gap-2">
-          <AdminPanelSettings fontSize="small" className="text-white" />
+          <Edit fontSize="small" className="text-white" />
           <Typography variant="body1" className="text-white">
-            {langPack.executive}
+            {langPack.editor}
           </Typography>
         </div>
       </MenuItem>
@@ -55,7 +55,7 @@ export default function CompanyFilter({
         <div className="flex items-center gap-2">
           <VisibilityIcon fontSize="small" className="text-white" />
           <Typography variant="body1" className="text-white">
-            {langPack.executive}
+            {langPack.viewer}
           </Typography>
         </div>
       </MenuItem>

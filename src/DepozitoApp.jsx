@@ -5,7 +5,7 @@ import { Box, Button, Grid, IconButton, Input } from "@mui/joy";
 import { Table, TableBody, TableHead, TableRow, TableCell, TableFooter, Menu, MenuItem, ListItemIcon, ListItemText, TableContainer } from "@mui/material";
 import { useCallback, useEffect, useState } from 'react';
 import useDate from './hooks/useDate.tsx';
-import useApp from './hooks/useApp.jsx';
+import useApp from './hooks/useApp.tsx';
 
 const DepozitoApp = () => {
     const [filterIsActive] = useState(false);

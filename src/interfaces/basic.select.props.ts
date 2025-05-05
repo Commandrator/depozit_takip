@@ -1,5 +1,5 @@
-import React from "react";
+import { SelectChangeEvent } from "@mui/material/Select";
 export default interface BasicSelectProps {
     range: string,
-    setRange: React.Dispatch<React.SetStateAction<string>>
+    handleChangeRange: (event: SelectChangeEvent) => void;
 }

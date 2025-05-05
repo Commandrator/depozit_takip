@@ -3,11 +3,10 @@ import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import { langPack, theme } from "..";
 import BasicSelectProps from "../interfaces/basic.select.props";
-const BasicSelect = ({ range, setRange }: BasicSelectProps) => {
-  const handleChange = (event: SelectChangeEvent) => setRange(event.target.value);
+const BasicSelect = ({ range, handleChangeRange }: BasicSelectProps) => {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
@@ -31,7 +30,7 @@ const BasicSelect = ({ range, setRange }: BasicSelectProps) => {
           id="load-list"
           value={range.toString()}
           label={langPack.load_range}
-          onChange={handleChange}
+          onChange={handleChangeRange}
           sx={{
             color: theme.text,
             backgroundColor: "transparent",

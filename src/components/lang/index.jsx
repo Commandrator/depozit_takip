@@ -44,7 +44,11 @@ const packages ={
         "period_delete_message":"Dönemin silinebilmesi için, sağ alt köşede bulunan \"Proje Başlığı\" alanının eksiksiz şekilde doldurulması gerekmektedir. Silme işlemi tamamlandıktan sonra geri alınamaz.",
         "add_a_period_title":"Henüz bir dönem bulunamadı",
         "add_a_period_subtitle":"Yeni bir dönem oluşturmak için yukarıdaki butona tıklayın.",
-        "load_range":"Yükleme Aralığı"
+        "load_range":"Yükleme Aralığı",
+        "viewer":"Görüntüleyici",
+        "editor":"Düzenleyici",
+        "no_results_found":"Sonuç Bulunamadı.",
+        "view":"Görüntüle"
     },
     "en":{
         

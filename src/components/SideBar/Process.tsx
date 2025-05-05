@@ -1,16 +1,26 @@
-import React, { ReactNode, useState } from "react";
-import { Divider, List, ListItem, ListItemButton, ListItemIcon } from "@mui/material";
+import React, { ReactNode, useState, cloneElement } from "react";
+import {
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+} from "@mui/material";
 import { Folder, NavigateNext } from "@mui/icons-material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import { theme } from "../..";
 const ProcessList = ({ processes, sidebarClose, level = 0 }) => {
   const [viewList, setViewList] = useState<boolean>(false);
-  const handleClick = (path: string | undefined, nav:ReactNode | undefined) => {
+  const handleClick = (
+    path: string | undefined,
+    nav: ReactNode | undefined
+  ) => {
     if (path) sidebarClose(path);
     else setViewList((prev) => !prev);
   };
   return (
     <List disablePadding dense sx={{ pl: level * 2, m: 0, p: 0 }}>
-      {processes.map((process, index) => (
+      {processes.map((process) => (
         <ListItem
           key={process.id}
           sx={{
@@ -18,7 +28,7 @@ const ProcessList = ({ processes, sidebarClose, level = 0 }) => {
             flexDirection: "column",
             alignItems: "flex-start",
             paddingY: 0,
-            marginY: 0
+            marginY: 0,
           }}
         >
           <div className="flex items-center w-full">
@@ -27,12 +37,14 @@ const ProcessList = ({ processes, sidebarClose, level = 0 }) => {
                 viewList ? (
                   <FolderOpenIcon />
                 ) : (
-                  <Folder />
+                  <Folder sx={{ color: theme.menuItem.color }} />
                 )
               ) : process.icon ? (
-                process.icon
+                cloneElement(process.icon, {
+                  sx: { color: theme.menuItem.color },
+                })
               ) : (
-                <NavigateNext />
+                <NavigateNext sx={{ color: theme.menuItem.color }} />
               )}
             </ListItemIcon>
             <ListItemButton
@@ -48,7 +60,9 @@ const ProcessList = ({ processes, sidebarClose, level = 0 }) => {
               {process.label}
             </ListItemButton>
           </div>
-          {process.children && process.children.length > 0 && <Divider sx={{ width: "100%" }} />}
+          {process.children && process.children.length > 0 && (
+            <Divider sx={{ width: "100%" }} />
+          )}
           {viewList && process.children && process.children.length > 0 && (
             <ProcessList
               processes={process.children}
