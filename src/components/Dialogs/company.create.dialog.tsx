@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Close, Save } from "@mui/icons-material";
-import useCompany from "../../hooks/useCompany";
+import useCompany from "../../hooks/useCompany.tsx";
 import { langPack, theme } from "../..";
 
 interface CreateCompanyDialogProps {

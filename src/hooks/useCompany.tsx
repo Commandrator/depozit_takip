@@ -1,20 +1,45 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import AppContext from "../context/index.tsx";
-import returnSeverity from "./useAPI.ts"
+import returnSeverity from "./useAPI.ts";
+import CompaniesDTO from "../interfaces/User.Companies.dto";
+import { CompanyDTO } from "../interfaces/CompanyDTO.ts";
+import { Companies } from "../classes/copanies.ts";
+import { Role, RoleEnum } from "../interfaces/role.type.ts";
 const useCompany = () => {
-  const { setOpen, setDetail, change, setChange } = useContext(AppContext);
-  const listCompanys = useCallback(async () => {
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
+    null
+  );
+  const {
+    setOpen,
+    setDetail,
+    change,
+    setChange,
+    selectedOption,
+    setSelectedOption,
+  } = useContext(AppContext);
+  const [companys, setCompanys] = useState<CompaniesDTO | null>(null);
+  const [company, setCompany] = useState<CompanyDTO>();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogType, setDialogType] = useState<string>("info");
+  const [range, setRange] = useState<string>("10");
+  const listCompanys = async (min?: number, max?: number) => {
     try {
-      const response = await fetch("http://localhost:3000/app/admin/company", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-
+      const params = new URLSearchParams();
+      if (min) params.set("min", String(min));
+      if (max) params.set("max", String(max));
+      if (selectedOption !== "all") params.set("role", String(selectedOption));
+      const response = await fetch(
+        `http://localhost:3000/app/admin/company?${params}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
-        setChange(false); // Veri başarıyla alındı, değişim durumunu sıfırla
-        return data;
+        setChange(false);
+        setCompanys(new Companies(data));
       } else {
         const message = await response.json();
         let severity = returnSeverity(response.status);
@@ -25,7 +50,7 @@ const useCompany = () => {
       console.error("Network Error:", error);
       return null;
     }
-  }, [setOpen, setDetail, setChange]);
+  };
   const getCompanyDetail = useCallback(
     async (id) => {
       try {
@@ -55,7 +80,6 @@ const useCompany = () => {
     },
     [setOpen, setDetail, setChange]
   );
-
   const deleteCompany = useCallback(
     async (id) => {
       try {
@@ -67,21 +91,20 @@ const useCompany = () => {
             credentials: "include",
           }
         );
-  
+
         let title = "";
         let severity = returnSeverity(response.status);
         let resData = await response.json();
-  
+
         if (response.ok) {
           setChange(true); // Silme işlemi sonrası değişim
           title = "Silme işlemi başarılı";
         } else {
           title = "Silme esnasında bir hata oluştu.";
         }
-  
+
         setDetail({ title, severity, message: resData.message });
         setOpen(true);
-  
       } catch (error) {
         setDetail({
           title: "İşlemi başarısız",
@@ -93,7 +116,6 @@ const useCompany = () => {
     },
     [setOpen, setDetail, setChange]
   );
-
   const updateCompany = useCallback(
     async (id, data) => {
       try {
@@ -129,7 +151,6 @@ const useCompany = () => {
     },
     [setOpen, setDetail, setChange]
   );
-
   const createCompany = useCallback(
     async (data) => {
       try {
@@ -165,7 +186,28 @@ const useCompany = () => {
     },
     [setOpen, setDetail, setChange]
   );
+  const handleDialogAction = async (type: string, id: number) => {
+    setDialogType(type);
+    setCompany(await getCompanyDetail(id));
+    setSelectedCompanyId(id);
+    setDialogOpen(true);
+  };
 
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    setDialogType("info");
+    setSelectedCompanyId(null);
+  };
+  const handleChangeRole = (value: string) => {
+    const validRoles: string[] = Object.values(RoleEnum); // Enum'un değerlerini bir diziye alıyoruz
+    if (validRoles.includes(value)) {
+      setSelectedOption(value as Role); // Geçerli role'ü setter'a gönderiyoruz
+      // listCompanys()
+      setChange(true);
+    } else {
+      console.log("Invalid role");
+    }
+  };
   return {
     listCompanys,
     getCompanyDetail,
@@ -173,8 +215,25 @@ const useCompany = () => {
     updateCompany,
     createCompany,
     change,
-    setChange
+    setChange,
+    companys,
+    setCompanys,
+    selectedCompanyId,
+    setSelectedCompanyId,
+    company,
+    setCompany,
+    dialogOpen,
+    setDialogOpen,
+    dialogType,
+    setDialogType,
+    handleDialogClose,
+    handleDialogAction,
+    range,
+    setRange,
+    selectedOption,
+    setSelectedOption,
+    handleChangeRole,
   };
 };
-export {returnSeverity}
+export { returnSeverity };
 export default useCompany;

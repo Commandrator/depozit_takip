@@ -18,7 +18,7 @@ import {
   Edit as EditIcon,
   Save,
 } from "@mui/icons-material";
-import useCompany from "../../hooks/useCompany.jsx";
+import useCompany from "../../hooks/useCompany.tsx";
 import { theme, langPack } from "../../index.jsx";
 
 const ContentItem = ({ title, content, theme }) => {

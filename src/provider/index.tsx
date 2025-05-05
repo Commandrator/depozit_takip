@@ -6,6 +6,7 @@ import UserDTO from "../interfaces/UserDTO.ts";
 import { GlobalAlert } from "../components/Alert/index.tsx";
 import DetailDTO from "../interfaces/alert.detil.dto.ts";
 import useApp from "../hooks/useApp.jsx";
+import Role from "../interfaces/role.type.ts";
 const AppProvider: React.FC = () => {
   const { validateSession } = useApp();
   const [depositList, setDepositList] = useState<any[]>();
@@ -14,6 +15,7 @@ const AppProvider: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [detail, setDetail] = useState<DetailDTO>();
   const [change, setChange] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<Role>("all"); //Role Option
   useEffect(() => {
     const loadData = async () => {
       const verified = await validateSession();
@@ -47,8 +49,10 @@ const AppProvider: React.FC = () => {
       setDetail,
       change,
       setChange,
+      selectedOption,
+      setSelectedOption
     }),
-    [depositList, auth, setOpen, setDetail, change, setChange]
+    [depositList, auth, setOpen, setDetail, change, setChange, selectedOption, setSelectedOption]
   );
   return (
     <AppContext.Provider value={value}>

@@ -9,6 +9,8 @@ const AppContext = React.createContext<AppContextType>({
   setDetail: () => {}, // Başlangıçta boş fonksiyon
   change: false, // Başlangıçta false
   setChange: () => {}, // Başlangıçta boş fonksiyon
+  selectedOption: "all",
+  setSelectedOption: () => {}
 });
 
 export default AppContext;
