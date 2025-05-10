@@ -23,7 +23,7 @@ function DrawerScrollableSideBar({ children }: DrawerScrollableSideBarProps) {
     handleOpen,
     sidebarClose,
     handleClose,
-    dialogOpen,
+    openNavbarDialog,
     defaultNavActive,
   } = useApp();
   if (!auth) return null;
@@ -42,7 +42,7 @@ function DrawerScrollableSideBar({ children }: DrawerScrollableSideBarProps) {
         </div>
       </div>
       <Drawer
-        open={dialogOpen}
+        open={openNavbarDialog}
         onClose={handleClose}
         slotProps={{
           content: {

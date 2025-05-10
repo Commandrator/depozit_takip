@@ -4,6 +4,7 @@ import { Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import UserDTO from "../interfaces/UserDTO.ts";
 import { GlobalAlert } from "../components/Alert/index.tsx";
+import { CompanyDTO } from "../interfaces/CompanyDTO.ts";
 import DetailDTO from "../interfaces/alert.detil.dto.ts";
 import useApp from "../hooks/useApp.tsx";
 import Role from "../interfaces/role.type.ts";
@@ -16,8 +17,12 @@ const AppProvider: React.FC = () => {
   const [detail, setDetail] = useState<DetailDTO>();
   const [change, setChange] = useState(false);
   const [defaultNavActive, setDefaultNavActive] = useState<boolean>(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [openNavbarDialog, setOpenNavbarDialog] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<Role>("all"); //Role Option
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number|null>(null);
+  const [company, setCompany] = useState<CompanyDTO>();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogType, setDialogType] = useState<string>("info");
   useEffect(() => {
     const loadData = async () => {
       const verified = await validateSession();
@@ -57,6 +62,14 @@ const AppProvider: React.FC = () => {
       setDialogOpen,
       defaultNavActive,
       setDefaultNavActive,
+      dialogType,
+      setDialogType,
+      company,
+      setCompany,
+      selectedCompanyId,
+      setSelectedCompanyId,
+      openNavbarDialog,
+      setOpenNavbarDialog
     }),
     [
       depositList,
@@ -71,6 +84,14 @@ const AppProvider: React.FC = () => {
       setDialogOpen,
       defaultNavActive,
       setDefaultNavActive,
+      dialogType,
+      setDialogType,
+      company,
+      setCompany,
+      selectedCompanyId,
+      setSelectedCompanyId,      
+      openNavbarDialog,
+      setOpenNavbarDialog
     ]
   );
   return (

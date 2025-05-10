@@ -9,8 +9,8 @@ const useApp = () => {
   const {
     depositList,
     setDepositList,
-    dialogOpen,
-    setDialogOpen,
+    openNavbarDialog,
+    setOpenNavbarDialog,
     defaultNavActive,
     setDefaultNavActive,
   } = useContext(AppContext);
@@ -102,14 +102,14 @@ const useApp = () => {
   const CreatePortal = (Protal) =>
     portal ? createPortal(Protal, portal) : null;
   const handleOpen = () => {
-    setDialogOpen(true);
+    setOpenNavbarDialog(true);
   };
   const handleClose = () => {
-    setDialogOpen(false);
+    setOpenNavbarDialog(false);
   };
   const sidebarClose = (path: string | undefined) => {
     if (path) navigate(path);
-    setDialogOpen(false);
+    setOpenNavbarDialog(false);
   };
   return {
     ...useAuth(),
@@ -120,7 +120,7 @@ const useApp = () => {
     sidebarClose,
     handleOpen,
     handleClose,
-    dialogOpen,
+    openNavbarDialog, 
     defaultNavActive,
     setDefaultNavActive,
   };

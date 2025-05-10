@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import useCompany from "../../../hooks/useCompany.tsx";
 import { Pagination } from "@mui/material";
 import useApp from "../../../hooks/useApp.tsx";
-import CompanyDialog from "../../../components/Dialogs/index.tsx";
 import { theme } from "../../../index.jsx";
 import BasicSelect from "../../../components/BasicSelect.tsx";
-import CompanyCard from "./company.card.tsx"
+import CompanyCard from "./company.card.tsx";
+import DialogWithTab from "../../../components/Dialogs/dialog.with.tabs.tsx";
 const CompanyMangement = () => {
   const { CreatePortal } = useApp();
   const {
@@ -40,16 +40,15 @@ const CompanyMangement = () => {
               handleDialogAction={handleDialogAction}
             />
           ))}
-        {company &&
-          CreatePortal(
-            <CompanyDialog
-              dialogOpen={dialogOpen}
-              handleDialogAction={handleDialogClose}
-              dialogType={dialogType}
-              company={company}
-              selectedCompanyId={selectedCompanyId}
-            />
-          )}
+        {dialogOpen && CreatePortal(
+          <DialogWithTab
+            dialogOpen={dialogOpen}
+            handleDialogClose={handleDialogClose}            
+            dialogType={dialogType}
+            company={company}
+            selectedCompanyId={selectedCompanyId}
+          />
+        )}
       </div>
       {companys ? (
         <div className="w-full flex justify-between items-center px-4 py-4">

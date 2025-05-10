@@ -11,10 +11,18 @@ const AppContext = React.createContext<AppContextType>({
   setChange: () => {}, // Başlangıçta boş fonksiyon
   selectedOption: "all",
   setSelectedOption: () => {},
-  dialogOpen:false,
-  setDialogOpen:() => {},
-  defaultNavActive:true,
-  setDefaultNavActive:() => {}
+  dialogOpen: false,
+  setDialogOpen: () => {},
+  defaultNavActive: true,
+  setDefaultNavActive: () => {},
+  dialogType: "info",
+  setDialogType: () => {},
+  company: undefined,
+  setCompany: () => {},
+  selectedCompanyId: null,
+  setSelectedCompanyId: () => {},
+  openNavbarDialog: false,
+  setOpenNavbarDialog: () => {},
 });
 
 export default AppContext;

@@ -11,8 +11,9 @@ import PersonelDialogProps from "../../interfaces/PersonelDialogProps";
 import { langPack, theme } from "../..";
 import { Close } from "@mui/icons-material";
 const PersonelDialog = (props: PersonelDialogProps) => {
-  const { dialogOpen, handleDialogAction, selectedCompanyId, company } = props;
+  const { dialogOpen, handleDialogAction, company } = props;
 
+  if (!company) return null;
   return (
     <Dialog
       open={dialogOpen}

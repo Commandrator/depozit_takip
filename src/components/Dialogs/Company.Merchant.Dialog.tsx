@@ -2,17 +2,15 @@ import React from "react";
 import {
   Button,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
+  DialogActions
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import MerchantDialogProps from "../../interfaces/MerchantDialogProps.ts";
 import { theme, langPack } from "../../index.jsx";
 const MerchantDialog = (props: MerchantDialogProps) => {
-  const { dialogOpen, handleDialogAction, selectedCompanyId, company } = props;
+  const { dialogOpen, handleDialogAction, company } = props;
 
+  if (!company) return null;
   return (
     <Dialog open={dialogOpen} onClose={handleDialogAction}>
       {/* <DialogTitle>{merchant.name}</DialogTitle>

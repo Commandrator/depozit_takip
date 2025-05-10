@@ -24,7 +24,6 @@ const CreateCompanyDialog: React.FC<CreateCompanyDialogProps> = ({
   const [companyAbout, setCompanyAbout] = useState<string>("");
   const [errors, setErrors] = useState<{ companyName?: string, companyAbout?:string }>({});
   const { createCompany } = useCompany();
-
   // Save the company and handle errors
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent form refresh

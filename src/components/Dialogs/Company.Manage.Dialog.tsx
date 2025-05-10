@@ -119,7 +119,7 @@ const ManageCompanyDialog = (props) => {
     await deleteCompany(selectedCompanyId);
     handleDialogAction();
   };
-
+  if (!company) return null;
   return (
     <Dialog
       open={dialogOpen}

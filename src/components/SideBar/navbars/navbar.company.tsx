@@ -9,21 +9,19 @@ import {
 } from "@mui/material";
 import { Add, Menu } from "@mui/icons-material";
 import CompanyFilter from "../../../components/Filtres/company.filter.tsx";
-import CreateCompanyDialog from "../../Dialogs/Company.Create.Dialog.tsx";
 import useApp from "../../../hooks/useApp.tsx";
 import { langPack, theme } from "../../..";
 import SearchBar from "../../Filtres/search.tsx";
 import useCompany from "../../../hooks/useCompany.tsx";
 import SerachItem from "./navbar.seacrh.item.tsx";
 const CompanyNav = () => {
-  const { CreatePortal, handleOpen } = useApp();
+  const { handleOpen } = useApp();
   const {
     handleSearch,
     handleClear,
     viewResult,
     results,
     value,
-    dialogOpen,
     handleCreateDialogAction,
     searchRef,
     handleClickOutside,
@@ -92,7 +90,7 @@ const CompanyNav = () => {
               ) : (
                 <List sx={{ padding: 0 }}>
                   {results?.companies?.map((company, index) => (
-                    <>
+                    <React.Fragment key={company.id}>
                       <SerachItem
                         company={company}
                         value={value}
@@ -100,7 +98,7 @@ const CompanyNav = () => {
                         setViewResult={setViewResult}
                       />
                       {index < results.companies.length - 1 && <Divider />}
-                    </>
+                    </React.Fragment>
                   ))}
                 </List>
               )}
@@ -108,13 +106,6 @@ const CompanyNav = () => {
           )}
         </div>
       </div>
-      {dialogOpen &&
-        CreatePortal(
-          <CreateCompanyDialog
-            dialogOpen={dialogOpen}
-            handleDialogAction={handleCreateDialogAction}
-          />
-        )}
     </div>
   );
 };

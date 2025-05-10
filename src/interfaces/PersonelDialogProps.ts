@@ -3,6 +3,6 @@ interface PersonelDialogProps{
     dialogOpen: boolean;
     handleDialogAction: () => void;
     selectedCompanyId: number | null;
-    company: CompanyDTO;
+    company: CompanyDTO | undefined;
 }
 export default PersonelDialogProps;

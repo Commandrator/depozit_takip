@@ -2,14 +2,11 @@ import { useCallback, useContext, useState, useRef } from "react";
 import AppContext from "../context/index.tsx";
 import returnSeverity from "./useAPI.ts";
 import CompaniesDTO from "../interfaces/User.Companies.dto";
-import { CompanyDTO } from "../interfaces/CompanyDTO.ts";
 import { Companies } from "../classes/copanies.ts";
 import { Role, RoleEnum } from "../interfaces/role.type.ts";
 import { SelectChangeEvent } from "@mui/material/Select";
+import CompanyDetail from "../classes/company.detail.ts";
 const useCompany = () => {
-  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
-    null
-  );
   const {
     setOpen,
     setDetail,
@@ -17,11 +14,16 @@ const useCompany = () => {
     setChange,
     selectedOption,
     setSelectedOption,
+    dialogType,
+    setDialogType,
+    dialogOpen,
+    company,
+    setCompany,
+    selectedCompanyId,
+    setSelectedCompanyId,
+    setDialogOpen,
   } = useContext(AppContext);
   const [companys, setCompanys] = useState<CompaniesDTO | null>();
-  const [company, setCompany] = useState<CompanyDTO>();
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [dialogType, setDialogType] = useState<string>("info");
   const [range, setRange] = useState<string>("10");
   const [page, setPage] = useState(1);
   const [value, setValue] = useState("");
@@ -77,7 +79,7 @@ const useCompany = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        return new Companies(data);
+        if (data) return new Companies(data);
       } else {
         const message = await response.json();
         let severity = returnSeverity(response.status);
@@ -104,7 +106,7 @@ const useCompany = () => {
         if (response.ok) {
           const data = await response.json();
           setChange(true); // Yeni veri geldiği için true yapıyoruz
-          return data;
+          return new CompanyDetail(data);
         } else {
           const message = await response.json();
           let severity = returnSeverity(response.status);
@@ -226,14 +228,16 @@ const useCompany = () => {
   );
   const handleDialogAction = async (type: string, id: number) => {
     setDialogType(type);
-    setCompany(await getCompanyDetail(id));
+    const data = await getCompanyDetail(id);
+    if (data) setCompany(data);
     setSelectedCompanyId(id);
     setDialogOpen(true);
   };
   const handleDialogClose = () => {
     setDialogOpen(false);
     setDialogType("info");
-    setSelectedCompanyId(null);
+    setCompany(undefined);
+    setSelectedCompanyId(NaN);
   };
   const handleChangeRole = (value: string) => {
     const validRoles: string[] = Object.values(RoleEnum); // Enum'un değerlerini bir diziye alıyoruz
@@ -271,6 +275,7 @@ const useCompany = () => {
     setResults(undefined);
   };
   const handleCreateDialogAction = () => {
+    setDialogType("create-company");
     setDialogOpen((prev) => !prev);
   };
   const handleClickOutside = (event) => {
@@ -284,17 +289,13 @@ const useCompany = () => {
     /**
      * OKU ŞUNU!!
      *
-     * liste yüklemesinine doğrudan bağlanmıyor.
+     * Tab yapısı ile dialoglar birleştirilecek.
      *
-     * appcontexte queri seçeneği ekle,
+     * Arama kısmına şeşlenen sonuç listelenecek
      *
-     * silindiğinde contectentde silinecek
+     * sonuç kelimesi appcontext ya da url query kısmına eklenecek
      *
-     * aramada görüntüle sayfası açıldığında company dialogu aktif olmalı
-     *
-     * dialogları tab ile birbirine bağla
-     *
-     *
+     * işlem sonunda durum change olarak değiştirikecej.
      *
      */
   };
