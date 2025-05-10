@@ -1,8 +1,8 @@
 import React from "react";
 import { TextField, IconButton, Stack } from "@mui/material";
 import { Close, Edit, Save } from "@mui/icons-material";
-import { theme } from "../../index.jsx";
-import usePeriod from "../../hooks/usePeriod.tsx";
+import { theme } from "../../../../index.jsx";
+import usePeriod from "../../../../hooks/usePeriod.tsx";
 const EditInput = ({ period, type, dataKey, regex, label, message }) => {
   const {
     isValidCompanyName,

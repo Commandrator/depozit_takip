@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createElement } from "react";
 import {
   Button,
   Dialog,
@@ -11,7 +11,6 @@ import useDialog from "../../hooks/useDialog.tsx";
 import CompanyDialogProps from "../../interfaces/CompanyDialogProps.ts";
 import { Close } from "@mui/icons-material";
 import DialogWithTabsMenu from "./dialog.with.tabs.menu.tsx";
-import ExampleContent from "./dialog.with.tabs.content.layout.tsx";
 const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
   const {
     dialogOpen,
@@ -20,12 +19,10 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
     dialogType,
     company,
   } = props;
-  const {
-    mainTabIndex,
-    handleMainChange,
-    menuItem,
-    handleClose,
-  } = useDialog({handleDialogClose, dialogType});
+  const { mainTabIndex, handleMainChange, menuItem, handleClose } = useDialog({
+    handleDialogClose,
+    dialogType,
+  });
   return (
     <Dialog
       open={dialogOpen}
@@ -48,11 +45,13 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
         />
       </DialogTitle>
       <DialogContent sx={{ padding: 0 }}>
-        <ExampleContent
-          company={company}
-          selectedCompanyId={selectedCompanyId}
-          dialogType={dialogType}
-        />
+        {menuItem &&
+          menuItem.subMenu[mainTabIndex].content &&
+          createElement(menuItem.subMenu[mainTabIndex].content, {
+            company,
+            selectedCompanyId,
+            dialogType,
+          })}
       </DialogContent>
       <DialogActions
         sx={{

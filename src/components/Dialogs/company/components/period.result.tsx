@@ -1,9 +1,9 @@
 import React from "react";
-import { DialogContent, Paper, Stack } from "@mui/material";
-import { theme } from "../../index.jsx";
-import PeriodItem from "./Company.Period.Dialog.Item.tsx";
-import PeriodDTO from "../../interfaces/period.dto.ts";
-import AddAPeriod from "./Company.Period.Dialog.AddAPeriod.tsx";
+import { Paper, Stack } from "@mui/material";
+import { theme } from "../../../../index.jsx";
+import PeriodDTO from "../../../../interfaces/period.dto.ts";
+import Add from "./period.add.tsx";
+import PeriodItem from "./period.item.tsx";
 /**
  * Arama kısmı ayırılp bu kısım oluşturulacak.
  * Bu kısım dönem listelenmesi için kullanılacak.
@@ -13,22 +13,16 @@ import AddAPeriod from "./Company.Period.Dialog.AddAPeriod.tsx";
  * @param param0
  * @returns
  */
-const PeriodListResult = ({
+const Result = ({
   periods,
   setViewCreate,
 }: {
-  periods: PeriodDTO[] | undefined;
+  periods: PeriodDTO[];
   setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  if (!periods) return null;
   return (
-    <DialogContent
-      className="space-y-5"
-      sx={{
-        backgroundColor: theme.background,
-        color: theme.text,
-        overflow: "hidden",
-      }}
-    >
+    <Stack spacing={2}>
       <Paper
         elevation={3}
         sx={{
@@ -64,10 +58,10 @@ const PeriodListResult = ({
             <PeriodItem key={period.id} period={period} />
           ))
         ) : (
-          <AddAPeriod setViewCreate={setViewCreate} />
+          <Add setViewCreate={setViewCreate} />
         )}
       </Stack>
-    </DialogContent>
+    </Stack>
   );
 };
-export default PeriodListResult;
+export default Result;

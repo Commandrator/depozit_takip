@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
   TextField,
   Typography,
   Divider,
   Box,
   Paper,
+  Stack,
 } from "@mui/material";
 import {
   Close,
@@ -18,9 +15,8 @@ import {
   Edit as EditIcon,
   Save,
 } from "@mui/icons-material";
-import useCompany from "../../hooks/useCompany.tsx";
-import { theme, langPack } from "../../index.jsx";
-
+import useCompany from "../../../hooks/useCompany.tsx";
+import { theme, langPack } from "../../../index.jsx";
 const ContentItem = ({ title, content, theme }) => {
   return content ? (
     <Typography variant="body1" sx={{ color: theme.text }}>
@@ -28,24 +24,20 @@ const ContentItem = ({ title, content, theme }) => {
     </Typography>
   ) : null;
 };
-
 const InputContent = ({
   defultValue,
   title,
   placeholder,
   type,
   selectedCompanyId,
-  theme,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(defultValue);
   const { updateCompany } = useCompany();
-
   const handleEditToggle = () => {
     if (isEditing) setValue(defultValue);
     setIsEditing(!isEditing);
   };
-
   const handleInputChange = (e) => setValue(e.target.value);
 
   const saveChanges = async (e) => {
@@ -53,12 +45,10 @@ const InputContent = ({
     await updateCompany(selectedCompanyId, { [type]: value });
     setIsEditing(false);
   };
-
   const cancelChanges = () => {
     setValue(defultValue);
     setIsEditing(false);
   };
-
   return (
     <Box display="flex" flexDirection="column" gap={1} width="100%">
       <Typography
@@ -69,7 +59,8 @@ const InputContent = ({
         {title}
       </Typography>
       <Box display="flex" alignItems="center" gap={1}>
-        <TextField
+        <TextField        
+          size="small"
           type="text"
           autoComplete="off"
           fullWidth
@@ -94,7 +85,6 @@ const InputContent = ({
         >
           {isEditing ? <Close /> : <EditIcon />}
         </IconButton>
-
         <IconButton
           onClick={saveChanges}
           disabled={!(isEditing && value !== defultValue)}
@@ -111,38 +101,17 @@ const InputContent = ({
     </Box>
   );
 };
-
-const ManageCompanyDialog = (props) => {
-  const { dialogOpen, handleDialogAction, selectedCompanyId, company } = props;
-  const { deleteCompany } = useCompany();
+const ManageCompanyContent = (props) => {
+  const { selectedCompanyId, company } = props;
+  const { deleteCompany, handleDialogClose } = useCompany();
   const handleDelete = async () => {
     await deleteCompany(selectedCompanyId);
-    handleDialogAction();
+    handleDialogClose();
   };
   if (!company) return null;
   return (
-    <Dialog
-      open={dialogOpen}
-      onClose={handleDialogAction}
-      fullWidth
-      maxWidth="md"
-    >
-      <DialogTitle
-        sx={{
-          backgroundColor: theme.background,
-          color: theme.text,
-          borderBottom: `1px solid ${theme.border}`,
-        }}
-      >
-        {langPack.edit_content}
-      </DialogTitle>
-      <DialogContent
-        className="space-y-4"
-        sx={{
-          backgroundColor: theme.background,
-          color: theme.text,
-        }}
-      >
+    <Stack spacing={2} sx={{ padding: "16px" }}>
+      <Stack spacing={2} sx={{ padding: "16px" }}>
         <Paper
           elevation={3}
           sx={{
@@ -153,16 +122,12 @@ const ManageCompanyDialog = (props) => {
             border: `1px solid ${theme.border}`,
           }}
         >
-          <Typography variant="h6" gutterBottom>
-            {langPack.company_about}
-          </Typography>
           <InputContent
             title={langPack.input_context_title_company_name}
             defultValue={company.name}
             placeholder={langPack.input_context_palceholder_company_name}
             type="name"
             selectedCompanyId={selectedCompanyId}
-            theme={theme}
           />
           <InputContent
             title={langPack.input_context_title_company_about}
@@ -170,10 +135,8 @@ const ManageCompanyDialog = (props) => {
             placeholder={langPack.input_context_palceholder_company_about}
             type="about"
             selectedCompanyId={selectedCompanyId}
-            theme={theme}
           />
         </Paper>
-
         <Paper
           elevation={3}
           sx={{
@@ -184,9 +147,6 @@ const ManageCompanyDialog = (props) => {
             border: `1px solid ${theme.border}`,
           }}
         >
-          <Typography variant="h6" gutterBottom>
-            {langPack.respnsible_information}
-          </Typography>
           <ContentItem
             title={langPack.respnsible}
             content={company.responsible.username}
@@ -229,28 +189,17 @@ const ManageCompanyDialog = (props) => {
             theme={theme}
           />
         </Paper>
-      </DialogContent>
-      <DialogActions sx={{ backgroundColor: theme.background }}>
-        <Button
-          endIcon={<DeleteForever />}
-          variant="contained"
-          color="error"
-          sx={{ backgroundColor: theme.deleteButton }}
-          onClick={handleDelete}
-        >
-          {langPack.delete}
-        </Button>
-        <Button
-          endIcon={<Close />}
-          variant="contained"
-          sx={{ backgroundColor: theme.closeButton }}
-          onClick={handleDialogAction}
-        >
-          {langPack.close}
-        </Button>
-      </DialogActions>
-    </Dialog>
+      </Stack>
+      <Button
+        endIcon={<DeleteForever />}
+        variant="contained"
+        color="error"
+        sx={{ backgroundColor: theme.deleteButton }}
+        onClick={handleDelete}
+      >
+        {langPack.delete}
+      </Button>
+    </Stack>
   );
 };
-
-export default ManageCompanyDialog;
+export default ManageCompanyContent;

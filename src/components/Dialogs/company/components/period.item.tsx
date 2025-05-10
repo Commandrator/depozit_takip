@@ -10,12 +10,13 @@ import {
   AccordionActions,
   TextField,
 } from "@mui/material";
-import { langPack, theme } from "../../index.jsx";
-import PeriodDTO from "../../interfaces/period.dto.ts";
-import usePeriod from "../../hooks/usePeriod.tsx";
-import EditInput from "./Company.Period.Dialog.Edit.Input.tsx";
-const PeriodItem: React.FC<{ period: PeriodDTO }> = ({ period }) => {
+import { langPack, theme } from "../../../../index.jsx";
+import PeriodDTO from "../../../../interfaces/period.dto.ts";
+import usePeriod from "../../../../hooks/usePeriod.tsx";
+import EditInput from "./period.edit.input.tsx";
+const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
   const { getDay, deletePeriod, handleDeleteInput, deleteOption } = usePeriod();
+  if (!period) return null; // period yoksa hiçbir şey döndürme
   return (
     <Accordion
       sx={{

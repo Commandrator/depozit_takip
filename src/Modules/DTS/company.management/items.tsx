@@ -6,6 +6,9 @@ import BusinessIcon from "@mui/icons-material/Business";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import TuneIcon from "@mui/icons-material/Tune";
 import InfoIcon from "@mui/icons-material/Info";
+import CreateCompanyDialogContent from "../../../components/Dialogs/company/index.tsx";
+import ManageCompanyContent from "../../../components/Dialogs/company/manage.tsx";
+import PeriodContent from "../../../components/Dialogs/company/period.tsx";
 /**
  * ŞUNUDA OKU!!
  *
@@ -25,24 +28,28 @@ const menuItems = [
         label: "merchant_transactions",
         action: "merchant",
         icon: <RecentActorsIcon fontSize="small" />,
+        content:null
       },
       {
         id: "submenu-personnel-transactions",
         label: "personel_transactions",
         action: "personnel",
         icon: <PeopleIcon fontSize="small" />,
+        content:null
       },
       {
         id: "submenu-period-transactions",
         label: "period_transactions",
         action: "period",
         icon: <ManageHistoryIcon fontSize="small" />,
+        content: PeriodContent
       },
       {
         id: "submenu-company-about-transactions",
         label: "about",
         action: "company",
         icon: <InfoIcon fontSize="small" />,
+        content:ManageCompanyContent
       },
     ],
   },
@@ -57,6 +64,7 @@ const menuItems = [
         label: "create_company",
         action: "create-company",
         icon: <AddBusinessIcon fontSize="small" />,
+        content: CreateCompanyDialogContent,
       },
     ],
   },
