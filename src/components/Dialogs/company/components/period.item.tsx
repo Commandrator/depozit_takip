@@ -10,6 +10,7 @@ import {
   AccordionActions,
   TextField,
 } from "@mui/material";
+import ReactMarkdown from "react-markdown";
 import { langPack, theme } from "../../../../index.jsx";
 import PeriodDTO from "../../../../interfaces/period.dto.ts";
 import usePeriod from "../../../../hooks/usePeriod.tsx";
@@ -109,10 +110,12 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
           padding: "10px 16px",
         }}
       >
-        <Typography sx={{ color: theme.text }} variant="body1">
-          {
-            langPack.period_delete_message
-          }
+        <Typography
+          sx={{ color: theme.text }}
+          component={ReactMarkdown}
+          variant="body1"
+        >
+          {langPack.period_delete_message.replace(":project_name:", period.name)}
         </Typography>
       </AccordionDetails>
       <AccordionActions

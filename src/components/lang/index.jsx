@@ -41,7 +41,7 @@ const packages ={
         "back":"Geri",
         "working_period":"Çalışma Dönemi",
         "number_of_days_remaining":"Kalan Gün Sayısı",
-        "period_delete_message":"Dönemin silinebilmesi için, sağ alt köşede bulunan \"Proje Başlığı\" alanının eksiksiz şekilde doldurulması gerekmektedir. Silme işlemi tamamlandıktan sonra geri alınamaz.",
+        "period_delete_message":"**UYARI**: Dönemi kalıcı olarak silmek için, sağ alt köşedeki \"Dönem Başlığı\" kısmına **:project_name:** yazmanız gerekir. Bu işlem geri alınamaz.",
         "add_a_period_title":"Henüz bir dönem bulunamadı",
         "add_a_period_subtitle":"Yeni bir dönem oluşturmak için yukarıdaki butona tıklayın.",
         "load_range":"Yükleme Aralığı",
