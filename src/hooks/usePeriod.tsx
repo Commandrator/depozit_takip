@@ -1,15 +1,16 @@
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useContext, useState, useCallback } from "react";
 import AppContext from "../context/index.tsx";
 import returnSeverity from "./useAPI.ts";
 import { langPack } from "../index.jsx";
-import PeriodDTO from "../interfaces/period.dto.ts";
-import Period from "../classes/Period.ts";
 import PeriodInputDTO from "../interfaces/period.dialog.input.dto.ts";
 import PeriodHookDTO from "../interfaces/period.dialog.hook.dto.ts";
+import Periods from "../classes/Periods.ts";
+import PeriodsDTO from "../interfaces/periods.dto.ts";
+import { SelectChangeEvent } from "@mui/material/Select";
 const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
   const { setOpen, setDetail, change, setChange } = useContext(AppContext);
-  const [isLoaded, setIsLoaded]=useState<boolean>(false);
-  const [periods, setPeriods] = useState<PeriodDTO[] | undefined>();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [periods, setPeriods] = useState<PeriodsDTO>();
   const [viewCreate, setViewCreate] = useState<boolean>(false);
   const currentYear = new Date().getFullYear();
   const nextYear = currentYear + 1;
@@ -25,6 +26,8 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     name?: string;
   }>({});
   const [edit, setEdit] = useState<boolean>(true);
+  const [range, setRange] = useState<string>("10");
+  const [page, setPage] = useState<number>(1);
   const checkEmpty = () => {
     let newErrors: Partial<PeriodInputDTO> = {};
     if (!inputValue.name.trim())
@@ -72,9 +75,19 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
   };
   const listPeriods = useCallback(
     async (company_id) => {
+      const params = new URLSearchParams();
+      if (periods) {
+        const min = (page - 1) * Number(range);
+        const max = page * Number(range);
+        params.set("min", String(min));
+        params.set("max", String(max));
+      }
       try {
         const response = await fetch(
-          `http://localhost:3000/app/admin/period/${company_id}`,
+          "http://localhost:3000/app/admin/period/"
+            .concat(company_id)
+            .concat("/?")
+            .concat(params.toString()),
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -83,20 +96,21 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
         );
         if (response.ok) {
           const data = await response.json();
-          setChange(true); // Veri başarıyla alındı, değişim durumunu sıfırla
-          return data;
+          setPeriods(new Periods(data));
+          setChange(false);
+          setIsLoaded(true);
         } else {
           const message = await response.json();
           let severity = returnSeverity(response.status);
           setOpen(true);
           setDetail({ ...message, title: "İşlem başarısız", severity });
-        }        
+        }
       } catch (error) {
         console.error("Network Error:", error);
         return null;
       }
     },
-    [setChange, setOpen, setDetail]
+    [setChange, setOpen, setDetail, page, range, periods]
   );
   const updatePeriod = async (company_id, id, data) => {
     try {
@@ -154,20 +168,11 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     if (!edit)
       setInputValue((prev) => ({ ...prev, [dataKey]: value[dataKey] }));
   };
-  useEffect(() => {
-    const loader = async () => {
-        const rawPeriods = await listPeriods(selectedCompanyId);
-        if (rawPeriods) {
-          const formattedPeriods = rawPeriods.map(
-            (p: PeriodDTO) => new Period(p)
-          );
-          setIsLoaded(true);
-          setPeriods(formattedPeriods);
-          setChange(false);
-        }
-      };
-    if (selectedCompanyId || (change && selectedCompanyId)) loader();
-  }, [listPeriods, setPeriods, setChange, setIsLoaded, change, selectedCompanyId]);
+  const handleChangeRange = (event: SelectChangeEvent) => {
+    setPage(1);
+    setRange(event.target.value);
+    setChange(true);
+  };
   const getDay = (deadline) => {
     const today = new Date();
     const deadlineDate = new Date(deadline);
@@ -210,9 +215,15 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     },
     [setOpen, setDetail, setChange]
   );
-  const handleDeleteInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setDeleteOption(e.target.value)
-  }
+  const handleDeleteInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setDeleteOption(e.target.value);
+  };
+  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    setChange(true);
+  };
   return {
     createPeriod,
     listPeriods,
@@ -236,7 +247,13 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     deletePeriod,
     deleteOption,
     handleDeleteInput,
-    isLoaded
+    isLoaded,
+    setRange,
+    handleChangeRange,
+    handleChange,
+    page,
+    setPage,
+    range,
   };
 };
 export default usePeriod;

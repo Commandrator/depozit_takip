@@ -25,7 +25,7 @@ const useCompany = () => {
   } = useContext(AppContext);
   const [companys, setCompanys] = useState<CompaniesDTO | null>();
   const [range, setRange] = useState<string>("10");
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const [value, setValue] = useState("");
   const [results, setResults] = useState<CompaniesDTO | null>();
   const [viewResult, setViewResult] = useState<boolean>(false);

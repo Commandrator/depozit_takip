@@ -1,11 +1,19 @@
 import React from "react";
-import { Paper, Tooltip, Button, Stack } from "@mui/material";
+import {
+  Paper,
+  Tooltip,
+  Button,
+  Stack,
+  Pagination,
+  SelectChangeEvent,
+} from "@mui/material";
 import { theme, langPack } from "../../../../index.jsx";
-import PeriodDTO from "../../../../interfaces/period.dto.ts";
 import { Add as AddIcon } from "@mui/icons-material";
 import Add from "./period.add.tsx";
 import PeriodItem from "./period.item.tsx";
 import Loader from "./loader.tsx";
+import PeriodsDTO from "../../../../interfaces/periods.dto.ts";
+import BasicSelect from "../../../BasicSelect.tsx";
 /**
  * Arama kısmı ayırılp bu kısım oluşturulacak.
  * Bu kısım dönem listelenmesi için kullanılacak.
@@ -19,10 +27,18 @@ const Result = ({
   periods,
   setViewCreate,
   isLoaded,
+  page,
+  range,
+  handleChangeRange,
+  handleChange,
 }: {
-  periods?: PeriodDTO[];
+  periods?: PeriodsDTO;
   setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
   isLoaded: boolean;
+  page: number;
+  range: string;
+  handleChangeRange: (event: SelectChangeEvent<string>) => void;
+  handleChange: (event: React.ChangeEvent<unknown>, value: number) => void;
 }) => {
   if (!isLoaded) return <Loader />;
   if (!periods) return null;
@@ -63,7 +79,6 @@ const Result = ({
           </Tooltip>
         </Stack>
       </Paper>
-
       <Paper
         elevation={3}
         className="custom-scrollbar"
@@ -76,8 +91,8 @@ const Result = ({
         }}
       >
         <Stack spacing={2}>
-          {periods.length > 0 ? (
-            periods.map((period) => (
+          {periods.periods.length > 0 ? (
+            periods.periods.map((period) => (
               <PeriodItem key={period.id} period={period} />
             ))
           ) : (
@@ -85,6 +100,29 @@ const Result = ({
           )}
         </Stack>
       </Paper>
+      <div className="w-full flex justify-between items-center px-4 py-4">
+        <div className="flex-1 flex justify-center">
+          <Pagination
+            count={Math.max(1, Math.ceil(periods.total / Number(range)))}
+            size="small"
+            page={page}
+            sx={{
+              color: theme.menuItem,
+              "& .MuiPaginationItem-root": {
+                color: theme.menuItem,
+              },
+              "& .Mui-selected": {
+                color: theme.text,
+                background: theme.menu.backgroundColor,
+              },
+            }}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <BasicSelect range={range} handleChangeRange={handleChangeRange} />
+        </div>
+      </div>
     </Stack>
   );
 };
