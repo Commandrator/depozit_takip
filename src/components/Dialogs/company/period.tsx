@@ -15,6 +15,15 @@ const PeriodContent = ({ selectedCompanyId }) => {
     handleChange,
     change,
     listPeriods,
+    handleSubmit,
+    handleSearch,
+    handleClear,
+    value,
+    viewResult,
+    results,
+    searchRef,
+    handleClickOutside,
+    setViewResult
   } = usePeriod({
     selectedCompanyId,
   });
@@ -34,6 +43,10 @@ const PeriodContent = ({ selectedCompanyId }) => {
           />
         ) : (
           <Result
+            handleSubmit={handleSubmit}
+            value={value}
+            handleSearch={handleSearch}
+            handleClear={handleClear}
             periods={periods}
             setViewCreate={setViewCreate}
             isLoaded={isLoaded}
@@ -41,6 +54,11 @@ const PeriodContent = ({ selectedCompanyId }) => {
             range={range}
             handleChangeRange={handleChangeRange}
             handleChange={handleChange}
+            viewResult={viewResult}
+            results={results}
+            searchRef={searchRef}
+            handleClickOutside={handleClickOutside}
+            setViewResult={setViewResult}
           />
         )}
       </Stack>

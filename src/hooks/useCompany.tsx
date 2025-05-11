@@ -283,7 +283,7 @@ const useCompany = () => {
       setViewResult(false);
     } else setViewResult(true);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("çalıştı");
     /**

@@ -50,7 +50,9 @@ const packages ={
         "no_results_found":"Sonuç Bulunamadı.",
         "view":"Görüntüle",
         "cancel":"İptal",
-        "add_a_new_period":"Yeni Dönem Ekle",
+        "create_period":"Dönem Oluştur",
+        "company_id_is_required":"Şirket kimliği gereklidir.",
+        "matching_periods_result":"Eşleşen **:total:** dönem bulundu."
     },
     "en":{
         

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Paper,
   Tooltip,
@@ -6,14 +6,16 @@ import {
   Stack,
   Pagination,
   SelectChangeEvent,
+  Box,
 } from "@mui/material";
 import { theme, langPack } from "../../../../index.jsx";
 import { Add as AddIcon } from "@mui/icons-material";
-import Add from "./period.add.tsx";
-import PeriodItem from "./period.item.tsx";
 import Loader from "./loader.tsx";
 import PeriodsDTO from "../../../../interfaces/periods.dto.ts";
 import BasicSelect from "../../../BasicSelect.tsx";
+import SearchBar from "../../../Filtres/search.tsx";
+import ResultList from "./period.result.list.tsx";
+import SearchResultList from "./period.result.search.list.tsx";
 /**
  * Arama kısmı ayırılp bu kısım oluşturulacak.
  * Bu kısım dönem listelenmesi için kullanılacak.
@@ -31,6 +33,15 @@ const Result = ({
   range,
   handleChangeRange,
   handleChange,
+  handleSubmit,
+  handleSearch,
+  handleClear,
+  value,
+  viewResult,
+  results,
+  searchRef,
+  handleClickOutside,
+  setViewResult,
 }: {
   periods?: PeriodsDTO;
   setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,9 +50,22 @@ const Result = ({
   range: string;
   handleChangeRange: (event: SelectChangeEvent<string>) => void;
   handleChange: (event: React.ChangeEvent<unknown>, value: number) => void;
+  value: string;
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleClear: () => void;
+  viewResult: boolean;
+  results?: PeriodsDTO;
+  searchRef: React.RefObject<HTMLDivElement>;
+  handleClickOutside: (event: MouseEvent) => void;
+  setViewResult: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  if (!isLoaded) return <Loader />;
-  if (!periods) return null;
+  useEffect(() => {
+    if (!results?.periods || results.periods.length === 0) return;
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [results, handleClickOutside]);
+  if (!isLoaded || !periods) return <Loader />;
   return (
     <Stack spacing={2}>
       <Paper
@@ -62,19 +86,59 @@ const Result = ({
           justifyContent="space-between"
           alignItems="center"
         >
-          <form>arama</form>
-          <Tooltip title={langPack.create}>
+          <div className="relative w-full" ref={searchRef}>
+            <SearchBar
+              value={value}
+              handleSearch={handleSearch}
+              searchSubmit={handleSubmit}
+              searchClear={handleClear}
+            />
+            {viewResult && (
+              <Box
+                className="w-full max-w-md"
+                sx={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  mt: 1,
+                  zIndex: 10,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: 2,
+                  backgroundColor: theme.background,
+                  color: theme.text,
+                  p: 1.5,
+                  boxShadow: 3,
+                }}
+              >
+                <SearchResultList
+                  results={results}
+                  value={value}
+                  setViewResult={setViewResult}
+                />
+              </Box>
+            )}
+          </div>
+          <Tooltip title={langPack.create_period}>
             <Button
-              sx={{ color: theme.menuItem.color }}
-              onClick={() => {
-                setViewCreate((prev) => !prev);
+              sx={{
+                color: theme.menuItem.color,
+                px: { xs: 1, sm: 2 },
+                ml: { xs: 2, md: 0 },
+                minWidth: { xs: "40px", sm: "64px" },
+                borderRadius: { xs: "50%", md: "12px" },
+                border: { xs: "none", sm: `1px solid ${theme.border}` },
+                "& .button-text": {
+                  display: { xs: "none", sm: "inline" },
+                },
+                whiteSpace: "nowrap",
               }}
+              onClick={() => setViewCreate((prev) => !prev)}
               startIcon={<AddIcon />}
               color="inherit"
               variant="outlined"
-              size="small"
             >
-              {langPack.add_a_new_period}
+              <span className="button-text">{langPack.create_period}</span>
             </Button>
           </Tooltip>
         </Stack>
@@ -91,13 +155,7 @@ const Result = ({
         }}
       >
         <Stack spacing={2}>
-          {periods.periods.length > 0 ? (
-            periods.periods.map((period) => (
-              <PeriodItem key={period.id} period={period} />
-            ))
-          ) : (
-            <Add setViewCreate={setViewCreate} />
-          )}
+          <ResultList periods={periods} setViewCreate={setViewCreate} />
         </Stack>
       </Paper>
       <div className="w-full flex justify-between items-center px-4 py-4">

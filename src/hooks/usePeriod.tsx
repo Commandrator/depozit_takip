@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from "react";
+import { useContext, useState, useCallback, useRef } from "react";
 import AppContext from "../context/index.tsx";
 import returnSeverity from "./useAPI.ts";
 import { langPack } from "../index.jsx";
@@ -28,6 +28,9 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
   const [edit, setEdit] = useState<boolean>(true);
   const [range, setRange] = useState<string>("10");
   const [page, setPage] = useState<number>(1);
+  const [value, setValue] = useState<string>("");
+  const [results, setResults] = useState<PeriodsDTO>();
+  const [viewResult, setViewResult] = useState<boolean>(false);
   const checkEmpty = () => {
     let newErrors: Partial<PeriodInputDTO> = {};
     if (!inputValue.name.trim())
@@ -85,7 +88,7 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
       try {
         const response = await fetch(
           "http://localhost:3000/app/admin/period/"
-            .concat(company_id)
+            .concat(company_id || "")
             .concat("/?")
             .concat(params.toString()),
           {
@@ -112,6 +115,39 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     },
     [setChange, setOpen, setDetail, page, range, periods]
   );
+  const searchPreview = async (query: string, company_id?: string) => {
+    try {
+      if (!company_id) throw new Error(langPack.company_id_is_required);
+      const params = new URLSearchParams();
+      params.set("min", String(0));
+      params.set("max", String(5));
+      params.set("q", query);
+      const response = await fetch(
+        "http://localhost:3000/app/admin/period/"
+          .concat(company_id)
+          .concat("/?")
+          .concat(params.toString()),
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setResults(new Periods(data));
+        setViewResult(true);
+      } else {
+        const message = await response.json();
+        let severity = returnSeverity(response.status);
+        setOpen(true);
+        setDetail({ ...message, title: "İşlemi başarısız", severity });
+      }
+    } catch (error) {
+      console.error("Network Error:", error);
+      return null;
+    }
+  };
   const updatePeriod = async (company_id, id, data) => {
     try {
       const response = await fetch(
@@ -224,7 +260,47 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     setPage(value);
     setChange(true);
   };
+  const handleClear = () => {
+    setValue("");
+    setViewResult(false);
+    setResults(undefined);
+  };
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const keyword = e.target.value;
+    setValue(keyword);
+    if (keyword.length > 1) {
+      await searchPreview(keyword, selectedCompanyId);
+    } else {
+      setViewResult(false);
+      setResults(undefined);
+    }
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("çalıştı");
+    /**
+     * OKU ŞUNU!!
+     *
+     * Tab yapısı ile dialoglar birleştirilecek.
+     *
+     * Arama kısmına şeşlenen sonuç listelenecek
+     *
+     * sonuç kelimesi appcontext ya da url query kısmına eklenecek
+     *
+     * işlem sonunda durum change olarak değiştirikecej.
+     *
+     */
+  };  
+  const handleClickOutside = (event) => {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+      setViewResult(false);
+    } else setViewResult(true);
+  };
+  const searchRef = useRef<HTMLDivElement>(null);
   return {
+    handleSubmit,
+    handleSearch,
+    handleClear,
     createPeriod,
     listPeriods,
     change,
@@ -254,6 +330,13 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     page,
     setPage,
     range,
+    searchPreview,
+    viewResult,
+    results,
+    value,
+    searchRef,
+    handleClickOutside,
+    setViewResult
   };
 };
 export default usePeriod;

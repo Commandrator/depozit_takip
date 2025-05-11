@@ -1,6 +1,7 @@
+import React from "react";
 import { Search, Close } from "@mui/icons-material";
 import { Box, Input, IconButton } from "@mui/joy";
-import React from "react";
+import { langPack } from "../..";
 
 const SearchBar = ({ value, handleSearch, searchSubmit, searchClear }) => {
   return (
@@ -9,7 +10,7 @@ const SearchBar = ({ value, handleSearch, searchSubmit, searchClear }) => {
         fullWidth
         value={value}
         onChange={handleSearch}
-        placeholder="Şirket adı"
+        placeholder={langPack.company_name}
         startDecorator={<Search />}
         endDecorator={
           <IconButton onClick={searchClear}>
