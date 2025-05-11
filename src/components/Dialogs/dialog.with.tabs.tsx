@@ -17,12 +17,17 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
     handleDialogClose,
     selectedCompanyId,
     dialogType,
-    company,
+    company
   } = props;
   const { mainTabIndex, handleMainChange, menuItem, handleClose } = useDialog({
     handleDialogClose,
     dialogType,
   });
+  const elementOption ={
+    company,
+    selectedCompanyId,
+    dialogType,
+  }
   return (
     <Dialog
       open={dialogOpen}
@@ -47,11 +52,7 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
       <DialogContent sx={{ padding: 0 }}>
         {menuItem &&
           menuItem.subMenu[mainTabIndex].content &&
-          createElement(menuItem.subMenu[mainTabIndex].content, {
-            company,
-            selectedCompanyId,
-            dialogType,
-          })}
+          createElement(menuItem.subMenu[mainTabIndex].content, {...elementOption})}
       </DialogContent>
       <DialogActions
         sx={{

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField, Stack } from "@mui/material";
+import { Button, TextField, Stack, Paper, Box } from "@mui/material";
 import { Save } from "@mui/icons-material";
 import useCompany from "../../../hooks/useCompany.tsx";
 import { langPack, theme } from "../../..";
@@ -33,7 +33,7 @@ const CreateCompanyDialogContent = () => {
   ) => {
     const value = e.target.value;
     const regex = /^[a-zA-ZçğıöşüÇĞİÖŞÜ0-9 ]+$/; // Boş girişleri ve sadece boşlukları engelle
-    if (regex.test(value)) {
+    if (regex.test(value) || !value) {
       setvalueSetter(value);
       setErrors((prev) => ({ ...prev, [errorOption]: "" })); // Hata varsa kaldır
     } else {
@@ -45,8 +45,21 @@ const CreateCompanyDialogContent = () => {
   };
   return (
     <Stack spacing={2} sx={{ padding: "16px" }}>
-      <Stack spacing={2} sx={{ padding: "16px" }}>
+      <Stack
+        component={Paper}
+        elevation={3}
+        spacing={2}
+        sx={{
+          padding: "16px",
+          p: 2,
+          borderRadius: "12px",
+          backgroundColor: theme.card.backgroundColor,
+          color: theme.text,
+          border: `1px solid ${theme.border}`,
+        }}
+      >
         <TextField
+          size="small"
           sx={{ "& .MuiInputBase-input": { color: theme.text } }}
           required
           autoFocus
@@ -69,6 +82,7 @@ const CreateCompanyDialogContent = () => {
           helperText={errors.companyName}
         />
         <TextField
+          size="small"
           sx={{ "& .MuiInputBase-input": { color: theme.text } }}
           margin="dense"
           autoComplete="off"
@@ -88,16 +102,18 @@ const CreateCompanyDialogContent = () => {
             )
           }
         />
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            onClick={handleSave}
+            color="success"
+            variant="contained"
+            disabled={!companyName.length}
+            endIcon={<Save />}
+          >
+            {langPack.save}
+          </Button>
+        </Box>
       </Stack>
-      <Button
-        onClick={handleSave}
-        color="success"
-        variant="contained"
-        disabled={!companyName.length}
-        endIcon={<Save />}
-      >
-        {langPack.save}
-      </Button>
     </Stack>
   );
 };

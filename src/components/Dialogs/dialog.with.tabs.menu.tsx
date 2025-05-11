@@ -41,6 +41,7 @@ const DialogWithTabsMenu = ({ mainTabIndex, handleMainChange, menuItem }:DialogW
     >
       {menuItem.subMenu.map((item) => (
         <Tab
+          key={item.id}
           label={langPack[item.label]}
           icon={item.icon}
           iconPosition="start"

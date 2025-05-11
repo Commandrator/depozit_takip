@@ -48,7 +48,9 @@ const packages ={
         "viewer":"Görüntüleyici",
         "editor":"Düzenleyici",
         "no_results_found":"Sonuç Bulunamadı.",
-        "view":"Görüntüle"
+        "view":"Görüntüle",
+        "cancel":"İptal",
+        "add_a_new_period":"Yeni Dönem Ekle",
     },
     "en":{
         

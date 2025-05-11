@@ -156,7 +156,6 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
   };
   useEffect(() => {
     const loader = async () => {
-      if (change) {
         const rawPeriods = await listPeriods(selectedCompanyId);
         if (rawPeriods) {
           const formattedPeriods = rawPeriods.map(
@@ -166,9 +165,8 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
           setPeriods(formattedPeriods);
           setChange(false);
         }
-      }
-    };
-    if (selectedCompanyId) loader();
+      };
+    if (selectedCompanyId || (change && selectedCompanyId)) loader();
   }, [listPeriods, setPeriods, setChange, setIsLoaded, change, selectedCompanyId]);
   const getDay = (deadline) => {
     const today = new Date();

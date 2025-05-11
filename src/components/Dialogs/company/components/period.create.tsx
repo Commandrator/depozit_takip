@@ -5,9 +5,12 @@ import {
   Button,
   Stack,
   Box,
+  Tooltip,
 } from "@mui/material";
 import { langPack, theme } from "../../../../index.jsx";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import usePeriod from "../../../../hooks/usePeriod.tsx";
+import { Save } from "@mui/icons-material";
 const Create = ({ selectedCompanyId, setViewCreate }) => {
   const {
     createPeriod,
@@ -97,17 +100,38 @@ const Create = ({ selectedCompanyId, setViewCreate }) => {
         />
       </Box>
       <Box display="flex" justifyContent="flex-end">
-        <Button
-          onClick={handleSave}
-          variant="outlined"
-          color="inherit"
-          sx={{
-            borderRadius: "20px",
-            color: theme.text,
-          }}
-        >
-          {langPack.save}
-        </Button>
+        <Stack direction="row" spacing={1}>
+          <Tooltip title={langPack.back}>
+            <Button
+              fullWidth
+              onClick={() => setViewCreate((prev) => !prev)}
+              variant="outlined"
+              color="inherit"
+              startIcon={<ChevronLeftIcon />}
+              sx={{
+                borderRadius: "20px",
+                color: theme.text,
+              }}
+            >
+              {langPack.cancel}
+            </Button>
+          </Tooltip>
+          <Tooltip title={langPack.save}>
+            <Button
+              fullWidth
+              onClick={handleSave}
+              variant="outlined"
+              color="inherit"
+              startIcon={<Save/>}
+              sx={{
+                borderRadius: "20px",
+                color: theme.text,
+              }}
+            >
+              {langPack.save}
+            </Button>
+          </Tooltip>
+        </Stack>
       </Box>
     </Stack>
   );

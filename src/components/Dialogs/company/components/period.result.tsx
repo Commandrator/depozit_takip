@@ -1,9 +1,11 @@
 import React from "react";
-import { Paper, Stack } from "@mui/material";
-import { theme } from "../../../../index.jsx";
+import { Paper, Tooltip, Button, Stack } from "@mui/material";
+import { theme, langPack } from "../../../../index.jsx";
 import PeriodDTO from "../../../../interfaces/period.dto.ts";
+import { Add as AddIcon } from "@mui/icons-material";
 import Add from "./period.add.tsx";
 import PeriodItem from "./period.item.tsx";
+import Loader from "./loader.tsx";
 /**
  * Arama kısmı ayırılp bu kısım oluşturulacak.
  * Bu kısım dönem listelenmesi için kullanılacak.
@@ -16,51 +18,73 @@ import PeriodItem from "./period.item.tsx";
 const Result = ({
   periods,
   setViewCreate,
+  isLoaded,
 }: {
-  periods: PeriodDTO[];
+  periods?: PeriodDTO[];
   setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoaded: boolean;
 }) => {
+  if (!isLoaded) return <Loader />;
   if (!periods) return null;
   return (
     <Stack spacing={2}>
       <Paper
         elevation={3}
         sx={{
-          p: 2,
+          position: "sticky", // yapıştır
+          top: 0,
+          zIndex: 10, // diğer içeriklerin üstünde kalsın
           borderRadius: "12px",
           backgroundColor: theme.card.backgroundColor,
           color: theme.text,
           border: `1px solid ${theme.border}`,
+          p: 2,
         }}
       >
-        <div className="flex justify-between items-center">
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <form>arama</form>
-        </div>
+          <Tooltip title={langPack.create}>
+            <Button
+              sx={{ color: theme.menuItem.color }}
+              onClick={() => {
+                setViewCreate((prev) => !prev);
+              }}
+              startIcon={<AddIcon />}
+              color="inherit"
+              variant="outlined"
+              size="small"
+            >
+              {langPack.add_a_new_period}
+            </Button>
+          </Tooltip>
+        </Stack>
       </Paper>
-      <Stack
-        spacing={2}
-        component={Paper}
-        className="custom-scrollbar"
+
+      <Paper
         elevation={3}
+        className="custom-scrollbar"
         sx={{
           p: 2,
           borderRadius: "12px",
           backgroundColor: theme.card.backgroundColor,
           color: theme.text,
           border: `1px solid ${theme.border}`,
-          overflow: "auto",
-          maxHeight: "400px", // yüksekliği sınırla
-          overflowY: "auto", // sadece bu alan kayabilir
         }}
       >
-        {periods?.length > 0 ? (
-          periods.map((period) => (
-            <PeriodItem key={period.id} period={period} />
-          ))
-        ) : (
-          <Add setViewCreate={setViewCreate} />
-        )}
-      </Stack>
+        <Stack spacing={2}>
+          {periods.length > 0 ? (
+            periods.map((period) => (
+              <PeriodItem key={period.id} period={period} />
+            ))
+          ) : (
+            <Add setViewCreate={setViewCreate} />
+          )}
+        </Stack>
+      </Paper>
     </Stack>
   );
 };
