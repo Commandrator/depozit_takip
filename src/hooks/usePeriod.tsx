@@ -77,18 +77,20 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     }
   };
   const listPeriods = useCallback(
-    async (company_id) => {
+    async (company_id, q?:string) => {
       const params = new URLSearchParams();
+      const query = q ??value;
       if (periods) {
         const min = (page - 1) * Number(range);
         const max = page * Number(range);
         params.set("min", String(min));
         params.set("max", String(max));
+        if (query) params.set("q", query);
       }
       try {
         const response = await fetch(
           "http://localhost:3000/app/admin/period/"
-            .concat(company_id || "")
+            .concat(company_id ?? "")
             .concat("/?")
             .concat(params.toString()),
           {
@@ -113,7 +115,7 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
         return null;
       }
     },
-    [setChange, setOpen, setDetail, page, range, periods]
+    [setChange, setOpen, setDetail, page, range, periods, value]
   );
   const searchPreview = async (query: string, company_id?: string) => {
     try {
@@ -135,7 +137,7 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
       );
       if (response.ok) {
         const data = await response.json();
-        setResults(new Periods(data));
+        setResults(new Periods(data).getUniquePeriods());
         setViewResult(true);
       } else {
         const message = await response.json();
@@ -193,7 +195,7 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
   ) => {
     const value = e.target.value;
     const isValid = regex.test(value);
-    setValue({ [errorKey]: value });
+    setValue((prev) => ({ ...prev, [errorKey]: value }));
     setErrors((prev) => ({
       ...prev,
       [errorKey]: isValid ? "" : message,
@@ -261,9 +263,12 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     setChange(true);
   };
   const handleClear = () => {
-    setValue("");
     setViewResult(false);
+    setChange(true);
+    setValue("");
     setResults(undefined);
+    setPage(1);
+    listPeriods(selectedCompanyId);
   };
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.target.value;
@@ -275,22 +280,17 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
       setResults(undefined);
     }
   };
+  const submitSearch = (name?: string) => {
+    if (name) setValue(name);
+    setViewResult(false);
+    setIsLoaded(false);
+    setPage(1);
+    listPeriods(selectedCompanyId, name);
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("çalıştı");
-    /**
-     * OKU ŞUNU!!
-     *
-     * Tab yapısı ile dialoglar birleştirilecek.
-     *
-     * Arama kısmına şeşlenen sonuç listelenecek
-     *
-     * sonuç kelimesi appcontext ya da url query kısmına eklenecek
-     *
-     * işlem sonunda durum change olarak değiştirikecej.
-     *
-     */
-  };  
+    submitSearch();
+  };
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       setViewResult(false);
@@ -336,7 +336,8 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     value,
     searchRef,
     handleClickOutside,
-    setViewResult
+    setViewResult,
+    submitSearch
   };
 };
 export default usePeriod;

@@ -19,31 +19,36 @@ const AppProvider: React.FC = () => {
   const [defaultNavActive, setDefaultNavActive] = useState<boolean>(true);
   const [openNavbarDialog, setOpenNavbarDialog] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<Role>("all"); //Role Option
-  const [selectedCompanyId, setSelectedCompanyId] = useState<number|null>(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
+    null
+  );
   const [company, setCompany] = useState<CompanyDTO>();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogType, setDialogType] = useState<string>("info");
   useEffect(() => {
     const loadData = async () => {
       const verified = await validateSession();
-      if (verified) {
-        const authData = localStorage.getItem("auth");
-        if (authData) {
-          try {
-            const parsedAuth = JSON.parse(authData);
-            if (typeof parsedAuth === "object" && parsedAuth !== null) {
-              setAuth(parsedAuth);
-            } else {
-              throw new Error("Geçersiz auth verisi");
-            }
-          } catch (error) {
-            console.error("JSON Parse Hatası:", error);
-            localStorage.removeItem("auth");
-          }
+      if (!verified) {
+        localStorage.removeItem("auth");
+        setAuth(undefined);
+        setUsable(true);
+        return;
+      }
+      const authData = localStorage.getItem("auth");
+      try {
+        const parsed = JSON.parse(authData || "");
+        if (parsed && typeof parsed === "object") {
+          setAuth(parsed);
+        } else {
+          throw new Error("Geçersiz veri");
         }
+      } catch (error) {
+        console.error("auth verisi okunamadı:", error);
+        localStorage.removeItem("auth");
       }
       setUsable(true);
     };
+
     loadData();
   }, [validateSession]);
   const value = useMemo(
@@ -69,7 +74,7 @@ const AppProvider: React.FC = () => {
       selectedCompanyId,
       setSelectedCompanyId,
       openNavbarDialog,
-      setOpenNavbarDialog
+      setOpenNavbarDialog,
     }),
     [
       depositList,
@@ -89,9 +94,9 @@ const AppProvider: React.FC = () => {
       company,
       setCompany,
       selectedCompanyId,
-      setSelectedCompanyId,      
+      setSelectedCompanyId,
       openNavbarDialog,
-      setOpenNavbarDialog
+      setOpenNavbarDialog,
     ]
   );
   return (

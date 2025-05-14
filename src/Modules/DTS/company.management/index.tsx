@@ -22,13 +22,12 @@ const CompanyMangement = () => {
     page,
     handleChange,
     handleChangeRange,
+    searchParams,
   } = useCompany();
   useEffect(() => {
-    if (!companys) listCompanys();
-  }, [companys, listCompanys]);
-  useEffect(() => {
-    if (change) listCompanys();
-  }, [change, listCompanys]);
+    const query = searchParams.get("q");
+    listCompanys(query);
+  }, [searchParams, change, listCompanys]);
   return (
     <div className="flex flex-col min-h-screen pt-32">
       <div className="flex-grow space-y-5">
@@ -40,15 +39,16 @@ const CompanyMangement = () => {
               handleDialogAction={handleDialogAction}
             />
           ))}
-        {dialogOpen && CreatePortal(
-          <DialogWithTab
-            dialogOpen={dialogOpen}
-            handleDialogClose={handleDialogClose}            
-            dialogType={dialogType}
-            company={company}
-            selectedCompanyId={selectedCompanyId}
-          />
-        )}
+        {dialogOpen &&
+          CreatePortal(
+            <DialogWithTab
+              dialogOpen={dialogOpen}
+              handleDialogClose={handleDialogClose}
+              dialogType={dialogType}
+              company={company}
+              selectedCompanyId={selectedCompanyId}
+            />
+          )}
       </div>
       {companys ? (
         <div className="w-full flex justify-between items-center px-4 py-4">
@@ -57,6 +57,7 @@ const CompanyMangement = () => {
               count={Math.max(1, Math.ceil(companys.total / Number(range)))}
               size="small"
               page={page}
+              onChange={handleChange}
               sx={{
                 color: theme.menuItem,
                 "& .MuiPaginationItem-root": {
@@ -67,7 +68,6 @@ const CompanyMangement = () => {
                   background: theme.menu.backgroundColor,
                 },
               }}
-              onChange={handleChange}
             />
           </div>
           <div>

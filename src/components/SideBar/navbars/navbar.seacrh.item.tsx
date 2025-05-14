@@ -1,20 +1,10 @@
-import React from "react";
-import { Button, Typography, ListItem } from "@mui/material";
+import { Typography, ListItemButton } from "@mui/material";
 import highlightSearchTerm from "../../Filtres/charFinder.tsx";
-import { langPack } from "../../../index.jsx";
-import { SearchItemProps } from "../../../interfaces/CompanyCardProps.ts";
-const SerachItem = ({
-  company,
-  value,
-  handleDialogAction,
-  setViewResult,
-}: SearchItemProps) => {
-  const handleAction = () => {
-    handleDialogAction("company", company.id);
-    setViewResult(false);
-  };
+import { type SearchItemProps } from "../../../interfaces/CompanyCardProps.ts";
+import { Search } from "@mui/icons-material";
+const SerachItem = ({ company, value, submitSearch }: SearchItemProps) => {
   return (
-    <ListItem>
+    <ListItemButton onClick={() => submitSearch(company.name)}>
       <div className="grid grid-cols-[1fr_auto] gap-2 items-start w-full">
         <div>
           <Typography key={company.id}>
@@ -22,11 +12,9 @@ const SerachItem = ({
           </Typography>
           <Typography color="neutral">{company.about}</Typography>
         </div>
-        <Button variant="outlined" color="inherit" onClick={handleAction}>
-          {langPack.view}
-        </Button>
       </div>
-    </ListItem>
+      <Search style={{ marginLeft: "auto" }} />
+    </ListItemButton>
   );
 };
 export default SerachItem;

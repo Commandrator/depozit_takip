@@ -1,19 +1,12 @@
-import React, { useEffect } from "react";
-import {
-  Button,
-  IconButton,
-  Box,
-  Typography,
-  List,
-  Divider,
-} from "@mui/material";
+import { useEffect } from "react";
+import { Button, IconButton, Box } from "@mui/material";
 import { Add, Menu } from "@mui/icons-material";
 import CompanyFilter from "../../../components/Filtres/company.filter.tsx";
 import useApp from "../../../hooks/useApp.tsx";
 import { langPack, theme } from "../../..";
 import SearchBar from "../../Filtres/search.tsx";
 import useCompany from "../../../hooks/useCompany.tsx";
-import SerachItem from "./navbar.seacrh.item.tsx";
+import CompanySearchList from "./navbar.company.list.tsx";
 const CompanyNav = () => {
   const { handleOpen } = useApp();
   const {
@@ -26,8 +19,7 @@ const CompanyNav = () => {
     searchRef,
     handleClickOutside,
     handleSubmit,
-    handleDialogAction,
-    setViewResult,
+    submitSearch,
   } = useCompany();
   useEffect(() => {
     if (!results?.companies || results.companies.length === 0) return;
@@ -83,25 +75,11 @@ const CompanyNav = () => {
                 boxShadow: 3,
               }}
             >
-              {results?.companies && results.companies.length === 0 ? (
-                <Typography color="neutral">
-                  {langPack.no_results_found}
-                </Typography>
-              ) : (
-                <List sx={{ padding: 0 }}>
-                  {results?.companies?.map((company, index) => (
-                    <React.Fragment key={company.id}>
-                      <SerachItem
-                        company={company}
-                        value={value}
-                        handleDialogAction={handleDialogAction}
-                        setViewResult={setViewResult}
-                      />
-                      {index < results.companies.length - 1 && <Divider />}
-                    </React.Fragment>
-                  ))}
-                </List>
-              )}
+              <CompanySearchList
+                results={results}
+                value={value}
+                submitSearch={submitSearch}
+              />
             </Box>
           )}
         </div>

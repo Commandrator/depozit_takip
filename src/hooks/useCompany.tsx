@@ -6,6 +6,7 @@ import { Companies } from "../classes/copanies.ts";
 import { Role, RoleEnum } from "../interfaces/role.type.ts";
 import { SelectChangeEvent } from "@mui/material/Select";
 import CompanyDetail from "../classes/company.detail.ts";
+import { useSearchParams } from "react-router-dom";
 const useCompany = () => {
   const {
     setOpen,
@@ -23,22 +24,22 @@ const useCompany = () => {
     setSelectedCompanyId,
     setDialogOpen,
   } = useContext(AppContext);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [companys, setCompanys] = useState<CompaniesDTO | null>();
   const [range, setRange] = useState<string>("10");
   const [page, setPage] = useState<number>(1);
-  const [value, setValue] = useState("");
-  const [results, setResults] = useState<CompaniesDTO | null>();
+  const [value, setValue] = useState(searchParams.get("q") ?? "");
+  const [results, setResults] = useState<CompaniesDTO>();
   const [viewResult, setViewResult] = useState<boolean>(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  const listCompanys = async () => {
+  const listCompanys = useCallback(async (query?: string | null) => {
     try {
       const params = new URLSearchParams();
-      if (companys) {
         const min = (page - 1) * Number(range);
         const max = page * Number(range);
-        params.set("min", String(min));
-        params.set("max", String(max));
-      }
+        if (min) params.set("min", String(min));
+        if (max) params.set("max", String(max));
+        if (query) params.set("q", query);
       if (selectedOption !== "all") params.set("role", String(selectedOption));
       const response = await fetch(
         `http://localhost:3000/app/admin/company?${params}`,
@@ -62,7 +63,7 @@ const useCompany = () => {
       console.error("Network Error:", error);
       return null;
     }
-  };
+  },[setCompanys, setChange, setOpen, setDetail, selectedOption, page, range]);
   const searchPreview = async (query: string) => {
     try {
       const params = new URLSearchParams();
@@ -79,7 +80,8 @@ const useCompany = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        if (data) return new Companies(data);
+        setResults(new Companies(data).getUniqueCompanys());
+        setViewResult(true);
       } else {
         const message = await response.json();
         let severity = returnSeverity(response.status);
@@ -226,13 +228,6 @@ const useCompany = () => {
     },
     [setOpen, setDetail, setChange]
   );
-  const handleDialogAction = async (type: string, id: number) => {
-    setDialogType(type);
-    const data = await getCompanyDetail(id);
-    if (data) setCompany(data);
-    setSelectedCompanyId(id);
-    setDialogOpen(true);
-  };
   const handleDialogClose = () => {
     setDialogOpen(false);
     setDialogType("info");
@@ -261,9 +256,7 @@ const useCompany = () => {
     const keyword = e.target.value;
     setValue(keyword);
     if (keyword.length > 1) {
-      const res = await searchPreview(keyword);
-      setResults(res);
-      setViewResult(true);
+      await searchPreview(keyword);
     } else {
       setViewResult(false);
       setResults(undefined);
@@ -271,8 +264,11 @@ const useCompany = () => {
   };
   const handleClear = () => {
     setValue("");
+    setChange(true);
     setViewResult(false);
     setResults(undefined);
+    searchParams.delete("q");
+    setSearchParams(searchParams);
   };
   const handleCreateDialogAction = () => {
     setDialogType("create-company");
@@ -283,21 +279,23 @@ const useCompany = () => {
       setViewResult(false);
     } else setViewResult(true);
   };
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const submitSearch = (name?: string) => {
+    setChange(true);
+    setSearchParams({ q: name ?? value });
+    setViewResult(false);
+    if (name) setValue(name);
+    setPage(1);
+  };
+  const handleDialogAction = async (type: string, id: number) => {
+    setDialogType(type);
+    const data = await getCompanyDetail(id);
+    if (data) setCompany(data);
+    setSelectedCompanyId(id);
+    setDialogOpen(true);
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    submitSearch();
     e.preventDefault();
-    console.log("çalıştı");
-    /**
-     * OKU ŞUNU!!
-     *
-     * Tab yapısı ile dialoglar birleştirilecek.
-     *
-     * Arama kısmına şeşlenen sonuç listelenecek
-     *
-     * sonuç kelimesi appcontext ya da url query kısmına eklenecek
-     *
-     * işlem sonunda durum change olarak değiştirikecej.
-     *
-     */
   };
   return {
     listCompanys,
@@ -318,7 +316,6 @@ const useCompany = () => {
     dialogType,
     setDialogType,
     handleDialogClose,
-    handleDialogAction,
     range,
     setRange,
     selectedOption,
@@ -341,6 +338,9 @@ const useCompany = () => {
     searchRef,
     handleClickOutside,
     handleSubmit,
+    submitSearch,
+    handleDialogAction,
+    searchParams,
   };
 };
 export { returnSeverity };

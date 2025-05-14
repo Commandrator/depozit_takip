@@ -41,7 +41,7 @@ const Result = ({
   results,
   searchRef,
   handleClickOutside,
-  setViewResult,
+  submitSearch,
 }: {
   periods?: PeriodsDTO;
   setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -58,7 +58,7 @@ const Result = ({
   results?: PeriodsDTO;
   searchRef: React.RefObject<HTMLDivElement>;
   handleClickOutside: (event: MouseEvent) => void;
-  setViewResult: React.Dispatch<React.SetStateAction<boolean>>;
+  submitSearch: (name?: string) => void;
 }) => {
   useEffect(() => {
     if (!results?.periods || results.periods.length === 0) return;
@@ -114,7 +114,7 @@ const Result = ({
                 <SearchResultList
                   results={results}
                   value={value}
-                  setViewResult={setViewResult}
+                  submitSearch={submitSearch}
                 />
               </Box>
             )}

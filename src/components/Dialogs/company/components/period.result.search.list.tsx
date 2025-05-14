@@ -7,11 +7,11 @@ import ReactMarkdown from "react-markdown";
 const SearchResultList = ({
   results,
   value,
-  setViewResult,
+  submitSearch,
 }: {
   results?: PeriodsDTO;
   value: string;
-  setViewResult: React.Dispatch<React.SetStateAction<boolean>>;
+  submitSearch: (name?: string) => void;
 }) => {
   if (!results?.periods || results.periods.length === 0) {
     return <Typography color="neutral">{langPack.no_results_found}</Typography>;
@@ -23,7 +23,7 @@ const SearchResultList = ({
           <SerachItem
             period={period}
             value={value}
-            setViewResult={setViewResult}
+            submitSearch={submitSearch}
           />
           {index < results.periods.length - 1 && <Divider />}
         </React.Fragment>

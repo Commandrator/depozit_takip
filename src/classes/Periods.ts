@@ -25,12 +25,21 @@ export class Period {
     }
 }
 export default class Periods {
-    periods: PeriodDTO[];
-    total: number;
+    periods: PeriodDTO[] = [];
+    total: number = 0;
     constructor(parameters: PeriodsDTO) {
         if (parameters) {
             this.total = parameters.total;
             this.periods = parameters.periods.map((p: PeriodDTO) => new Period(p));
         }
+    }
+    getUniquePeriods() {
+        const uniquePeriods = this.periods.reduce((acc: PeriodDTO[], period: PeriodDTO) => {
+            if (!acc.some(item => item.name === period.name)) {
+                acc.push(period);
+            }
+            return acc;
+        }, []);
+        return new Periods({ periods: uniquePeriods, total: this.total });
     }
 }

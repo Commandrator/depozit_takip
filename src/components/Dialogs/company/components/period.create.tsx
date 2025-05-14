@@ -64,9 +64,9 @@ const Create = ({ selectedCompanyId, setViewCreate }) => {
             isValidCompanyName(
               e,
               setInputValue,
-              "periodName",
+              "name",
               langPack.enter_letters_and_numbers_only,
-              /^[a-zA-ZçğıöşüÇĞİÖŞÜ0-9 ]+$/
+              /^[-a-zA-ZçğıöşüÇĞİÖŞÜ0-9 ]+$/
             );
           }}
           error={!!errors.name}

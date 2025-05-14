@@ -26,7 +26,7 @@ const useAuth = (): AuthHook => {
       if (response.ok) {
         const data = await response.json();
         setAuth(data);
-        localStorage["auth"] = JSON.stringify(data);
+        localStorage.setItem("auth", JSON.stringify(data));
       } else {
         const message = await response.json();
         const status = await response.status;
