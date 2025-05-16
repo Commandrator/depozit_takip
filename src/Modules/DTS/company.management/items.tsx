@@ -9,6 +9,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import CreateCompanyDialogContent from "../../../components/Dialogs/company/index.tsx";
 import ManageCompanyContent from "../../../components/Dialogs/company/manage.tsx";
 import PeriodContent from "../../../components/Dialogs/company/period.tsx";
+import DeliverContent from "../../../components/Dialogs/company/deliver.tsx";
 /**
  * ŞUNUDA OKU!!
  *
@@ -35,7 +36,7 @@ const menuItems = [
         label: "personel_transactions",
         action: "personnel",
         icon: <PeopleIcon fontSize="small" />,
-        content:null
+        content:DeliverContent
       },
       {
         id: "submenu-period-transactions",

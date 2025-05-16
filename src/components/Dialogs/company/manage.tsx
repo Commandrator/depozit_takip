@@ -17,6 +17,7 @@ import {
 } from "@mui/icons-material";
 import useCompany from "../../../hooks/useCompany.tsx";
 import { theme, langPack } from "../../../index.jsx";
+import ContentProps from "../../../interfaces/content.props.ts";
 const ContentItem = ({ title, content, theme }) => {
   return content ? (
     <Typography variant="body1" sx={{ color: theme.text }}>
@@ -101,7 +102,7 @@ const InputContent = ({
     </Box>
   );
 };
-const ManageCompanyContent = (props) => {
+const ManageCompanyContent : React.FC<ContentProps> = (props) => {
   const { selectedCompanyId, company } = props;
   const { deleteCompany, handleDialogClose } = useCompany();
   const handleDelete = async () => {

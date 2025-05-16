@@ -3,7 +3,7 @@ import { Button, TextField, Stack, Paper, Box } from "@mui/material";
 import { Save } from "@mui/icons-material";
 import useCompany from "../../../hooks/useCompany.tsx";
 import { langPack, theme } from "../../..";
-const CreateCompanyDialogContent = () => {
+const CreateCompanyDialogContent : React.FC = () => {
   const [companyName, setCompanyName] = useState<string>("");
   const [companyAbout, setCompanyAbout] = useState<string>("");
   const [errors, setErrors] = useState<{

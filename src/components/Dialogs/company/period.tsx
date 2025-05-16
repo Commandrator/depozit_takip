@@ -3,7 +3,8 @@ import { Stack } from "@mui/material";
 import usePeriod from "../../../hooks/usePeriod.tsx";
 import Result from "./components/period.result.tsx";
 import Create from "./components/period.create.tsx";
-const PeriodContent = ({ selectedCompanyId }) => {
+import type ContentProps from "../../../interfaces/content.props.ts";
+const PeriodContent:React.FC<ContentProps> = ({ selectedCompanyId }) => {
   const {
     periods,
     viewCreate,
