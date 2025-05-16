@@ -1,6 +1,7 @@
 import { useCallback, useContext } from "react";
 import AuthHook from "../interfaces/AuthHook";
 import AppContext from "../context/index.tsx";
+import returnSeverity from "./useAPI.ts";
 // Hook fonksiyonu
 const useAuth = (): AuthHook => {
   const { auth, setAuth, setOpen, setDetail } = useContext(AppContext);
@@ -24,26 +25,12 @@ const useAuth = (): AuthHook => {
         credentials: "include",
       });
       if (response.ok) {
-        const data = await response.json();
-        setAuth(data);
-        localStorage.setItem("auth", JSON.stringify(data));
+        await get_about();
       } else {
         const message = await response.json();
-        const status = await response.status;
-        let severity = "";
-        switch (status) {
-          case 400:
-            severity = "warning";
-            break;
-          case 500:
-            severity = "error";
-            break;
-          default:
-            severity = "error";
-            break;
-        }
+        let severity = returnSeverity(response.status);
         setOpen(true);
-        setDetail({ ...message, title: "İşlemi başarısız", severity });
+        setDetail({ ...message, title: "İşlem başarısız", severity });
       }
     } catch (error) {
       throw new Error(error);
@@ -61,23 +48,33 @@ const useAuth = (): AuthHook => {
         if (response.ok) clearStorage();
         else {
           const message = await response.json();
-          const status = await response.status;
-          let severity = "";
-          switch (status) {
-            case 400:
-              severity = "warning";
-              break;
-            case 500:
-              severity = "error";
-              break;
-            default:
-              severity = "error";
-              break;
-          }
+          let severity = returnSeverity(response.status);
           setOpen(true);
-          setDetail({ ...message, title: "İşlemi başarısız", severity });
+          setDetail({ ...message, title: "İşlem başarısız", severity });
           clearStorage();
         }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const get_about = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/auth/", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+      if (response.ok) {
+        const result = await response.json();
+        setAuth(result);
+        localStorage.setItem("auth", JSON.stringify(result));
+      } else {
+        const message = await response.json();
+        let severity = returnSeverity(response.status);
+        setOpen(true);
+        setDetail({ ...message, title: "İşlem başarısız", severity });
+        clearStorage();
       }
     } catch (error) {
       console.log(error);
