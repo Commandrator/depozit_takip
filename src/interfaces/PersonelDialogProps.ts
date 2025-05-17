@@ -1,8 +1,7 @@
 import { CompanyDTO } from "./CompanyDTO";
-interface PersonelDialogProps{
+export default interface PersonelDialogProps{
     dialogOpen: boolean;
     handleDialogAction: () => void;
     selectedCompanyId: number | null;
     company: CompanyDTO | undefined;
 }
-export default PersonelDialogProps;

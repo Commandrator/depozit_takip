@@ -1,43 +1,32 @@
-import React, { useEffect } from "react";
-import { Paper, Tooltip, Button, Stack, Pagination, Box } from "@mui/material";
-import { theme, langPack } from "../../../../index.jsx";
+import { Stack, Paper, Box, Tooltip, Button, Pagination } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
-import Loader from "./loader.tsx";
+import { theme, langPack } from "../../../../index.jsx";
 import BasicSelect from "../../../BasicSelect.tsx";
 import SearchBar from "../../../Filtres/search.tsx";
-import ResultList from "./period.result.list.tsx";
-import SearchResultList from "./period.result.search.list.tsx";
-import { DialogResultDTO } from "../../../../interfaces/dialog.result.dto.ts";
-/**
- * # Dönem Arama sonuç sayfası
- *
- * @param param0
- * @returns
- */
-const Result: React.FC<DialogResultDTO> = ({
-  periods,
-  setViewCreate,
-  isLoaded,
-  page,
+import React from "react";
+import Loader from "./loader.tsx";
+import ResultList from "./deliver.result.list.tsx";
+import { DialogDeliverResultDTO } from "../../../../interfaces/dialog.result.dto.ts";
+import SearchResultList from "./deliver.result.search.list.tsx";
+
+const Result: React.FC<DialogDeliverResultDTO> = ({
+  viewResult,
   range,
-  handleChangeRange,
-  handleChange,
+  page,
+  value,
+  searchRef,
   handleSubmit,
   handleSearch,
   handleClear,
-  value,
-  viewResult,
-  results,
-  searchRef,
-  handleClickOutside,
+  setViewCreate,
+  handleChangeRange,
+  handleChange,
   submitSearch,
+  delivers,
+  results,
+  isLoaded,
 }): JSX.Element => {
-  useEffect(() => {
-    if (!results?.periods || results.periods.length === 0) return;
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [results, handleClickOutside]);
-  if (!isLoaded || !periods) return <Loader />;
+  if (!isLoaded || !delivers) return <Loader />;
   return (
     <Stack spacing={2}>
       <Paper
@@ -91,7 +80,7 @@ const Result: React.FC<DialogResultDTO> = ({
               </Box>
             )}
           </div>
-          <Tooltip title={langPack.create_period}>
+          <Tooltip title={langPack.add_employee}>
             <Button
               sx={{
                 color: theme.menuItem.color,
@@ -105,12 +94,12 @@ const Result: React.FC<DialogResultDTO> = ({
                 },
                 whiteSpace: "nowrap",
               }}
-              onClick={() => setViewCreate((prev) => !prev)}
+              onClick={(): void => setViewCreate((prev) => !prev)}
               startIcon={<AddIcon />}
               color="inherit"
               variant="outlined"
             >
-              <span className="button-text">{langPack.create_period}</span>
+              <span className="button-text">{langPack.add_employee}</span>
             </Button>
           </Tooltip>
         </Stack>
@@ -127,13 +116,13 @@ const Result: React.FC<DialogResultDTO> = ({
         }}
       >
         <Stack spacing={2}>
-          <ResultList periods={periods} setViewCreate={setViewCreate} />
+          <ResultList results={delivers} setViewCreate={setViewCreate} />
         </Stack>
       </Paper>
       <div className="w-full flex justify-between items-center px-4 py-4">
         <div className="flex-1 flex justify-center">
           <Pagination
-            count={Math.max(1, Math.ceil(periods.total / Number(range)))}
+            count={Math.max(1, Math.ceil(delivers.total / Number(range)))}
             size="small"
             page={page}
             sx={{

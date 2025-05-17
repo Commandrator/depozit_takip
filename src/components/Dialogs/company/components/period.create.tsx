@@ -11,7 +11,8 @@ import { langPack, theme } from "../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import usePeriod from "../../../../hooks/usePeriod.tsx";
 import { Save } from "@mui/icons-material";
-const Create = ({ selectedCompanyId, setViewCreate }) => {
+import DialogCreateDTO from "../../../../interfaces/dialog.create.dto.ts";
+const Create : React.FC<DialogCreateDTO> = ({ selectedCompanyId, setViewCreate }) => {
   const {
     createPeriod,
     errors,

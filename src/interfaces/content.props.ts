@@ -1,5 +1,5 @@
 import { CompanyDTO } from "./CompanyDTO";
 export default interface ContentProps {
-    selectedCompanyId?: string;
+    selectedCompanyId: string;
     company?: CompanyDTO;
 }

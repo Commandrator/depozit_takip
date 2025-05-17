@@ -41,11 +41,9 @@ const packages = {
     back: "Geri",
     working_period: "Çalışma Dönemi",
     number_of_days_remaining: "Kalan Gün Sayısı",
-    period_delete_message:
-      '**UYARI**: Dönemi kalıcı olarak silmek için, sağ alt köşedeki "Dönem Başlığı" kısmına **:project_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
+    period_delete_message: '**UYARI**: Dönemi kalıcı olarak silmek için, sağ alt köşedeki "Dönem Başlığı" kısmına **:project_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
     add_a_period_title: "Henüz bir dönem bulunamadı",
-    add_a_period_subtitle:
-      "Yeni bir dönem oluşturmak için yukarıdaki butona tıklayın.",
+    add_a_period_subtitle: "Oluşturmak için yukarıdaki butona tıklayın.",
     load_range: "Yükleme Aralığı",
     viewer: "Görüntüleyici",
     editor: "Düzenleyici",
@@ -57,6 +55,17 @@ const packages = {
     matching_periods_result: "Eşleşen **:total:** dönem bulundu.",
     matching_result: "Eşleşen **:total:** sonuç bulundu.",
     search_word: "Arama sözcüğü",
+    employee:"Personel",
+    enter_employee_name: "En az üç harf içerecek şekilde personelin adını girin",
+    invalid_mail_format:"Mail formatı geçersiz.",
+    employee_connect_mail:"Personel maili",
+    active_employee:"Aktif",
+    mail_notice:"Bu e-posta adresi personel bilgilendirme amaçlı kullanılacaktır.",
+    add_employee:"Personel Oluştur",
+    add_a_deliver_title: "Henüz bir personel bulunamadı",
+    add_a_deliver_subtitle: "Oluşturmak için yukarıdaki butona tıklayın.",
+    deliver_delete_message: '**UYARI**: Personeli kalıcı olarak silmek için, sağ alt köşedeki "Dönem Başlığı" kısmına **:deliver_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
+    employee_name:"Personel adı"
   },
   en: {},
 };
