@@ -1,30 +1,23 @@
 import React from "react";
-import {
-  Paper,
-  TextField,
-  Button,
-  Stack,
-  Box,
-  Tooltip,
-} from "@mui/material";
+import { Paper, TextField, Button, Stack, Box, Tooltip } from "@mui/material";
 import { langPack, theme } from "../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import usePeriod from "../../../../hooks/usePeriod.tsx";
 import { Save } from "@mui/icons-material";
 import DialogCreateDTO from "../../../../interfaces/dialog.create.dto.ts";
-const Create : React.FC<DialogCreateDTO> = ({ selectedCompanyId, setViewCreate }) => {
+const Create: React.FC<DialogCreateDTO> = ({
+  selectedCompanyId,
+  setViewCreate,
+}) => {
   const {
-    createPeriod,
+    create,
     errors,
     inputValue,
-    checkEmpty,
-    isValidCompanyName,
-    setInputValue,
+    isValidInput,
   } = usePeriod({ selectedCompanyId });
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    await checkEmpty();
-    await createPeriod(selectedCompanyId, inputValue);
+    await create(selectedCompanyId);
     setViewCreate((prev) => !prev);
   };
   return (
@@ -61,15 +54,7 @@ const Create : React.FC<DialogCreateDTO> = ({ selectedCompanyId, setViewCreate }
           fullWidth
           variant="outlined"
           value={inputValue.name}
-          onChange={(e) => {
-            isValidCompanyName(
-              e,
-              setInputValue,
-              "name",
-              langPack.enter_letters_and_numbers_only,
-              /^[-a-zA-ZçğıöşüÇĞİÖŞÜ0-9 ]+$/
-            );
-          }}
+          onChange={(e) => isValidInput(e, "name")}
           error={!!errors.name}
           helperText={errors.name}
         />
@@ -87,15 +72,7 @@ const Create : React.FC<DialogCreateDTO> = ({ selectedCompanyId, setViewCreate }
           onClick={(e) =>
             e.currentTarget.querySelector("input")?.showPicker?.()
           }
-          onChange={(e) => {
-            isValidCompanyName(
-              e,
-              setInputValue,
-              "deadline",
-              langPack.invalid_date_format,
-              /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
-            );
-          }}
+          onChange={(e) => isValidInput(e, "deadline")}
           error={!!errors["deadline"]}
           helperText={errors["deadline"]}
         />
@@ -123,7 +100,7 @@ const Create : React.FC<DialogCreateDTO> = ({ selectedCompanyId, setViewCreate }
               onClick={handleSave}
               variant="outlined"
               color="inherit"
-              startIcon={<Save/>}
+              startIcon={<Save />}
               sx={{
                 borderRadius: "20px",
                 color: theme.text,

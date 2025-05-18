@@ -9,8 +9,14 @@ import DeliverInput, {
 import { SelectChangeEvent } from "@mui/material";
 interface UseDeliverProps {
   selectedCompanyId?: string;
+  defVal?: string | boolean;
+  defKey?: keyof DeliverInput;
 }
-const useDeliver = ({ selectedCompanyId }: UseDeliverProps = {}) => {
+const useDeliver = ({
+  selectedCompanyId,
+  defVal,
+  defKey,
+}: UseDeliverProps = {}) => {
   const { setOpen, setDetail, change, setChange } = useContext(AppContext);
   const searchRef = useRef<HTMLDivElement>(null);
   const [range, setRange] = useState<string>("10");
@@ -24,10 +30,10 @@ const useDeliver = ({ selectedCompanyId }: UseDeliverProps = {}) => {
   const [edit, setEdit] = useState<boolean>(true);
   const [deleteOption, setDeleteOption] = useState<string>();
   const [inputValue, setInputValue] = useState<DeliverInput>(
-    new DeliverInput({ employee: "", mail: "", active: true })
+    new DeliverInput(defKey && defVal ? { [defKey]: defVal } : {})
   );
   const [errors, setErrors] = useState<DeliverInputError>(
-    new DeliverInputError({ employee: "", mail: "" })
+    new DeliverInputError(defKey && defVal ? { [defKey]: defVal } : {})
   );
   const list = useCallback(
     async (company_id, q?: string) => {
@@ -107,10 +113,8 @@ const useDeliver = ({ selectedCompanyId }: UseDeliverProps = {}) => {
   const handleEdit = (value: string, dataKey: keyof DeliverInput) => {
     setEdit((prev) => !prev);
     if (!edit)
-      setInputValue((prev) => {
-        if (!prev) return prev;
-        return { ...prev, [dataKey]: value } as DeliverInput;
-      });
+      setInputValue(new DeliverInput(defKey && defVal ? { [defKey]: defVal } : {})
+    );
   };
   const isValidInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -144,9 +148,9 @@ const useDeliver = ({ selectedCompanyId }: UseDeliverProps = {}) => {
       let resData = await response.json();
 
       if (response.ok) {
-        setChange(true); // Yeni teslim oluşturuldu
+        setChange(true);
         title = "Oluşturma işlemi başarılı";
-        setErrors(new DeliverInputError({ employee: "", mail: "" }));
+        setErrors(new DeliverInputError({}));
       } else {
         title = "Oluşturma sırasında bir hata oluştu.";
       }
@@ -213,11 +217,10 @@ const useDeliver = ({ selectedCompanyId }: UseDeliverProps = {}) => {
   };
   const handleDeleteInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setDeleteOption(e.target.value);
-  };
+  ) => setDeleteOption(e.target.value);
   const delete_deliver = useCallback(
-    async (company_id: string, id: string) => {
+    async ( e: React.FormEvent<HTMLFormElement>, company_id: string, id: string) => {
+      e.preventDefault();
       try {
         const response = await fetch(
           "http://localhost:3000/app/admin/deliver/"
@@ -252,6 +255,43 @@ const useDeliver = ({ selectedCompanyId }: UseDeliverProps = {}) => {
     },
     [setOpen, setDetail, setChange]
   );
+
+  const update = async (company_id, id, data) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/app/admin/period/"
+          .concat(company_id)
+          .concat("/")
+          .concat(id),
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(data),
+        }
+      );
+      let title = "";
+      let severity = returnSeverity(response.status);
+      let resData = await response.json();
+      if (response.ok) {
+        setChange(true);
+        setEdit((prev) => !prev);
+        title = "Güncelleme işlemi başarılı";
+      } else {
+        severity = returnSeverity(response.status);
+        title = "Güncelleme sırasında bir hata oluştu.";
+      }
+      setDetail({ title, severity, message: resData.message });
+      setOpen(true);
+    } catch (error) {
+      setDetail({
+        title: "İşlemi başarısız",
+        severity: "error",
+        message: error.message,
+      });
+      setOpen(true);
+    }
+  };
   return {
     delete_deliver,
     handleChangeRange,
@@ -293,6 +333,7 @@ const useDeliver = ({ selectedCompanyId }: UseDeliverProps = {}) => {
     deleteOption,
     setDeleteOption,
     handleDeleteInput,
+    update,
   };
 };
 export default useDeliver;

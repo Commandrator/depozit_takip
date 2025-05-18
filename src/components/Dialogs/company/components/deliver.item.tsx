@@ -14,6 +14,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import { langPack, theme } from "../../../../index.jsx";
 import useDeliver from "../../../../hooks/useDeliver.tsx";
+import EditInput from "./deliver.edit.input.tsx";
 /**
  * # Deliver Item Element
  * ---
@@ -66,24 +67,21 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        {/* <EditInput
-            period={period}
-            type="text"
-            dataKey="name"
-            regex={/^[a-zA-ZçğıöşüÇĞİÖŞÜ0-9 -]+$/}
-            label={langPack.period_name}
-            message={langPack.enter_letters_and_numbers_only}
-          /> */}
+        <EditInput
+          data={deliver}
+          type="text"
+          dataKey="employee"
+          label={langPack.employee_name}
+          required
+        />
       </AccordionDetails>
       <AccordionDetails>
-        {/* <EditInput
-            period={period}
-            type="date"
-            dataKey="deadline"
-            regex={/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/}
-            label={langPack.expiration_date}
-            message={langPack.deadline}
-          /> */}
+        <EditInput
+          data={deliver}
+          type="email"
+          dataKey="mail"
+          label={langPack.employee_mail}
+        />
       </AccordionDetails>
       <AccordionDetails
         className="text-sm"
@@ -100,6 +98,10 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.creation_date}:</span>{" "}
           {new Date(deliver.created_date).toLocaleDateString()}
+        </Typography>
+        <Typography sx={{ color: theme.text }} variant="body2">
+          <span className="text-gray-400">{langPack.employee_id}:</span>{" "}
+          {deliver.company_user_id ?? langPack.employee_not_connected}
         </Typography>
       </AccordionDetails>
       <AccordionDetails
@@ -128,29 +130,35 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
           padding: "10px 16px",
         }}
       >
-        <TextField
-          size="small"
-          label={langPack.employee_name}
-          placeholder={deliver.employee}
-          onChange={handleDeleteInput}
-          value={deleteOption}
-          sx={{
-            "& .MuiInputBase-input::placeholder": {
-              fontSize: "10px",
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          disabled={deleteOption !== deliver.employee}
-          className="opacity-70 hover:opacity-100 transition-opacity duration-300"
-          color="error"
-          onClick={() =>
-            delete_deliver(String(deliver.company_id), String(deliver.id))
-          }
+        <form
+          onSubmit={(e) => delete_deliver(e, 
+            String(deliver.company_id),
+            String(deliver.id)
+          )}
         >
-          {langPack.delete}
-        </Button>
+          <TextField
+            size="small"
+            label={langPack.employee_name}
+            required
+            placeholder={deliver.employee}
+            onChange={handleDeleteInput}
+            value={deleteOption}
+            sx={{
+              "& .MuiInputBase-input::placeholder": {
+                fontSize: "10px",
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            disabled={deleteOption !== deliver.employee}
+            className="opacity-70 hover:opacity-100 transition-opacity duration-300"
+            color="error"
+            type="submit"
+          >
+            {langPack.delete}
+          </Button>
+        </form>
       </AccordionActions>
     </Accordion>
   );

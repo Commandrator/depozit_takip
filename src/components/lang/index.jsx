@@ -65,7 +65,10 @@ const packages = {
     add_a_deliver_title: "Henüz bir personel bulunamadı",
     add_a_deliver_subtitle: "Oluşturmak için yukarıdaki butona tıklayın.",
     deliver_delete_message: '**UYARI**: Personeli kalıcı olarak silmek için, sağ alt köşedeki "Dönem Başlığı" kısmına **:deliver_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
-    employee_name:"Personel adı"
+    employee_name:"Personel adı",
+    employee_mail:"Personel Maili",
+    employee_id:"Kullanıcı Adresi",
+    employee_not_connected:"Personel bağlantısı kurulmadı."
   },
   en: {},
 };

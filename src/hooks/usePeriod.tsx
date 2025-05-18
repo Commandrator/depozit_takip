@@ -2,70 +2,62 @@ import { useContext, useState, useCallback, useRef } from "react";
 import AppContext from "../context/index.tsx";
 import returnSeverity from "./useAPI.ts";
 import { langPack } from "../index.jsx";
-import PeriodInputDTO from "../interfaces/period.dialog.input.dto.ts";
-import PeriodHookDTO from "../interfaces/period.dialog.hook.dto.ts";
+import type PeriodHookDTO from "../interfaces/period.dialog.hook.dto.ts";
 import Periods from "../classes/Periods.ts";
-import PeriodsDTO from "../interfaces/periods.dto.ts";
-import { SelectChangeEvent } from "@mui/material/Select";
-const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
+import type PeriodsDTO from "../interfaces/periods.dto.ts";
+import { type SelectChangeEvent } from "@mui/material/Select";
+import PeriodInput, {
+  PeriodInputError,
+} from "../classes/period.input.value.ts";
+const usePeriod = ({
+  selectedCompanyId,
+  defKey,
+  defValue,
+}: PeriodHookDTO = {}) => {
   const { setOpen, setDetail, change, setChange } = useContext(AppContext);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [periods, setPeriods] = useState<PeriodsDTO>();
-  const [viewCreate, setViewCreate] = useState<boolean>(false);
-  const currentYear = new Date().getFullYear();
-  const nextYear = currentYear + 1;
-  const [deleteOption, setDeleteOption] = useState<string>();
-  const [inputValue, setInputValue] = useState<PeriodInputDTO>({
-    deadline: new Date(new Date().setFullYear(nextYear))
-      .toISOString()
-      .split("T")[0],
-    name: `${currentYear} - ${nextYear} ${langPack.working_period}`,
-  });
-  const [errors, setErrors] = useState<{
-    deadline?: string;
-    name?: string;
-  }>({});
-  const [edit, setEdit] = useState<boolean>(true);
   const [range, setRange] = useState<string>("10");
   const [page, setPage] = useState<number>(1);
   const [value, setValue] = useState<string>("");
   const [results, setResults] = useState<PeriodsDTO>();
   const [viewResult, setViewResult] = useState<boolean>(false);
-  const checkEmpty = () => {
-    let newErrors: Partial<PeriodInputDTO> = {};
-    if (!inputValue.name.trim())
-      newErrors.name = langPack.company_name_cannot_be_blank;
-    if (!inputValue.deadline.trim())
-      newErrors.deadline = langPack.company_name_cannot_be_blank;
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return false;
-    }
-    return true;
-  };
-  const createPeriod = async (company_id, data) => {
+  const [viewCreate, setViewCreate] = useState<boolean>(false);
+  const [deleteOption, setDeleteOption] = useState<string>();
+  const [edit, setEdit] = useState<boolean>(true);
+  const [inputValue, setInputValue] = useState<PeriodInput>(
+    new PeriodInput(defKey && defValue ? { [defKey]: defValue } : {})
+  );
+  const [errors, setErrors] = useState<PeriodInputError>(
+    new PeriodInputError(defKey && defValue ? { [defKey]: defValue } : {})
+  );
+  const create = async (company_id) => {
     try {
+      const validationErrors = new PeriodInputError(inputValue);
+      if (validationErrors.hasError()) {
+        setErrors(validationErrors);
+        return;
+      }
       const response = await fetch(
         "http://localhost:3000/app/admin/period/".concat(company_id),
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(data),
+          body: JSON.stringify(inputValue),
         }
       );
       let title = "";
       let severity = returnSeverity(response.status);
       let resData = await response.json();
       if (response.ok) {
-        setChange(true); // Yeni şirket oluşturulduğu için değişim
+        setChange(true);
         title = "Oluşturma işlemi başarılı";
+        setErrors(new PeriodInputError({}));
       } else {
-        severity = returnSeverity(response.status);
         title = "Oluşturma sırasında bir hata oluştu.";
       }
       setDetail({ title, severity, message: resData.message });
-      setErrors({});
       setOpen(true);
     } catch (error) {
       setDetail({
@@ -77,9 +69,9 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     }
   };
   const listPeriods = useCallback(
-    async (company_id, q?:string) => {
+    async (company_id, q?: string) => {
       const params = new URLSearchParams();
-      const query = q ??value;
+      const query = q ?? value;
       if (periods) {
         const min = (page - 1) * Number(range);
         const max = page * Number(range);
@@ -186,25 +178,29 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
       setOpen(true);
     }
   };
-  const isValidCompanyName = (
+  /**
+   * # isValidInput
+   * ---
+   * İnput değerine göre işlem yapmak için kullanılacaktır.
+   * @param e
+   * @param errorKey
+   */
+  const isValidInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    setValue: (value: any) => void,
-    errorKey: string,
-    message: string,
-    regex: RegExp // düzeltildi: string değil RegExp
+    errorKey: string
   ) => {
-    const value = e.target.value;
-    const isValid = regex.test(value);
-    setValue((prev) => ({ ...prev, [errorKey]: value }));
-    setErrors((prev) => ({
-      ...prev,
-      [errorKey]: isValid ? "" : message,
-    }));
+    const target = e.target as HTMLInputElement;
+    const { type, value, checked } = target;
+    const result = type === "checkbox" ? checked : value;
+    setInputValue((prev) => new PeriodInput({ ...prev, [errorKey]: result }));
+    setErrors(new PeriodInputError({ ...inputValue, [errorKey]: result }));
   };
-  const handleEdit = (value, dataKey) => {
+  const handleEdit = () => {
     setEdit((prev) => !prev);
     if (!edit)
-      setInputValue((prev) => ({ ...prev, [dataKey]: value[dataKey] }));
+      setInputValue(
+        new PeriodInput(defKey && defValue ? { [defKey]: defValue } : {})
+      );
   };
   const handleChangeRange = (event: SelectChangeEvent) => {
     setPage(1);
@@ -217,8 +213,13 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     const timeDiff = deadlineDate.getTime() - today.getTime();
     return Math.max(0, Math.ceil(timeDiff / (1000 * 60 * 60 * 24)));
   };
-  const deletePeriod = useCallback(
-    async (company_id, id) => {
+  const delete_period = useCallback(
+    async (
+      e: React.FormEvent<HTMLFormElement>,
+      company_id: string,
+      id: string
+    ) => {
+      e.preventDefault();
       try {
         const response = await fetch(
           "http://localhost:3000/app/admin/period/"
@@ -255,9 +256,7 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
   );
   const handleDeleteInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setDeleteOption(e.target.value);
-  };
+  ) => setDeleteOption(e.target.value);
   const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     setChange(true);
@@ -291,21 +290,20 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     e.preventDefault();
     submitSearch();
   };
-  const handleClickOutside = (event) => {
-    if (searchRef.current && !searchRef.current.contains(event.target)) {
-      setViewResult(false);
-    } else setViewResult(true);
-  };
+  const handleClickOutside = (event) =>
+    setViewResult(
+      Boolean(searchRef.current && !searchRef.current.contains(event.target))
+    );
   const searchRef = useRef<HTMLDivElement>(null);
   return {
     handleSubmit,
     handleSearch,
     handleClear,
-    createPeriod,
+    create,
     listPeriods,
     change,
     setChange,
-    isValidCompanyName,
+    isValidInput,
     periods,
     setPeriods,
     viewCreate,
@@ -314,13 +312,12 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     errors,
     inputValue,
     setErrors,
-    checkEmpty,
     edit,
     setEdit,
     getDay,
     updatePeriod,
     handleEdit,
-    deletePeriod,
+    delete_period,
     deleteOption,
     handleDeleteInput,
     isLoaded,
@@ -337,7 +334,7 @@ const usePeriod = ({ selectedCompanyId }: PeriodHookDTO = {}) => {
     searchRef,
     handleClickOutside,
     setViewResult,
-    submitSearch
+    submitSearch,
   };
 };
 export default usePeriod;

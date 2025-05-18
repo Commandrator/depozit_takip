@@ -16,7 +16,8 @@ import PeriodDTO from "../../../../interfaces/period.dto.ts";
 import usePeriod from "../../../../hooks/usePeriod.tsx";
 import EditInput from "./period.edit.input.tsx";
 const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
-  const { getDay, deletePeriod, handleDeleteInput, deleteOption } = usePeriod();
+  const { getDay, delete_period, handleDeleteInput, deleteOption } =
+    usePeriod();
   if (!period) return null; // period yoksa hiçbir şey döndürme
   return (
     <Accordion
@@ -57,22 +58,20 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
       </AccordionSummary>
       <AccordionDetails>
         <EditInput
-          period={period}
+          data={period}
           type="text"
           dataKey="name"
-          regex={/^[a-zA-ZçğıöşüÇĞİÖŞÜ0-9 -]+$/}
           label={langPack.period_name}
-          message={langPack.enter_letters_and_numbers_only}
+          required
         />
       </AccordionDetails>
       <AccordionDetails>
         <EditInput
-          period={period}
+          data={period}
           type="date"
           dataKey="deadline"
-          regex={/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/}
           label={langPack.expiration_date}
-          message={langPack.deadline}
+          required
         />
       </AccordionDetails>
       <AccordionDetails
@@ -115,9 +114,13 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
           component={ReactMarkdown}
           variant="body1"
         >
-          {langPack.period_delete_message.replace(":project_name:", period.name)}
+          {langPack.period_delete_message.replace(
+            ":project_name:",
+            period.name
+          )}
         </Typography>
       </AccordionDetails>
+
       <AccordionActions
         sx={{
           backgroundColor: theme.background,
@@ -125,27 +128,34 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
           padding: "10px 16px",
         }}
       >
-        <TextField
-          size="small"
-          label={langPack.period_name}
-          placeholder={period.name}
-          onChange={handleDeleteInput}
-          value={deleteOption}
-          sx={{
-            "& .MuiInputBase-input::placeholder": {
-              fontSize: "10px",
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          disabled={deleteOption !== period.name}
-          className="opacity-70 hover:opacity-100 transition-opacity duration-300"
-          color="error"
-          onClick={() => deletePeriod(period.company_id, period.id)}
+        <form
+          onSubmit={(e) =>
+            delete_period(e, String(period.company_id), String(period.id))
+          }
         >
-          {langPack.delete}
-        </Button>
+          <TextField
+            size="small"
+            required
+            label={langPack.period_name}
+            placeholder={period.name}
+            onChange={handleDeleteInput}
+            value={deleteOption}
+            sx={{
+              "& .MuiInputBase-input::placeholder": {
+                fontSize: "10px",
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            disabled={deleteOption !== period.name}
+            className="opacity-70 hover:opacity-100 transition-opacity duration-300"
+            color="error"
+            type="submit"
+          >
+            {langPack.delete}
+          </Button>
+        </form>
       </AccordionActions>
     </Accordion>
   );

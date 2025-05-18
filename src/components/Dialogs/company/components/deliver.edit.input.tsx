@@ -2,13 +2,13 @@ import React from "react";
 import { TextField, IconButton, Stack } from "@mui/material";
 import { Close, Edit, Save } from "@mui/icons-material";
 import { theme } from "../../../../index.jsx";
-import usePeriod from "../../../../hooks/usePeriod.tsx";
-import PeriodDTO from "../../../../interfaces/period.dto.ts";
-import PeriodInput from "../../../../classes/period.input.value.ts";
+import useDeliver from "../../../../hooks/useDeliver.tsx";
+import DeliverDTO from "../../../../interfaces/deliver.dto.ts";
+import DeliverInput from "../../../../classes/deliver.input.values.ts";
 interface EditInputDTO {
-  data: PeriodDTO;
+  data: DeliverDTO;
   type: string;
-  dataKey: keyof PeriodInput;
+  dataKey: keyof DeliverInput;
   label: string;
   required?: boolean;
 }
@@ -19,14 +19,8 @@ const EditInput: React.FC<EditInputDTO> = ({
   label,
   required,
 }) => {
-  const {
-    isValidInput,
-    errors,
-    updatePeriod,
-    edit,
-    handleEdit,
-    inputValue
-  } = usePeriod({ defKey:dataKey, defValue:data[dataKey] });
+  const { isValidInput, errors, update, edit, handleEdit, inputValue } =
+    useDeliver({ defKey:dataKey, defVal:data[dataKey] });
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <TextField
@@ -50,13 +44,13 @@ const EditInput: React.FC<EditInputDTO> = ({
         error={!!errors[dataKey]}
         helperText={errors[dataKey]}
       />
-      <IconButton onClick={handleEdit}>
+      <IconButton onClick={() => handleEdit(data[dataKey], dataKey)}>
         {edit ? <Edit /> : <Close />}
       </IconButton>
       <IconButton
         disabled={edit || data[dataKey] === inputValue[dataKey]}
         onClick={() =>
-          updatePeriod(data.company_id, data.id, {
+          update(data.company_id, data.id, {
             [dataKey]: inputValue[dataKey],
           })
         }

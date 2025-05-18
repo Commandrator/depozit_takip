@@ -5,7 +5,7 @@ export default class DeliverInput implements DeliverInputDTO {
   mail: string = "";
   active: boolean = false;
 
-  constructor(data: DeliverInputDTO) {
+  constructor(data: Partial<DeliverInputDTO>) {
     if (data.employee) this.employee = data.employee;
     if (data.mail) this.mail = data.mail;
     if (typeof data.active === "boolean") this.active = data.active;
@@ -20,7 +20,7 @@ export class DeliverInputError implements DeliverInputErrorDTO {
     mail: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   };
 
-  constructor(data: DeliverInputErrorDTO) {
+  constructor(data: Partial<DeliverInputErrorDTO>) {
     if (!data.employee || !this.regex.employee.test(data.employee.trim())) {
       this.employee = langPack.enter_employee_name;
     }
