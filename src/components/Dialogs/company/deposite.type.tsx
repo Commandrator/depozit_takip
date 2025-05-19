@@ -1,7 +1,7 @@
 import React,{useEffect} from "react";
 import type ContentProps from "../../../interfaces/content.props";
 import { Stack } from "@mui/material";
-import useDialogType from "../../../hooks/useDilaogContext";
+import useDialogContext from "../../../hooks/useDilaogContext.tsx";
 const DepositeTypeContent: React.FC<ContentProps> = ({
   selectedCompanyId,
 }): JSX.Element => {
@@ -25,7 +25,7 @@ const DepositeTypeContent: React.FC<ContentProps> = ({
     handleClickOutside,
     list,
     change,
-  } = useDialogType({ selectedCompanyId });
+  } = useDialogContext({module: "depositeType", selectedCompanyId });
   
     useEffect(() => {
       if (!listedData) list(selectedCompanyId);

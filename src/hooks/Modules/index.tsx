@@ -3,9 +3,10 @@ import { langPack } from "../../index.jsx";
 const modules = {
   depositeType
 };
-const useModuleAdapter = (moduleName: keyof typeof modules) => {
+const useModule = (moduleName: keyof typeof modules) => {
   const selected = modules[moduleName];
   if (!selected) throw new Error(langPack.module_notfount.replace(":name:",moduleName));
   return selected;
 }
-export default useModuleAdapter;
+export {modules};
+export default useModule;

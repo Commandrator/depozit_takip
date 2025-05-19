@@ -4,18 +4,18 @@ import AppContext from "../context/index.tsx";
 import { langPack } from "../index.jsx";
 import { SelectChangeEvent } from "@mui/material";
 import {DepositeTypes as DataAdaper} from "../classes/deposite.types.ts";
+import useModule, { modules } from "./Modules/index.tsx";
 import { DepositeTypeInputtError as InputErrorAdapter, DepositeTypeInput as InputAdapter} from "../classes/deposite.input.values.ts";
-const api = process.env.REACT_APP_API_URL?.concat("/app/admin/deposite/type/");
-interface UseProps {
-  selectedCompanyId?: string;
+type Modules = typeof modules;
+interface UseProps<M extends keyof Modules> {
+  module: M;  
+  selectedCompanyId: string,
   defVal?: string | boolean;
-  defKey?: keyof InputAdapter;
+  defKey?: keyof Modules[M]["InputAdapter"];
 }
-const useDialogType = ({
-  selectedCompanyId,
-  defVal,
-  defKey,
-}: UseProps = {}) => {
+const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
+  const { module, defKey, defVal, selectedCompanyId } = props;
+  const { InputAdapter, api } = useModule(module);
   const { setOpen, setDetail, change, setChange } = useContext(AppContext);
   const searchRef = useRef<HTMLDivElement>(null);
   const [range, setRange] = useState<string>("10");
@@ -70,7 +70,7 @@ const useDialogType = ({
         return null;
       }
     },
-    [setChange, setOpen, setDetail, page, range, listedData, value]
+    [setChange, setOpen, setDetail, page, range, listedData, value, api]
   );
   const searchPreview = async (query: string, company_id?: string) => {
     try {
@@ -246,7 +246,7 @@ const useDialogType = ({
         setOpen(true);
       }
     },
-    [setOpen, setDetail, setChange]
+    [setOpen, setDetail, setChange,api]
   );
 
   const update = async (company_id, id, data) => {
@@ -325,4 +325,4 @@ const useDialogType = ({
     update,
   };
 };
-export default useDialogType;
+export default useDialogContext;
