@@ -2,44 +2,43 @@ import { useCallback, useState, useContext, useRef } from "react";
 import returnSeverity from "./useAPI.ts";
 import AppContext from "../context/index.tsx";
 import { langPack } from "../index.jsx";
-import { Delivers } from "../classes/delivers.ts";
-import DeliverInput, {
-  DeliverInputError,
-} from "../classes/deliver.input.values.ts";
 import { SelectChangeEvent } from "@mui/material";
-interface UseDeliverProps {
+import {DepositeTypes as DataAdaper} from "../classes/deposite.types.ts";
+import { DepositeTypeInputtError as InputErrorAdapter, DepositeTypeInput as InputAdapter} from "../classes/deposite.input.values.ts";
+const api = process.env.REACT_APP_API_URL?.concat("/app/admin/deposite/type/");
+interface UseProps {
   selectedCompanyId?: string;
   defVal?: string | boolean;
-  defKey?: keyof DeliverInput;
+  defKey?: keyof InputAdapter;
 }
-const useDeliver = ({
+const useDialogType = ({
   selectedCompanyId,
   defVal,
   defKey,
-}: UseDeliverProps = {}) => {
+}: UseProps = {}) => {
   const { setOpen, setDetail, change, setChange } = useContext(AppContext);
   const searchRef = useRef<HTMLDivElement>(null);
   const [range, setRange] = useState<string>("10");
   const [page, setPage] = useState<number>(1);
   const [value, setValue] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [delivers, setDelivers] = useState<Delivers>();
-  const [results, setResults] = useState<Delivers>();
+  const [listedData, setListedData] = useState<DataAdaper>();
+  const [results, setResults] = useState<DataAdaper>();
   const [viewResult, setViewResult] = useState<boolean>(false);
   const [viewCreate, setViewCreate] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(true);
   const [deleteOption, setDeleteOption] = useState<string>();
-  const [inputValue, setInputValue] = useState<DeliverInput>(
-    new DeliverInput(defKey && defVal ? { [defKey]: defVal } : {})
+  const [inputValue, setInputValue] = useState<InputAdapter>(
+    new InputAdapter(defKey && defVal ? { [defKey]: defVal } : {})
   );
-  const [errors, setErrors] = useState<DeliverInputError>(
-    new DeliverInputError(defKey && defVal ? { [defKey]: defVal } : {})
+  const [errors, setErrors] = useState<InputErrorAdapter>(
+    new InputErrorAdapter(defKey && defVal ? { [defKey]: defVal } : {})
   );
   const list = useCallback(
     async (company_id, q?: string) => {
       const params = new URLSearchParams();
       const query = q ?? value;
-      if (delivers) {
+      if (listedData) {
         const min = (page - 1) * Number(range);
         const max = page * Number(range);
         params.set("min", String(min));
@@ -47,20 +46,17 @@ const useDeliver = ({
         if (query) params.set("q", query);
       }
       try {
-        const response = await fetch(
-          "http://localhost:3000/app/admin/deliver/"
-            .concat(company_id ?? "")
-            .concat("/?")
-            .concat(params.toString()),
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        if (!api) return;
+        const url = new URL(company_id ?? "", api);
+        url.search = params.toString();
+        const response = await fetch(url.toString(), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         if (response.ok) {
           const data = await response.json();
-          setDelivers(new Delivers(data));
+          setListedData(new DataAdaper(data));
           setChange(false);
           setIsLoaded(true);
         } else {
@@ -74,7 +70,7 @@ const useDeliver = ({
         return null;
       }
     },
-    [setChange, setOpen, setDetail, page, range, delivers, value]
+    [setChange, setOpen, setDetail, page, range, listedData, value]
   );
   const searchPreview = async (query: string, company_id?: string) => {
     try {
@@ -84,20 +80,17 @@ const useDeliver = ({
       params.set("max", String(5));
       params.set("q", query);
       params.set("preview", String(true));
-      const response = await fetch(
-        "http://localhost:3000/app/admin/deliver/"
-          .concat(company_id)
-          .concat("/?")
-          .concat(params.toString()),
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      if (!api) return;
+      const url = new URL(company_id ?? "", api);
+      url.search = params.toString();
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
       if (response.ok) {
         const data = await response.json();
-        setResults(new Delivers(data));
+        setResults(new DataAdaper(data));
         setViewResult(true);
       } else {
         const message = await response.json();
@@ -110,11 +103,11 @@ const useDeliver = ({
       return null;
     }
   };
-  const handleEdit = (value: string, dataKey: keyof DeliverInput) => {
+  const handleEdit = (value: string, dataKey: keyof InputAdapter) => {
     setEdit((prev) => !prev);
     if (!edit)
       setInputValue(
-        new DeliverInput(defKey && defVal ? { [defKey]: defVal } : {})
+        new InputAdapter(defKey && defVal ? { [defKey]: defVal } : {})
       );
   };
   const isValidInput = (
@@ -124,25 +117,24 @@ const useDeliver = ({
     const target = e.target as HTMLInputElement;
     const { type, value, checked } = target;
     const result = type === "checkbox" ? checked : value;
-    setInputValue((prev) => new DeliverInput({ ...prev, [errorKey]: result }));
-    setErrors(new DeliverInputError({ ...inputValue, [errorKey]: result }));
+    setInputValue((prev) => new InputAdapter({ ...prev, [errorKey]: result }));
+    setErrors(new InputErrorAdapter({ ...inputValue, [errorKey]: result }));
   };
   const create = async (company_id) => {
     try {
-      const validationErrors = new DeliverInputError(inputValue);
+      const validationErrors = new InputErrorAdapter(inputValue);
       if (validationErrors.hasError()) {
         setErrors(validationErrors);
         return;
       }
-      const response = await fetch( 
-        "http://localhost:3000/app/admin/deliver/".concat(company_id),
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(inputValue),
-        }
-      );
+      if (!api) return;
+      const url = new URL(company_id, api);
+      const response = await fetch(url.toString(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(inputValue),
+      });
 
       let title = "";
       let severity = returnSeverity(response.status);
@@ -151,7 +143,7 @@ const useDeliver = ({
       if (response.ok) {
         setChange(true);
         title = "Oluşturma işlemi başarılı";
-        setErrors(new DeliverInputError({}));
+        setErrors(new InputErrorAdapter({}));
       } else {
         title = "Oluşturma sırasında bir hata oluştu.";
       }
@@ -227,17 +219,13 @@ const useDeliver = ({
     ) => {
       if (e) e.preventDefault();
       try {
-        const response = await fetch(
-          "http://localhost:3000/app/admin/deliver/"
-            .concat(company_id)
-            .concat("/")
-            .concat(id),
-          {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        if (!api) return;
+        const url = new URL(company_id.concat("/").concat(id), api);
+        const response = await fetch(url.toString(), {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         let title = "";
         let severity = returnSeverity(response.status);
         let resData = await response.json();
@@ -263,18 +251,14 @@ const useDeliver = ({
 
   const update = async (company_id, id, data) => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/app/admin/deliver/"
-          .concat(company_id)
-          .concat("/")
-          .concat(id),
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(data),
-        }
-      );
+      if (!api) return;
+      const url = new URL(company_id.concat("/").concat(id), api);
+      const response = await fetch(url.toString(), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
       let title = "";
       let severity = returnSeverity(response.status);
       let resData = await response.json();
@@ -314,8 +298,8 @@ const useDeliver = ({
     setViewResult,
     results,
     setResults,
-    delivers,
-    setDelivers,
+    listedData,
+    setListedData,
     isLoaded,
     setIsLoaded,
     value,
@@ -341,4 +325,4 @@ const useDeliver = ({
     update,
   };
 };
-export default useDeliver;
+export default useDialogType;

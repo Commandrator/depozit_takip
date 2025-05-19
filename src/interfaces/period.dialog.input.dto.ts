@@ -6,12 +6,23 @@ export interface PeriodInputErrorDTO {
   deadline: string;
   name: string;
 }
-export interface DeliverInputDTO{
+export interface DeliverInputDTO {
   employee: string;
-  mail:string;
-  active:boolean;
+  mail: string;
+  active: boolean;
 }
-export interface DeliverInputErrorDTO{  
+export interface DeliverInputErrorDTO {
   employee: string;
-  mail:string;
+  mail: string;
+}
+export interface DepositeTypeInputDTO {
+  name: string;
+  about: string;
+  current_price: number;
+  active: boolean;
+}
+export interface DepositeTypeErrorDTO {
+  name: string;
+  about: string;
+  current_price?: number | string;
 }

@@ -10,6 +10,7 @@ import {
   Button,
   AccordionActions,
   TextField,
+  Switch
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import { langPack, theme } from "../../../../index.jsx";
@@ -27,7 +28,8 @@ import EditInput from "./deliver.edit.input.tsx";
 const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
   deliver,
 }): JSX.Element | null => {
-  const { handleDeleteInput, deleteOption, delete_deliver } = useDeliver();
+  const { handleDeleteInput, deleteOption, delete_deliver, update } =
+    useDeliver();
   if (!deliver) return null;
   return (
     <Accordion
@@ -44,28 +46,47 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         sx={{
-          backgroundColor: theme.card.backgroundColor, // Summary kısmının arka plan rengi
-          color: theme.text, // Yazı rengi
+          backgroundColor: theme.card.backgroundColor,
+          color: theme.text,
           borderRadius: "12px",
-          padding: "4px 16px", // Padding
-          opacity: 0.5, // Soluk başlangıç
-          transition: "opacity 0.3s ease", // Yalnızca opacity geçişi
+          padding: "4px 16px",
+          opacity: 0.5,
+          transition: "opacity 0.3s ease",
           "&:hover": {
-            opacity: 1, // Hover durumunda netleşme
+            opacity: 1,
           },
           "&.Mui-expanded": {
             opacity: 1,
-            backgroundColor: theme.background, // Açıldığında Accordion tüm kısmı aynı arka planı alır
+            backgroundColor: theme.background,
           },
+          position: "relative", // Switch'i konumlandırmak için gerekli
         }}
       >
-        <Typography component="span">
+        <div>
+        <Typography component="span" sx={{ flexGrow: 1 }}>
           {deliver.employee}
-          <Divider
-            sx={{ borderColor: theme.text, borderWidth: 1, elevation: 12 }}
-          />
+          <Divider sx={{ borderColor: theme.text, borderWidth: 1 }} />
         </Typography>
+        </div>
+        <Switch
+          checked={deliver.active}
+          onChange={() => {
+            update(String(deliver.company_id), String(deliver.id), {
+              active: !deliver.active,
+            });
+          }}
+          color="success"
+          onClick={(e) => e.stopPropagation()} // Accordion açılmasını engeller
+          onFocus={(e) => e.stopPropagation()} // Focus da tetiklenmesin
+          sx={{
+            position: "absolute",
+            right: 40,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        />
       </AccordionSummary>
+
       <AccordionDetails>
         <EditInput
           data={deliver}
@@ -128,13 +149,39 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
           backgroundColor: theme.background,
           color: theme.text,
           padding: "10px 16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: {
+            xs: "column", // küçük ekranda alt alta
+            sm: "row", // tablet ve üstünde yan yana
+          },
+          gap: 2,
         }}
       >
+        <Button
+          variant="contained"
+          color="error"
+          disabled={!deliver.company_user_id}
+          onClick={() => {
+            update(String(deliver.company_id), String(deliver.id), {
+              mail: "",
+            });
+          }}
+          sx={{
+            mb: {
+              xs: 1, // mobilde alt boşluk
+              sm: 0, // büyük ekranda boşluk yok
+            },
+          }}
+        >
+          {langPack.employee_disconnet}
+        </Button>
+
         <form
-          onSubmit={(e) => delete_deliver(e, 
-            String(deliver.company_id),
-            String(deliver.id)
-          )}
+          onSubmit={(e) =>
+            delete_deliver(String(deliver.company_id), String(deliver.id), e)
+          }
         >
           <TextField
             size="small"
@@ -144,8 +191,13 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
             onChange={handleDeleteInput}
             value={deleteOption}
             sx={{
+              flexGrow: 1, // input genişleyebilir
               "& .MuiInputBase-input::placeholder": {
                 fontSize: "10px",
+              },
+              mr: {
+                xs: 0,
+                sm: 2,
               },
             }}
           />

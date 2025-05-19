@@ -52,7 +52,10 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
       <DialogContent sx={{ padding: 0 }}>
         {menuItem &&
           menuItem.subMenu[mainTabIndex].content &&
-          createElement(menuItem.subMenu[mainTabIndex].content, {...elementOption})}
+          createElement(
+            menuItem.subMenu[mainTabIndex].content as React.FC<any>,
+            { ...elementOption }
+          )}
       </DialogContent>
       <DialogActions
         sx={{

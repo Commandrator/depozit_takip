@@ -10,6 +10,9 @@ import CreateCompanyDialogContent from "../../../components/Dialogs/company/inde
 import ManageCompanyContent from "../../../components/Dialogs/company/manage.tsx";
 import PeriodContent from "../../../components/Dialogs/company/period.tsx";
 import DeliverContent from "../../../components/Dialogs/company/deliver.tsx";
+import InventoryIcon from '@mui/icons-material/Inventory';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import CategoryIcon from '@mui/icons-material/Category';
 /**
  * ŞUNUDA OKU!!
  *
@@ -19,18 +22,48 @@ import DeliverContent from "../../../components/Dialogs/company/deliver.tsx";
  */
 const menuItems = [
   {
-    id: "menu-company-transactions",
-    label: "company_transactions",
-    icon: <BusinessIcon fontSize="small" />,
+    id: "menu-commercial_operations ",
+    label: "commercial_operations",
+    icon: <RecentActorsIcon fontSize="small" />,
     hide: false,
     subMenu: [
+      {
+        id: "submenu-deposito-transactions",
+        label: "deposite_transactions",
+        action: "merchant",
+        icon: <CategoryIcon fontSize="small" />,
+        content:null
+      },  
       {
         id: "submenu-merchant-transactions",
         label: "merchant_transactions",
         action: "merchant",
         icon: <RecentActorsIcon fontSize="small" />,
         content:null
+      },  
+      
+      {
+        id: "submenu-merchant-type-transactions",
+        label: "merchant_type_transactions",
+        action: "merchant_type",
+        icon: <StorefrontIcon fontSize="small" />,
+        content:null
       },
+      {
+        id: "submenu-deposito-type-transactions",
+        label: "deposite_type_transactions",
+        action: "deposite_type",
+        icon: <InventoryIcon fontSize="small" />,
+        content:null
+      },
+    ],
+  },
+  {
+    id: "menu-company-transactions",
+    label: "company_transactions",
+    icon: <BusinessIcon fontSize="small" />,
+    hide: false,
+    subMenu: [
       {
         id: "submenu-personnel-transactions",
         label: "personel_transactions",
