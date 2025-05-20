@@ -1,3 +1,4 @@
+import DialogCreateDTO from "../../../../interfaces/dialog.create.dto";
 import React from "react";
 import {
   Paper,
@@ -13,21 +14,18 @@ import {
 import { langPack, theme } from "../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Save } from "@mui/icons-material";
-import DialogCreateDTO from "../../../../interfaces/dialog.create.dto.ts";
-import useDeliver from "../../../../hooks/useDeliver.tsx";
-import { DeliverInputError } from "../../../../classes/deliver.input.values.ts";
-/**
- * # Personel oluşturma modülü
- *
- */
+import useDialogContext from "../../../../hooks/useDilaogContext.tsx";
+import useModule from "../../../../hooks/Modules/index.tsx";
 const Create: React.FC<DialogCreateDTO> = ({
   selectedCompanyId,
   setViewCreate,
+  dialogType,
 }) => {
-  const { create, isValidInput, errors, inputValue } = useDeliver({
+  const { create, isValidInput, errors, inputValue } = useDialogContext({
+    module: dialogType,
     selectedCompanyId,
   });
-
+  const { InputErrorAdapter } = useModule(dialogType);
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     await create(selectedCompanyId);
@@ -63,14 +61,14 @@ const Create: React.FC<DialogCreateDTO> = ({
             size="small"
             margin="dense"
             autoComplete="off"
-            label={langPack.employee}
+            label={langPack.name}
             type="text"
             fullWidth
             variant="outlined"
-            value={inputValue.employee}
-            onChange={(e) => isValidInput(e, "employee")}
-            error={!!errors.employee}
-            helperText={errors.employee}
+            value={inputValue.name}
+            onChange={(e) => isValidInput(e, "name")}
+            error={!!errors.name}
+            helperText={errors.name}
           />
 
           <TextField
@@ -78,14 +76,14 @@ const Create: React.FC<DialogCreateDTO> = ({
             margin="dense"
             autoComplete="off"
             label={langPack.employee_connect_mail}
-            type="email"
+            type="text"
             size="small"
             fullWidth
             variant="outlined"
-            value={inputValue.mail}
-            onChange={(e) => isValidInput(e, "mail")}
-            error={!!errors.mail}
-            helperText={errors.mail}
+            value={inputValue.about}
+            onChange={(e) => isValidInput(e, "about")}
+            error={!!errors.about}
+            helperText={errors.about}
           />
           <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
             {langPack.mail_notice}
@@ -127,7 +125,7 @@ const Create: React.FC<DialogCreateDTO> = ({
                   variant="outlined"
                   color="inherit"
                   startIcon={<Save />}
-                  disabled={new DeliverInputError(inputValue).hasError()}
+                  disabled={new InputErrorAdapter(inputValue).hasError()}
                   sx={{
                     borderRadius: "20px",
                     color: theme.text,
@@ -143,5 +141,4 @@ const Create: React.FC<DialogCreateDTO> = ({
     </form>
   );
 };
-
 export default Create;

@@ -1,4 +1,26 @@
 import type { DepositeTypesDTO, DepositeTypeDTO } from "../interfaces/deposite.types.dto.ts";
+
+export class DepositeType implements DepositeTypeDTO {
+  id: number;
+  company_id: number;
+  name: string;
+  about?: string;
+  current_price?: number;
+  last_update: string;
+  active: boolean;
+  creation_date: string;
+  constructor(parameters: DepositeTypeDTO) {
+    this.id = parameters.id;
+    this.company_id = parameters.company_id;
+    this.name = parameters.name;
+    this.about = parameters.about;
+    this.current_price = parameters.current_price;
+    this.last_update = parameters.last_update;
+    this.active = parameters.active;
+    this.creation_date = parameters.creation_date;
+  }
+}
+
 export class DepositeTypes {
     deposits: DepositeTypeDTO[] = [];
     total: number = 0;

@@ -3,35 +3,43 @@ import returnSeverity from "./useAPI.ts";
 import AppContext from "../context/index.tsx";
 import { langPack } from "../index.jsx";
 import { SelectChangeEvent } from "@mui/material";
-import {DepositeTypes as DataAdaper} from "../classes/deposite.types.ts";
-import useModule, { modules } from "./Modules/index.tsx";
-import { DepositeTypeInputtError as InputErrorAdapter, DepositeTypeInput as InputAdapter} from "../classes/deposite.input.values.ts";
-type Modules = typeof modules;
+import useModule,  {type Modules } from "./Modules/index.tsx";
 interface UseProps<M extends keyof Modules> {
   module: M;  
   selectedCompanyId: string,
-  defVal?: string | boolean;
+  defVal?: Modules[M]["InputAdapter"][keyof Modules[M]["InputAdapter"]];
   defKey?: keyof Modules[M]["InputAdapter"];
 }
+/**
+ * # useDialogContext
+ * ---
+ * modüle: Kullanılacak adaptör,
+ * selectedCompanyId: şirket id'si (opsiyonel)
+ * defVal: varsayılan değer (opsiyonel)
+ * defkey: varsayılan anahtar (opsiyonel)
+ * @author <Talha Yaşar>
+ * @param props 
+ * @returns 
+ */
 const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
   const { module, defKey, defVal, selectedCompanyId } = props;
-  const { InputAdapter, api } = useModule(module);
+  const { InputAdapter, InputErrorAdapter, DataAdapter,  api } = useModule(module);
   const { setOpen, setDetail, change, setChange } = useContext(AppContext);
   const searchRef = useRef<HTMLDivElement>(null);
   const [range, setRange] = useState<string>("10");
   const [page, setPage] = useState<number>(1);
   const [value, setValue] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [listedData, setListedData] = useState<DataAdaper>();
-  const [results, setResults] = useState<DataAdaper>();
+  const [listedData, setListedData] = useState<InstanceType<typeof DataAdapter>>();
+  const [results, setResults] = useState<InstanceType<typeof DataAdapter>>();
   const [viewResult, setViewResult] = useState<boolean>(false);
   const [viewCreate, setViewCreate] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(true);
   const [deleteOption, setDeleteOption] = useState<string>();
-  const [inputValue, setInputValue] = useState<InputAdapter>(
+  const [inputValue, setInputValue] = useState<InstanceType<typeof InputAdapter>>(
     new InputAdapter(defKey && defVal ? { [defKey]: defVal } : {})
   );
-  const [errors, setErrors] = useState<InputErrorAdapter>(
+  const [errors, setErrors] = useState<InstanceType<typeof InputErrorAdapter>>(
     new InputErrorAdapter(defKey && defVal ? { [defKey]: defVal } : {})
   );
   const list = useCallback(
@@ -56,7 +64,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
         });
         if (response.ok) {
           const data = await response.json();
-          setListedData(new DataAdaper(data));
+          setListedData(new DataAdapter(data));
           setChange(false);
           setIsLoaded(true);
         } else {
@@ -70,7 +78,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
         return null;
       }
     },
-    [setChange, setOpen, setDetail, page, range, listedData, value, api]
+    [setChange, setOpen, setDetail, page, range, listedData, value, api, DataAdapter]
   );
   const searchPreview = async (query: string, company_id?: string) => {
     try {
@@ -90,7 +98,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       });
       if (response.ok) {
         const data = await response.json();
-        setResults(new DataAdaper(data));
+        setResults(new DataAdapter(data));
         setViewResult(true);
       } else {
         const message = await response.json();
@@ -103,7 +111,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       return null;
     }
   };
-  const handleEdit = (value: string, dataKey: keyof InputAdapter) => {
+  const handleEdit = () => {
     setEdit((prev) => !prev);
     if (!edit)
       setInputValue(
@@ -112,7 +120,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
   };
   const isValidInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    errorKey: string
+    errorKey: keyof Modules[M]["InputAdapter"]
   ) => {
     const target = e.target as HTMLInputElement;
     const { type, value, checked } = target;
@@ -211,7 +219,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
   const handleDeleteInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setDeleteOption(e.target.value);
-  const delete_deliver = useCallback(
+  const delete_data = useCallback(
     async (
       company_id: string,
       id: string,
@@ -282,7 +290,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
     }
   };
   return {
-    delete_deliver,
+    delete_data,
     handleChangeRange,
     handleChange,
     handleClear,

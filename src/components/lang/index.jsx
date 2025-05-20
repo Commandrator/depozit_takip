@@ -81,7 +81,9 @@ const packages = {
     enter_deposite_type_name:"Depozito türüne ad verin.",
     enter_deposite_type_about:"Girmiş olduğunuz detay bilgisini kontrol ediniz.",
     enter_current_price:"Birim fiyatı kontrol ediniz.",
-    module_notfount:"Modül bulunamadı: :name:"
+    module_notfount:"Modül bulunamadı: :name:",
+    deposite_delete_message:'**UYARI**: Depozito Tipini kalıcı olarak silmek için, sağ alt köşedeki "Depozito Tipi" kısmına **:deposite_type_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
+    deposite_type:"Depozito Tipi"
   },
   en: {},
 };

@@ -5,7 +5,8 @@ export default interface DepositeTypeDTO{
     about?: string,
     current_price?: number,
     last_update: string,
-    active: boolean
+    active: boolean,
+    creation_date: string
 }
 interface DepositeTypesDTO{
     total: number;

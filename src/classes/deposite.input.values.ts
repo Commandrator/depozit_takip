@@ -5,7 +5,7 @@ export class DepositeTypeInput implements DepositeTypeInputDTO {
     about: string = "";
     current_price: number = NaN;
     active: boolean = false;
-
+    
     constructor(data: Partial<DepositeTypeInputDTO>) {
         if (data.name) this.name = data.name;
         if (data.about !== undefined) this.about = data.about;
@@ -18,7 +18,7 @@ export class DepositeTypeInputtError implements DepositeTypeErrorDTO {
     about: string = "";
     current_price: string = "";
     private regex = {
-        name: /^[a-zA-ZÇŞĞÜÖİçşğüöı .'-]{1,50}$/,
+        name: /^[a-zA-ZÇŞĞÜÖİçşğüöı0-9\s().'-]{1,50}$/,
         about: /^[a-zA-ZÇŞĞÜÖİçşğüöı0-9\s.,;:!?'"\-()]{0,500}$/,
         current_price: /^\d+(\.\d{1,2})?$/,
     };

@@ -5,7 +5,7 @@ import Create from "./components/deliver.create.tsx";
 import useDeliver from "../../../hooks/useDeliver.tsx";
 import Result from "./components/deliver.result.tsx";
 const DeliverContent: React.FC<ContentProps> = ({
-  selectedCompanyId,
+  selectedCompanyId
 }): JSX.Element => {
   const {
     setViewCreate,

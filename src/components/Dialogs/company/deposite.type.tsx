@@ -2,8 +2,11 @@ import React,{useEffect} from "react";
 import type ContentProps from "../../../interfaces/content.props";
 import { Stack } from "@mui/material";
 import useDialogContext from "../../../hooks/useDilaogContext.tsx";
+import Create from "./components/deposite.type.create.tsx";
+import Result from "./components/deposite.type.result.tsx";
 const DepositeTypeContent: React.FC<ContentProps> = ({
   selectedCompanyId,
+  dialogType
 }): JSX.Element => {
   const {
     setViewCreate,
@@ -25,8 +28,7 @@ const DepositeTypeContent: React.FC<ContentProps> = ({
     handleClickOutside,
     list,
     change,
-  } = useDialogContext({module: "depositeType", selectedCompanyId });
-  
+  } = useDialogContext({module: dialogType, selectedCompanyId });
     useEffect(() => {
       if (!listedData) list(selectedCompanyId);
     }, [listedData, list, selectedCompanyId]);
@@ -40,9 +42,11 @@ const DepositeTypeContent: React.FC<ContentProps> = ({
           <Create
             selectedCompanyId={selectedCompanyId}
             setViewCreate={setViewCreate}
+            dialogType={dialogType}
           />
         ) : (
-          <Result
+          <Result         
+            module={dialogType}
             viewResult={viewResult}
             range={range}
             page={page}
@@ -56,7 +60,7 @@ const DepositeTypeContent: React.FC<ContentProps> = ({
             handleChange={handleChange}
             submitSearch={submitSearch}
             handleClickOutside={handleClickOutside}
-            delivers={delivers}
+            listedData={listedData}
             results={results}
             isLoaded={isLoaded}
           />

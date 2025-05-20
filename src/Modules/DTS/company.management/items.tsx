@@ -13,6 +13,7 @@ import DeliverContent from "../../../components/Dialogs/company/deliver.tsx";
 import InventoryIcon from '@mui/icons-material/Inventory';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import CategoryIcon from '@mui/icons-material/Category';
+import DepositeTypeContent from "../../../components/Dialogs/company/deposite.type.tsx";
 /**
  * ŞUNUDA OKU!!
  *
@@ -54,7 +55,7 @@ const menuItems = [
         label: "deposite_type_transactions",
         action: "deposite_type",
         icon: <InventoryIcon fontSize="small" />,
-        content:null
+        content:DepositeTypeContent
       },
     ],
   },

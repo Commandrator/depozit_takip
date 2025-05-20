@@ -1,31 +1,31 @@
 import { Divider, List, Typography, ListItem } from "@mui/material";
 import React from "react";
-import PeriodsDTO from "../../../../interfaces/periods.dto";
-import { langPack } from "../../../..";
-import SerachItem from "./period.result.search.list.item.tsx";
+import { langPack } from "../../../../index.jsx";
+import SerachItem from "./deposite.type.result.search.list.item.tsx";
 import ReactMarkdown from "react-markdown";
+import { DepositeTypesDTO } from "../../../../interfaces/deposite.types.dto.ts";
 const SearchResultList = ({
   results,
   value,
   submitSearch,
 }: {
-  results?: PeriodsDTO;
+  results?: DepositeTypesDTO;
   value: string;
   submitSearch: (name?: string) => void;
 }) => {
-  if ((!results?.periods || results.periods.length === 0)) {
+  if ((!results?.deposits || results.deposits.length === 0)) {
     return <Typography color="neutral">{langPack.no_results_found}</Typography>;
   }
   return (
     <List sx={{ padding: 0 }}>
-      {results.periods.map((period, index) => (
-        <React.Fragment key={period.id}>
+      {results.deposits.map((deposit, index) => (
+        <React.Fragment key={deposit.id}>
           <SerachItem
-            period={period}
+            result={deposit}
             value={value}
             submitSearch={submitSearch}
           />
-          {index < results.periods.length - 1 && <Divider />}
+          {index < results.deposits.length - 1 && <Divider />}
         </React.Fragment>
       ))}
       <Divider />
