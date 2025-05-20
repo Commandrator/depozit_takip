@@ -1,11 +1,20 @@
 import { langPack } from "..";
 import { type DepositeTypeInputDTO, type DepositeTypeErrorDTO } from "../interfaces/period.dialog.input.dto";
+/**
+ * ### DepositeTypeInput
+ * ---
+ * about ve current_price'ın undefined karşılaştırılmasının sebebi
+ * kullanıcının bu bilgileri silmek null kullanması durumunda işlemin
+ * sınıfa işlenmesini sağlamak. 
+ * 
+ * Aynı durum actice içinde geçerli, false geldiği zaman varsayılan
+ * değerle çalışmasına sebep oluyor.
+ */
 export class DepositeTypeInput implements DepositeTypeInputDTO {
     name: string = "";
     about: string = "";
     current_price: number = 0;
     active: boolean = true;
-
     constructor(data: Partial<DepositeTypeInputDTO>) {
         if (data.name) this.name = data.name;
         if (data.about !== undefined) this.about = data.about;
@@ -13,6 +22,17 @@ export class DepositeTypeInput implements DepositeTypeInputDTO {
         if (data.current_price !== undefined) this.current_price = data.current_price;
     }
 }
+/**
+ * ### DepositeTypeInputtError
+ * ---
+ * Regex kontrolünün ayrı yapmamın sebebi iki duruma bağlı çalışasıdır.
+ * Bu durumların fonksiyon haline getirlimesini bu nesne yapısı için
+ * gereksiz gördüğüm için yapmadım.
+ * 
+ * #### HashError
+ * ---
+ * Yüklenen değere göre mesajın doldurulup doldurulmadığını testetmek.
+ */
 export class DepositeTypeInputtError implements DepositeTypeErrorDTO {
     name: string = "";
     about: string = "";
@@ -33,7 +53,6 @@ export class DepositeTypeInputtError implements DepositeTypeErrorDTO {
             this.current_price = langPack.enter_current_price;
         }
     }
-
     hasError(): boolean {
         return !!(this.name || this.about || this.current_price);
     }

@@ -17,7 +17,7 @@ const rootElement = createRoot(root);
 rootElement.render(createElement(StrictMode, { children: routerProvider }));
 document.body.appendChild(portal);
 document.body.appendChild(root);
-const langPack = packages[browserLanguage] ? packages[browserLanguage] : packages["tr"]; // varsayılan uygulama dili türkçe
+const langPack = packages[browserLanguage] ?? packages["tr"]; 
 const theme = palette[mediaQuery ? "dark" : "light"];
 export { theme, langPack };
 
