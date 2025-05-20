@@ -55,7 +55,7 @@ const packages = {
     create_period: "Dönem Oluştur",
     company_id_is_required: "Şirket kimliği gereklidir.",
     matching_periods_result: "Eşleşen **:total:** dönem bulundu.",
-    matching_result: "Eşleşen **:total:** sonuç bulundu.",
+    matching_result: "**:total:** sonuç bulundu",
     search_word: "Arama sözcüğü",
     employee: "Personel",
     enter_employee_name:
@@ -63,8 +63,8 @@ const packages = {
     invalid_mail_format: "Mail formatı geçersiz.",
     employee_connect_mail: "Personel maili",
     active_employee: "Aktif",
-    mail_notice:
-      "Bu e-posta adresi personel bilgilendirme amaçlı kullanılacaktır.",
+    active:"Aktif",
+    mail_notice:"Bu e-posta adresi personel bilgilendirme amaçlı kullanılacaktır.",
     add_employee: "Personel Oluştur",
     add_a_deliver_title: "Henüz bir personel bulunamadı",
     add_a_deliver_subtitle: "Oluşturmak için yukarıdaki butona tıklayın.",
@@ -83,7 +83,10 @@ const packages = {
     enter_current_price:"Birim fiyatı kontrol ediniz.",
     module_notfount:"Modül bulunamadı: :name:",
     deposite_delete_message:'**UYARI**: Depozito Tipini kalıcı olarak silmek için, sağ alt köşedeki "Depozito Tipi" kısmına **:deposite_type_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
-    deposite_type:"Depozito Tipi"
+    deposite_type:"Depozito Tipi",
+    description:"Açıklama",
+    deposite_type_name:"Depozito Tipi",
+    price:"Birim Fiyat"
   },
   en: {},
 };

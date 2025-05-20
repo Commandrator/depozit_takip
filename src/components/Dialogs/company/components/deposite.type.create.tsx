@@ -9,7 +9,6 @@ import {
   Tooltip,
   FormControlLabel,
   Switch,
-  Typography,
 } from "@mui/material";
 import { langPack, theme } from "../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -61,7 +60,7 @@ const Create: React.FC<DialogCreateDTO> = ({
             size="small"
             margin="dense"
             autoComplete="off"
-            label={langPack.name}
+            label={langPack.deposite_type_name}
             type="text"
             fullWidth
             variant="outlined"
@@ -70,12 +69,25 @@ const Create: React.FC<DialogCreateDTO> = ({
             error={!!errors.name}
             helperText={errors.name}
           />
-
           <TextField
             sx={{ "& .MuiInputBase-input": { color: theme.text } }}
             margin="dense"
             autoComplete="off"
-            label={langPack.employee_connect_mail}
+            label={langPack.price}
+            type="text"
+            size="small"
+            fullWidth
+            variant="outlined"
+            value={inputValue.current_price}
+            onChange={(e) => isValidInput(e, "current_price")}
+            error={!!errors.current_price}
+            helperText={errors.current_price}
+          />
+          <TextField
+            sx={{ "& .MuiInputBase-input": { color: theme.text } }}
+            margin="dense"
+            autoComplete="off"
+            label={langPack.description}
             type="text"
             size="small"
             fullWidth
@@ -85,9 +97,6 @@ const Create: React.FC<DialogCreateDTO> = ({
             error={!!errors.about}
             helperText={errors.about}
           />
-          <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-            {langPack.mail_notice}
-          </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <FormControlLabel
@@ -97,7 +106,7 @@ const Create: React.FC<DialogCreateDTO> = ({
                 onChange={(e) => isValidInput(e, "active")}
               />
             }
-            label={langPack.active_employee}
+            label={langPack.active}
           />
 
           <Stack direction="row" spacing={1}>

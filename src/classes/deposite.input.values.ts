@@ -3,9 +3,9 @@ import { type DepositeTypeInputDTO, type DepositeTypeErrorDTO } from "../interfa
 export class DepositeTypeInput implements DepositeTypeInputDTO {
     name: string = "";
     about: string = "";
-    current_price: number = NaN;
-    active: boolean = false;
-    
+    current_price: number = 0;
+    active: boolean = true;
+
     constructor(data: Partial<DepositeTypeInputDTO>) {
         if (data.name) this.name = data.name;
         if (data.about !== undefined) this.about = data.about;

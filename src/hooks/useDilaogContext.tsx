@@ -8,7 +8,7 @@ interface UseProps<M extends keyof Modules> {
   module: M;  
   selectedCompanyId: string,
   defVal?: Modules[M]["InputAdapter"][keyof Modules[M]["InputAdapter"]];
-  defKey?: keyof Modules[M]["InputAdapter"];
+  defKey?: string;
 }
 /**
  * # useDialogContext
@@ -120,7 +120,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
   };
   const isValidInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    errorKey: keyof Modules[M]["InputAdapter"]
+    errorKey: string
   ) => {
     const target = e.target as HTMLInputElement;
     const { type, value, checked } = target;

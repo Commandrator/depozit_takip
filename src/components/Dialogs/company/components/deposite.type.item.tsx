@@ -97,7 +97,7 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
           data={deposite}
           type="text"
           dataKey="name"
-          label={langPack.employee_name}
+          label={langPack.deposite_type_name}
           module={module}
           required
         />
@@ -108,7 +108,16 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
           data={deposite}
           type="text"
           dataKey="about"
-          label={langPack.employee_mail}
+          label={langPack.description}
+        />
+      </AccordionDetails>
+      <AccordionDetails>
+        <EditInput
+          module={module}
+          data={deposite}
+          type="number"
+          dataKey="current_price"
+          label={langPack.price}
         />
       </AccordionDetails>
       <AccordionDetails

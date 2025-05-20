@@ -4,34 +4,28 @@ import { Close, Edit, Save } from "@mui/icons-material";
 import { theme } from "../../../../index.jsx";
 import { Modules } from "../../../../hooks/Modules/index.tsx";
 import useDialogContext from "../../../../hooks/useDilaogContext.tsx";
-interface EditInputDTO<
-  M extends keyof Modules,
-  K extends keyof Modules[M]["InputAdapter"] & keyof InstanceType<Modules[M]["Entity"]>
-> {
+interface EditInputDTO<M extends keyof Modules> {
   data: InstanceType<Modules[M]["Entity"]>;
   type: string;
-  dataKey: K;
+  dataKey: string;
   label: string;
   required?: boolean;
   module: M;
 }
-const EditInput = <
-  M extends keyof Modules,
-  K extends keyof Modules[M]["InputAdapter"] & keyof InstanceType<Modules[M]["Entity"]>
->({
+const EditInput = <M extends keyof Modules>({
   data,
   type,
   dataKey,
   label,
   required,
-  module
-}: EditInputDTO<M, K>): JSX.Element => {
+  module,
+}: EditInputDTO<M>): JSX.Element => {
   const { isValidInput, errors, update, edit, handleEdit, inputValue } =
     useDialogContext({
       defKey: dataKey,
-      defVal: data[dataKey] as Modules[M]["InputAdapter"][K],
+      defVal: data[dataKey],
       module,
-      selectedCompanyId: String(data.company_id)
+      selectedCompanyId: String(data.company_id),
     });
 
   return (
@@ -73,5 +67,4 @@ const EditInput = <
     </Stack>
   );
 };
-
 export default EditInput;

@@ -1,12 +1,21 @@
 import { useEffect, FC } from "react";
-import { Paper, Tooltip, Button, Stack, Pagination, Box } from "@mui/material";
+import {
+  Paper,
+  Tooltip,
+  Button,
+  Stack,
+  Pagination,
+  Box,
+  Typography,
+} from "@mui/material";
+import ReactMarkdown from "react-markdown";
 import { theme, langPack } from "../../../../index.jsx";
 import { Add as AddIcon } from "@mui/icons-material";
 import Loader from "./loader.tsx";
 import BasicSelect from "../../../BasicSelect.tsx";
 import SearchBar from "../../../Filtres/search.tsx";
 import ResultList from "./deposite.type.result.list.tsx";
-import {type DialogDepositeTypeModuleDTO } from "../../../../interfaces/dialog.result.dto.ts";
+import { type DialogDepositeTypeModuleDTO } from "../../../../interfaces/dialog.result.dto.ts";
 import SearchResultList from "./deposite.type.result.search.list.tsx";
 /**
  * # Dönem Arama sonuç sayfası
@@ -32,7 +41,7 @@ const Result: FC<DialogDepositeTypeModuleDTO> = (props) => {
     searchRef,
     handleClickOutside,
     submitSearch,
-    module
+    module,
   } = props;
   useEffect(() => {
     if (!results?.deposits || results.deposits.length === 0) return;
@@ -112,7 +121,7 @@ const Result: FC<DialogDepositeTypeModuleDTO> = (props) => {
               color="inherit"
               variant="outlined"
             >
-              <span className="button-text">{langPack.create_period}</span>
+              <span className="button-text">{langPack.create}</span>
             </Button>
           </Tooltip>
         </Stack>
@@ -129,10 +138,21 @@ const Result: FC<DialogDepositeTypeModuleDTO> = (props) => {
         }}
       >
         <Stack spacing={2}>
-          <ResultList listedData={listedData} setViewCreate={setViewCreate} module={module} />
+          <ResultList
+            listedData={listedData}
+            setViewCreate={setViewCreate}
+            module={module}
+          />
         </Stack>
       </Paper>
       <div className="w-full flex justify-between items-center px-4 py-4">
+        <Typography
+          sx={{ color: theme.text }}
+          component={ReactMarkdown}
+          variant="body1"
+        >
+          {langPack.matching_result.replace(":total:", listedData.total)}
+        </Typography>
         <div className="flex-1 flex justify-center">
           <Pagination
             count={Math.max(1, Math.ceil(listedData.total / Number(range)))}

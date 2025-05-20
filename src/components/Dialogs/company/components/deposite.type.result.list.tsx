@@ -1,6 +1,6 @@
 import { DepositeTypes } from "../../../../classes/deposite.types.ts";
 import { Modules } from "../../../../hooks/Modules/index.tsx";
-import Item from "./deposite.item.tsx";
+import Item from "./deposite.type.item.tsx";
 import Add from "./period.add.tsx";
 import React from "react";
 const ResultList = React.memo(

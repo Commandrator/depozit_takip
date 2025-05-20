@@ -36,7 +36,7 @@ const SearchResultList = ({
             sx={{ textAlign: "right" }}
             component={ReactMarkdown}
           >
-            {langPack.matching_periods_result.replace(":total:", results.total)}
+            {langPack.matching_result.replace(":total:", results.total)}
           </Typography>
         </div>
       </ListItem>
