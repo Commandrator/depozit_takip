@@ -55,9 +55,9 @@ const EditInput = <M extends keyof Modules>({
         {edit ? <Edit /> : <Close />}
       </IconButton>
       <IconButton
-        disabled={edit || data[dataKey] === inputValue[String(dataKey)]}
+        disabled={edit || data[dataKey] === inputValue[String(dataKey)] || (required && !inputValue[String(dataKey)])}
         onClick={() =>
-          update(data.company_id, data.id, {
+          update(String(data.company_id), String(data.id), {
             [dataKey]: inputValue[String(dataKey)],
           })
         }

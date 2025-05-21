@@ -11,14 +11,27 @@ import {
   TextField,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
-import { langPack, theme } from "../../../../index.jsx";
-import PeriodDTO from "../../../../interfaces/period.dto.ts";
-import usePeriod from "../../../../hooks/usePeriod.tsx";
-import EditInput from "./period.edit.input.tsx";
-const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
-  const { getDay, delete_period, handleDeleteInput, deleteOption } =
-    usePeriod();
-  if (!period) return null; // period yoksa hiçbir şey döndürme
+import { langPack, theme } from "../../../../../index.jsx";
+import EditInput from "../default.type.edit.input.tsx";
+import { Modules } from "../../../../../hooks/Modules/index.tsx";
+import PeriodDTO from "../../../../../interfaces/period.dto.ts";
+import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
+interface DeaultInterface {
+  result?: PeriodDTO;
+  module: keyof Modules;
+}
+const PeriodItem: React.FC<DeaultInterface> = ({ result, module }) => {
+  const { handleDeleteInput, deleteOption, delete_data } = useDialogContext({
+    selectedCompanyId: String(result?.company_id ?? ""),
+    module,
+  });
+  const getDay = (deadline) => {
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+    const timeDiff = deadlineDate.getTime() - today.getTime();
+    return Math.max(0, Math.ceil(timeDiff / (1000 * 60 * 60 * 24)));
+  };
+  if (!result) return null; // period yoksa hiçbir şey döndürme
   return (
     <Accordion
       sx={{
@@ -50,7 +63,7 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
         }}
       >
         <Typography component="span">
-          {period.name}
+          {result.name}
           <Divider
             sx={{ borderColor: theme.text, borderWidth: 1, elevation: 12 }}
           />
@@ -58,7 +71,8 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
       </AccordionSummary>
       <AccordionDetails>
         <EditInput
-          data={period}
+          module={module}
+          data={result}
           type="text"
           dataKey="name"
           label={langPack.period_name}
@@ -67,7 +81,8 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
       </AccordionDetails>
       <AccordionDetails>
         <EditInput
-          data={period}
+          module={module}
+          data={result}
           type="date"
           dataKey="deadline"
           label={langPack.expiration_date}
@@ -86,19 +101,19 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
           <span className="text-gray-400">
             {langPack.number_of_days_remaining}:
           </span>{" "}
-          {getDay(period.deadline)}
+          {getDay(result.deadline)}
         </Typography>
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.expiration_date}:</span>{" "}
-          {new Date(period.deadline).toLocaleDateString()}
+          {new Date(result.deadline).toLocaleDateString()}
         </Typography>
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.last_update_date}:</span>{" "}
-          {new Date(period.last_update).toLocaleDateString()}
+          {new Date(result.last_update).toLocaleDateString()}
         </Typography>
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.creation_date}:</span>{" "}
-          {new Date(period.creation_date).toLocaleDateString()}
+          {new Date(result.creation_date).toLocaleDateString()}
         </Typography>
       </AccordionDetails>
       <AccordionDetails
@@ -116,7 +131,7 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
         >
           {langPack.period_delete_message.replace(
             ":project_name:",
-            period.name
+            result.name
           )}
         </Typography>
       </AccordionDetails>
@@ -130,14 +145,14 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
       >
         <form
           onSubmit={(e) =>
-            delete_period(e, String(period.company_id), String(period.id))
+            delete_data(String(result.company_id), String(result.id), e)
           }
         >
           <TextField
             size="small"
             required
             label={langPack.period_name}
-            placeholder={period.name}
+            placeholder={result.name}
             onChange={handleDeleteInput}
             value={deleteOption}
             sx={{
@@ -148,7 +163,7 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
           />
           <Button
             variant="contained"
-            disabled={deleteOption !== period.name}
+            disabled={deleteOption !== result.name}
             className="opacity-70 hover:opacity-100 transition-opacity duration-300"
             color="error"
             type="submit"
@@ -160,4 +175,5 @@ const PeriodItem: React.FC<{ period?: PeriodDTO }> = ({ period }) => {
     </Accordion>
   );
 };
+export { PeriodItem };
 export default PeriodItem;

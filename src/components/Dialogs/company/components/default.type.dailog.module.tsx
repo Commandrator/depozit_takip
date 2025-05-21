@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import type ContentProps from "../../../interfaces/content.props";
+import ContentProps from "../../../../interfaces/content.props";
+import useDialogContext from "../../../../hooks/useDilaogContext.tsx";
 import { Stack } from "@mui/material";
-import Create from "./components/deliver.create.tsx";
-import useDeliver from "../../../hooks/useDeliver.tsx";
-import Result from "./components/deliver.result.tsx";
-const DeliverContent: React.FC<ContentProps> = ({
-  selectedCompanyId
-}): JSX.Element => {
+import Result from "./defalut.type.dialog.result.module.tsx";
+const DefaultTypeDialog: React.FC<ContentProps> = ({
+  selectedCompanyId,
+  dialogType,
+}) => {
   const {
     setViewCreate,
     viewCreate,
@@ -21,29 +21,34 @@ const DeliverContent: React.FC<ContentProps> = ({
     handleChangeRange,
     handleChange,
     submitSearch,
-    delivers,
+    listedData,
     results,
     isLoaded,
     handleClickOutside,
     list,
-    change
-  } = useDeliver({ selectedCompanyId });
+    change,
+  } = useDialogContext({ module: dialogType, selectedCompanyId });
   useEffect(() => {
-    if (!delivers) list(selectedCompanyId);
-  }, [delivers, list, selectedCompanyId]);
+    if (!listedData[dialogType]) {
+      list(selectedCompanyId);
+    }
+  }, [listedData, list, selectedCompanyId, dialogType]);
   useEffect(() => {
-    if (change) list(selectedCompanyId);
+    if (change) {
+      list(selectedCompanyId);
+    }
   }, [change, list, selectedCompanyId]);
   return (
     <Stack spacing={2} sx={{ padding: "16px" }}>
       <Stack spacing={2} sx={{ padding: "16px" }}>
-        {viewCreate ? (
-          <Create
-            selectedCompanyId={selectedCompanyId}
-            setViewCreate={setViewCreate}
-          />
-        ) : (
+        {viewCreate ? null : (
+          //   <Create
+          //     selectedCompanyId={selectedCompanyId}
+          //     setViewCreate={setViewCreate}
+          //     dialogType={dialogType}
+          //   />
           <Result
+            module={dialogType}
             viewResult={viewResult}
             range={range}
             page={page}
@@ -57,8 +62,8 @@ const DeliverContent: React.FC<ContentProps> = ({
             handleChange={handleChange}
             submitSearch={submitSearch}
             handleClickOutside={handleClickOutside}
-            delivers={delivers}
-            results={results}
+            listedData={listedData[dialogType]}
+            results={results[dialogType]}
             isLoaded={isLoaded}
           />
         )}
@@ -66,4 +71,5 @@ const DeliverContent: React.FC<ContentProps> = ({
     </Stack>
   );
 };
-export default DeliverContent;
+
+export default DefaultTypeDialog;

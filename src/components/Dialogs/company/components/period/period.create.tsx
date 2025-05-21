@@ -1,20 +1,21 @@
 import React from "react";
 import { Paper, TextField, Button, Stack, Box, Tooltip } from "@mui/material";
-import { langPack, theme } from "../../../../index.jsx";
+import { langPack, theme } from "../../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import usePeriod from "../../../../hooks/usePeriod.tsx";
 import { Save } from "@mui/icons-material";
-import DialogCreateDTO from "../../../../interfaces/dialog.create.dto.ts";
-const Create: React.FC<DialogCreateDTO> = ({
-  selectedCompanyId,
-  setViewCreate,
-}) => {
+import DialogCreateDTO from "../../../../../interfaces/dialog.create.dto.ts";
+import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
+const Create = (props: DialogCreateDTO<"period">) => {
+  const { selectedCompanyId, setViewCreate, dialogType } = props;
   const {
     create,
     errors,
     inputValue,
     isValidInput,
-  } = usePeriod({ selectedCompanyId });
+  } = useDialogContext<"period">({
+      module: dialogType,
+      selectedCompanyId,
+    });
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     await create(selectedCompanyId);

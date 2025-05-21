@@ -1,5 +1,4 @@
 import React from "react";
-import DeliverDTO from "../../../../interfaces/deliver.dto";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Typography,
@@ -10,12 +9,14 @@ import {
   Button,
   AccordionActions,
   TextField,
-  Switch
+  Switch,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
-import { langPack, theme } from "../../../../index.jsx";
-import useDeliver from "../../../../hooks/useDeliver.tsx";
-import EditInput from "./deliver.edit.input.tsx";
+import { langPack, theme } from "../../../../../index.jsx";
+import EditInput from "../default.type.edit.input.tsx";
+import { Modules } from "../../../../../hooks/Modules/index.tsx";
+import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
+import DeliverDTO from "../../../../../interfaces/deliver.dto.ts";
 /**
  * # Deliver Item Element
  * ---
@@ -25,12 +26,20 @@ import EditInput from "./deliver.edit.input.tsx";
  * @param param0
  * @returns
  */
-const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
-  deliver,
+interface DeaultInterface {
+  result?: DeliverDTO;
+  module: keyof Modules;
+}
+const DeliverItem: React.FC<DeaultInterface> = ({
+  result,
+  module,
 }): JSX.Element | null => {
-  const { handleDeleteInput, deleteOption, delete_deliver, update } =
-    useDeliver();
-  if (!deliver) return null;
+  const { handleDeleteInput, deleteOption, delete_data, update } =
+    useDialogContext({
+      selectedCompanyId: String(result?.company_id ?? ""),
+      module,
+    });
+  if (!result) return null;
   return (
     <Accordion
       sx={{
@@ -63,16 +72,16 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
         }}
       >
         <div>
-        <Typography component="span" sx={{ flexGrow: 1 }}>
-          {deliver.employee}
-          <Divider sx={{ borderColor: theme.text, borderWidth: 1 }} />
-        </Typography>
+          <Typography component="span" sx={{ flexGrow: 1 }}>
+            {result.employee}
+            <Divider sx={{ borderColor: theme.text, borderWidth: 1 }} />
+          </Typography>
         </div>
         <Switch
-          checked={deliver.active}
+          checked={result.active}
           onChange={() => {
-            update(String(deliver.company_id), String(deliver.id), {
-              active: !deliver.active,
+            update(String(result.company_id), String(result.id), {
+              active: !result.active,
             });
           }}
           color="success"
@@ -89,7 +98,8 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
 
       <AccordionDetails>
         <EditInput
-          data={deliver}
+          module={module}
+          data={result}
           type="text"
           dataKey="employee"
           label={langPack.employee_name}
@@ -98,7 +108,8 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
       </AccordionDetails>
       <AccordionDetails>
         <EditInput
-          data={deliver}
+          module={module}
+          data={result}
           type="email"
           dataKey="mail"
           label={langPack.employee_mail}
@@ -114,15 +125,15 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
       >
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.last_update_date}:</span>{" "}
-          {new Date(deliver.last_update).toLocaleDateString()}
+          {new Date(result.last_update).toLocaleDateString()}
         </Typography>
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.creation_date}:</span>{" "}
-          {new Date(deliver.created_date).toLocaleDateString()}
+          {new Date(result.created_date).toLocaleDateString()}
         </Typography>
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.employee_id}:</span>{" "}
-          {deliver.company_user_id ?? langPack.employee_not_connected}
+          {result.company_user_id ?? langPack.employee_not_connected}
         </Typography>
       </AccordionDetails>
       <AccordionDetails
@@ -140,7 +151,7 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
         >
           {langPack.deliver_delete_message.replace(
             ":deliver_name:",
-            deliver.employee
+            result.employee
           )}
         </Typography>
       </AccordionDetails>
@@ -162,9 +173,9 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
         <Button
           variant="contained"
           color="error"
-          disabled={!deliver.company_user_id}
+          disabled={!result.company_user_id}
           onClick={() => {
-            update(String(deliver.company_id), String(deliver.id), {
+            update(String(result.company_id), String(result.id), {
               mail: "",
             });
           }}
@@ -180,14 +191,14 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
 
         <form
           onSubmit={(e) =>
-            delete_deliver(String(deliver.company_id), String(deliver.id), e)
+            delete_data(String(result.company_id), String(result.id), e)
           }
         >
           <TextField
             size="small"
             label={langPack.employee_name}
             required
-            placeholder={deliver.employee}
+            placeholder={result.employee}
             onChange={handleDeleteInput}
             value={deleteOption}
             sx={{
@@ -203,7 +214,7 @@ const DeliverItem: React.FC<{ deliver?: DeliverDTO }> = ({
           />
           <Button
             variant="contained"
-            disabled={deleteOption !== deliver.employee}
+            disabled={deleteOption !== result.employee}
             className="opacity-70 hover:opacity-100 transition-opacity duration-300"
             color="error"
             type="submit"

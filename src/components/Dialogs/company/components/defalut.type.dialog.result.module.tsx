@@ -1,32 +1,55 @@
-import { Stack, Paper, Box, Tooltip, Button, Pagination } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
+import { useEffect } from "react";
+import {
+  Paper,
+  Tooltip,
+  Button,
+  Stack,
+  Pagination,
+  Box,
+  Typography,
+} from "@mui/material";
+import ReactMarkdown from "react-markdown";
 import { theme, langPack } from "../../../../index.jsx";
+import { Add as AddIcon } from "@mui/icons-material";
+import Loader from "./loader.tsx";
 import BasicSelect from "../../../BasicSelect.tsx";
 import SearchBar from "../../../Filtres/search.tsx";
-import React from "react";
-import Loader from "./loader.tsx";
-import ResultList from "./deliver.result.list.tsx";
-import { DialogDeliverResultDTO } from "../../../../interfaces/dialog.result.dto.ts";
-import SearchResultList from "./deliver.result.search.list.tsx";
-
-const Result: React.FC<DialogDeliverResultDTO> = ({
-  viewResult,
-  range,
-  page,
-  value,
-  searchRef,
-  handleSubmit,
-  handleSearch,
-  handleClear,
-  setViewCreate,
-  handleChangeRange,
-  handleChange,
-  submitSearch,
-  delivers,
-  results,
-  isLoaded,
-}): JSX.Element => {
-  if (!isLoaded || !delivers) return <Loader />;
+import ResultList from "./default.type.result.list.tsx";
+import { type DialogModuleDTO } from "../../../../interfaces/dialog.result.dto.ts";
+import { Modules } from "../../../../hooks/Modules/index.tsx";
+import SearchResultList from "./default.type.dialog.result.search.list.tsx";
+/**
+ * # Genel Arama sonuç sayfası
+ *
+ * @param param0
+ * @returns
+ */
+const Result = <M extends keyof Modules>(props: DialogModuleDTO<M>) => {
+  const {
+    listedData,
+    setViewCreate,
+    isLoaded,
+    page,
+    range,
+    handleChangeRange,
+    handleChange,
+    handleSubmit,
+    handleSearch,
+    handleClear,
+    value,
+    viewResult,
+    results,
+    searchRef,
+    handleClickOutside,
+    submitSearch,
+    module,
+  } = props;
+  useEffect(() => {
+    if (!results?.results || results.results.length === 0) return;
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [results, handleClickOutside]);
+  if (!isLoaded || !listedData) return <Loader />;
   return (
     <Stack spacing={2}>
       <Paper
@@ -73,6 +96,7 @@ const Result: React.FC<DialogDeliverResultDTO> = ({
                 }}
               >
                 <SearchResultList
+                  module={module}
                   results={results}
                   value={value}
                   submitSearch={submitSearch}
@@ -80,7 +104,7 @@ const Result: React.FC<DialogDeliverResultDTO> = ({
               </Box>
             )}
           </div>
-          <Tooltip title={langPack.add_employee}>
+          <Tooltip title={langPack.create}>
             <Button
               sx={{
                 color: theme.menuItem.color,
@@ -94,12 +118,12 @@ const Result: React.FC<DialogDeliverResultDTO> = ({
                 },
                 whiteSpace: "nowrap",
               }}
-              onClick={(): void => setViewCreate((prev) => !prev)}
+              onClick={() => setViewCreate((prev) => !prev)}
               startIcon={<AddIcon />}
               color="inherit"
               variant="outlined"
             >
-              <span className="button-text">{langPack.add_employee}</span>
+              <span className="button-text">{langPack.create}</span>
             </Button>
           </Tooltip>
         </Stack>
@@ -116,13 +140,24 @@ const Result: React.FC<DialogDeliverResultDTO> = ({
         }}
       >
         <Stack spacing={2}>
-          <ResultList results={delivers} setViewCreate={setViewCreate} />
+          <ResultList
+            listedData={listedData}
+            setViewCreate={setViewCreate}
+            module={module}
+          />
         </Stack>
       </Paper>
       <div className="w-full flex justify-between items-center px-4 py-4">
+        <Typography
+          sx={{ color: theme.text }}
+          component={ReactMarkdown}
+          variant="body1"
+        >
+          {langPack.matching_result.replace(":total:", listedData.total)}
+        </Typography>
         <div className="flex-1 flex justify-center">
           <Pagination
-            count={Math.max(1, Math.ceil(delivers.total / Number(range)))}
+            count={Math.max(1, Math.ceil(listedData.total / Number(range)))}
             size="small"
             page={page}
             sx={{

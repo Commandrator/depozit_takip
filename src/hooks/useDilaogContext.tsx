@@ -24,7 +24,7 @@ interface UseProps<M extends keyof Modules> {
  */
 const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
   const { module, defKey, defVal, selectedCompanyId } = props;
-  const { InputAdapter, InputErrorAdapter, DataAdapter, api } =
+  const { InputAdapter, InputErrorAdapter, DataAdapter, Entity, api } =
     useModule(module);
   type InputErrorInstance = InstanceType<typeof InputErrorAdapter>;
   type InputInstance = InstanceType<typeof InputAdapter>;
@@ -36,8 +36,10 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
   const [page, setPage] = useState<number>(1);
   const [value, setValue] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [listedData, setListedData] = useState<DataInstance>();
-  const [results, setResults] = useState<DataInstance>();
+  const [listedData, setListedData] = useState<Record<string, DataInstance>>(
+    {}
+  );
+  const [results, setResults] = useState<Record<string, DataInstance>>({});
   const [viewResult, setViewResult] = useState<boolean>(false);
   const [viewCreate, setViewCreate] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(true);
@@ -72,7 +74,10 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
         });
         const result = await response.json();
         if (response.ok) {
-          setListedData(new DataAdapter(result));
+          setListedData((prev) => ({
+            ...prev,
+            [module]: new DataAdapter(result),
+          }));
           setChange(false);
           setIsLoaded(true);
           return;
@@ -86,7 +91,6 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
         setDetail(detail);
       } catch (error) {
         console.error("Network Error:", error);
-        return null;
       }
     },
     [
@@ -100,6 +104,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       api,
       DataAdapter,
       OperationMessagesByStatus,
+      module,
     ]
   );
   const searchPreview = async (query: string, company_id: string | number) => {
@@ -121,7 +126,10 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       });
       const result = await response.json();
       if (response.ok) {
-        setResults(new DataAdapter(result));
+        setResults((prev) => ({
+          ...prev,
+          [module]: new DataAdapter(result),
+        }));
         setViewResult(true);
         return;
       }
@@ -134,7 +142,6 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       setDetail(detail);
     } catch (error) {
       console.error("Network Error:", error);
-      return null;
     }
   };
   const delete_data = useCallback(
@@ -183,7 +190,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
         method,
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(data),
+        body: JSON.stringify(new Entity(data)),
       });
       const result = await response.json();
       const success = response.ok;
@@ -257,7 +264,10 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
   };
   const handleEdit = () => {
     setEdit((prev) => !prev);
-    if (!edit) setInputValue(new InputAdapter(initialData));
+    if (!edit) {
+      setInputValue(new InputAdapter(initialData));
+      setErrors(new InputErrorAdapter(initialData));
+    }
   };
   const handleChange = (_, value: number) => {
     setPage(value);
@@ -267,7 +277,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
     setViewResult(false);
     setChange(true);
     setValue("");
-    setResults(undefined);
+    setResults({});
     setPage(1);
     list(selectedCompanyId);
   };
@@ -278,7 +288,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       await searchPreview(keyword, selectedCompanyId);
     } else {
       setViewResult(false);
-      setResults(undefined);
+      setResults({});
     }
   };
   const submitSearch = (name?: string) => {
@@ -331,12 +341,14 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
     range,
     setRange,
     change,
-    inputValue,
+    inputValue:
+      inputValue as Modules[M]["InputAdapter"][keyof Modules[M]["InputAdapter"]],
     setInputValue,
     edit,
     setEdit,
     handleEdit,
-    errors,
+    errors:
+      errors as Modules[M]["InputErrorAdapter"][keyof Modules[M]["InputErrorAdapter"]],
     setErrors,
     create,
     searchRef,

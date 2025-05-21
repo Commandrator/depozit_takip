@@ -1,6 +1,6 @@
 import { langPack } from "..";
 import { type DeliverInputDTO, type DeliverInputErrorDTO } from "../interfaces/period.dialog.input.dto";
-export default class DeliverInput implements DeliverInputDTO {
+export class DeliverInput implements DeliverInputDTO {
   employee: string = "";
   mail: string = "";
   active: boolean = false;
@@ -11,6 +11,7 @@ export default class DeliverInput implements DeliverInputDTO {
     if (typeof data.active === "boolean") this.active = data.active;
   }
 }
+export default DeliverInput;
 export class DeliverInputError implements DeliverInputErrorDTO {
   employee: string = "";
   mail: string = "";

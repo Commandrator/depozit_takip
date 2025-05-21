@@ -10,24 +10,22 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import { langPack, theme } from "../../../../index.jsx";
+import { langPack, theme } from "../../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Save } from "@mui/icons-material";
-import DialogCreateDTO from "../../../../interfaces/dialog.create.dto.ts";
-import useDeliver from "../../../../hooks/useDeliver.tsx";
-import { DeliverInputError } from "../../../../classes/deliver.input.values.ts";
+import DialogCreateDTO from "../../../../../interfaces/dialog.create.dto.ts";
+import { DeliverInputError } from "../../../../../classes/deliver.input.values.ts";
 /**
  * # Personel oluşturma modülü
  *
  */
-const Create: React.FC<DialogCreateDTO> = ({
-  selectedCompanyId,
-  setViewCreate,
-}) => {
-  const { create, isValidInput, errors, inputValue } = useDeliver({
-    selectedCompanyId,
-  });
-
+const Create = (props: DialogCreateDTO<"personnel">) => {
+  const { selectedCompanyId, setViewCreate, dialogType } = props;
+  const { create, isValidInput, errors, inputValue } =
+    useDialogContext<"personnel">({
+      module: dialogType,
+      selectedCompanyId,
+    });
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     await create(selectedCompanyId);
@@ -143,5 +141,4 @@ const Create: React.FC<DialogCreateDTO> = ({
     </form>
   );
 };
-
 export default Create;

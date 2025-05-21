@@ -12,11 +12,11 @@ import {
   Switch,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
-import { langPack, theme } from "../../../../index.jsx";
-import EditInput from "./deposite.type.edit.input.tsx";
-import DepositeTypeDTO from "../../../../interfaces/deposite.types.dto.ts";
-import useDialogContext from "../../../../hooks/useDilaogContext.tsx";
-import { Modules } from "../../../../hooks/Modules/index.tsx";
+import { langPack, theme } from "../../../../../index.jsx";
+import EditInput from "../default.type.edit.input.tsx";
+import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
+import { Modules } from "../../../../../hooks/Modules/index.tsx";
+import DepositeTypeDTO from "../../../../../interfaces/deposite.types.dto.ts";
 /**
  * # deposite Item Element
  * ---
@@ -26,16 +26,20 @@ import { Modules } from "../../../../hooks/Modules/index.tsx";
  * @param param0
  * @returns
  */
-const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
-  deposite,
+interface DeaultInterface {
+  result?: DepositeTypeDTO;
+  module: keyof Modules;
+}
+export const Item: React.FC<DeaultInterface> = ({
+  result,
   module,
 }): JSX.Element | null => {
   const { handleDeleteInput, deleteOption, delete_data, update } =
     useDialogContext({
-      selectedCompanyId: String(deposite?.company_id ?? ""),
+      selectedCompanyId: String(result?.company_id ?? ""),
       module,
     });
-  if (!deposite) return null;
+  if (!result) return null;
   return (
     <Accordion
       sx={{
@@ -69,15 +73,15 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
       >
         <div>
           <Typography component="span" sx={{ flexGrow: 1 }}>
-            {deposite.name}
+            {result.name}
             <Divider sx={{ borderColor: theme.text, borderWidth: 1 }} />
           </Typography>
         </div>
         <Switch
-          checked={deposite.active}
+          checked={result.active}
           onChange={() => {
-            update(String(deposite.company_id), String(deposite.id), {
-              active: !deposite.active,
+            update(String(result.company_id), String(result.id), {
+              active: !result.active,
             });
           }}
           color="success"
@@ -94,7 +98,7 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
 
       <AccordionDetails>
         <EditInput
-          data={deposite}
+          data={result}
           type="text"
           dataKey="name"
           label={langPack.deposite_type_name}
@@ -105,7 +109,7 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
       <AccordionDetails>
         <EditInput
           module={module}
-          data={deposite}
+          data={result}
           type="text"
           dataKey="about"
           label={langPack.description}
@@ -114,7 +118,7 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
       <AccordionDetails>
         <EditInput
           module={module}
-          data={deposite}
+          data={result}
           type="number"
           dataKey="current_price"
           label={langPack.price}
@@ -130,11 +134,11 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
       >
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.last_update_date}:</span>{" "}
-          {new Date(deposite.last_update).toLocaleDateString()}
+          {new Date(result.last_update).toLocaleDateString()}
         </Typography>
         <Typography sx={{ color: theme.text }} variant="body2">
           <span className="text-gray-400">{langPack.creation_date}:</span>{" "}
-          {new Date(deposite.creation_date).toLocaleDateString()}
+          {new Date(result.creation_date).toLocaleDateString()}
         </Typography>
       </AccordionDetails>
       <AccordionDetails
@@ -152,7 +156,7 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
         >
           {langPack.deposite_delete_message.replace(
             ":deposite_type_name:",
-            deposite.name
+            result.name
           )}
         </Typography>
       </AccordionDetails>
@@ -165,14 +169,14 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
       >
         <form
           onSubmit={(e) =>
-            delete_data(String(deposite.company_id), String(deposite.id), e)
+            delete_data(String(result.company_id), String(result.id), e)
           }
         >
           <TextField
             size="small"
             label={langPack.deposite_type}
             required
-            placeholder={deposite.name}
+            placeholder={result.name}
             onChange={handleDeleteInput}
             value={deleteOption}
             sx={{
@@ -188,7 +192,7 @@ const Item: React.FC<{ deposite?: DepositeTypeDTO; module: keyof Modules }> = ({
           />
           <Button
             variant="contained"
-            disabled={deleteOption !== deposite.name}
+            disabled={deleteOption !== result.name}
             className="opacity-70 hover:opacity-100 transition-opacity duration-300"
             color="error"
             type="submit"

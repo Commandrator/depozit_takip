@@ -7,5 +7,7 @@ const api: string = `${process.env.REACT_APP_API_URL}/app/admin/deposite/type/`;
  * dialog bağlamında gelen actions kısmı useModule aracılığıyla
  * kullanılır. 
  */
-const deposite_type = { DataAdapter, InputErrorAdapter, InputAdapter, Entity, api };
+const deposite_type = {
+    DataAdapter, InputErrorAdapter, InputAdapter, Entity, api,
+};
 export default deposite_type;

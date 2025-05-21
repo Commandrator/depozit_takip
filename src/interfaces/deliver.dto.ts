@@ -2,7 +2,7 @@ export default interface DeliverDTO{
     id: number,
     company_id: number,
     employee: string,
-    company_user_id?: string,
+    company_user_id?: string | null,
     created_date: string,
     last_update: string,
     active: boolean

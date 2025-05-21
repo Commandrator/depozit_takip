@@ -1,33 +1,33 @@
 import type { DepositeTypesDTO, DepositeTypeDTO } from "../interfaces/deposite.types.dto.ts";
 
 export class DepositeType implements DepositeTypeDTO {
-  id: number;
-  company_id: number;
-  name: string;
-  about?: string;
-  current_price?: number;
-  last_update: string;
-  active: boolean;
-  creation_date: string;
-  constructor(parameters: DepositeTypeDTO) {
-    this.id = parameters.id;
-    this.company_id = parameters.company_id;
-    this.name = parameters.name;
-    this.about = parameters.about;
-    this.current_price = parameters.current_price;
-    this.last_update = parameters.last_update;
-    this.active = parameters.active;
-    this.creation_date = parameters.creation_date;
-  }
+    id: number;
+    company_id: number;
+    name: string;
+    about?: string;
+    current_price?: number | null = null;
+    last_update: string;
+    active: boolean;
+    creation_date: string;
+    constructor(params: DepositeTypeDTO) {
+        if (params.id) this.id = Number(params.id);
+        if (params.company_id) this.company_id = Number(params.company_id);
+        if (params.name) this.name = params.name;
+        if (params.about) this.about = params.about;
+        if (params.current_price) this.current_price = params.current_price;
+        if (params.last_update) this.last_update = params.last_update;
+        if (params.active !== undefined) this.active = params.active;
+        if (params.creation_date) this.creation_date = params.creation_date;
+    }
 }
 
 export class DepositeTypes {
-    deposits: DepositeTypeDTO[] = [];
+    results: DepositeTypeDTO[] = [];
     total: number = 0;
     constructor(parameters?: DepositeTypesDTO) {
         if (parameters) {
             this.total = parameters.total;
-            this.deposits = parameters.deposits;
+            this.results = parameters.deposits;
         }
     }
     normalize(str: string): string {
@@ -35,7 +35,7 @@ export class DepositeTypes {
     }
     getUnique(): DepositeTypes {
         const seenNames = new Set<string>();
-        const uniqueCompanies = this.deposits.filter(deposit => {
+        const uniqueCompanies = this.results.filter(deposit => {
             const normalized = this.normalize(deposit.name);
             if (seenNames.has(normalized)) {
                 return false;

@@ -108,6 +108,9 @@ const packages = {
     get_unauthorized: "Yetkisiz erişim.",
     get_server_error: "Sunucu hatası oluştu.",
     generic_failure: "İşlem başarısız",
+    default_add_title: "Kayıt bulunamadı",
+    default_add_subtitle:
+      "Yeni bir giriş eklemek için lütfen 'Oluştur' butonunu kullanın.",
   },
   en: {},
 };

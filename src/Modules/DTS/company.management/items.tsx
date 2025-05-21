@@ -8,12 +8,10 @@ import TuneIcon from "@mui/icons-material/Tune";
 import InfoIcon from "@mui/icons-material/Info";
 import CreateCompanyDialogContent from "../../../components/Dialogs/company/index.tsx";
 import ManageCompanyContent from "../../../components/Dialogs/company/manage.tsx";
-import PeriodContent from "../../../components/Dialogs/company/period.tsx";
-import DeliverContent from "../../../components/Dialogs/company/deliver.tsx";
 import InventoryIcon from '@mui/icons-material/Inventory';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import CategoryIcon from '@mui/icons-material/Category';
-import DepositeTypeContent from "../../../components/Dialogs/company/deposite.type.tsx";
+import DefaultTypeDialog from "../../../components/Dialogs/company/components/default.type.dailog.module.tsx";
 /**
  * ŞUNUDA OKU!!
  *
@@ -55,7 +53,7 @@ const menuItems = [
         label: "deposite_type_transactions",
         action: "deposite_type",
         icon: <InventoryIcon fontSize="small" />,
-        content:DepositeTypeContent
+        content:DefaultTypeDialog
       },
     ],
   },
@@ -70,14 +68,14 @@ const menuItems = [
         label: "personel_transactions",
         action: "personnel",
         icon: <PeopleIcon fontSize="small" />,
-        content:DeliverContent
+        content:DefaultTypeDialog
       },
       {
         id: "submenu-period-transactions",
         label: "period_transactions",
         action: "period",
         icon: <ManageHistoryIcon fontSize="small" />,
-        content: PeriodContent
+        content: DefaultTypeDialog
       },
       {
         id: "submenu-company-about-transactions",

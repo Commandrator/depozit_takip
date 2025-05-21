@@ -7,7 +7,8 @@ import { Modules } from "../hooks/Modules/index.tsx";
 import { DepositeTypes } from "../classes/deposite.types.ts";
 export interface DialogSearchResultBaseDTO {
     value: string;
-    submitSearch: (name?: string) => void;
+    submitSearch: (name?: string) => void;    
+    module: keyof Modules;
 }
 export interface DialogDeliverSearchResultDTO extends DialogSearchResultBaseDTO {
     results?: DeliversDTO;
@@ -15,10 +16,10 @@ export interface DialogDeliverSearchResultDTO extends DialogSearchResultBaseDTO 
 export interface DialogPeriodSearchResultDTO extends DialogSearchResultBaseDTO {
     results?: PeriodsDTO;
 }
-export interface DialogDeliverSearchItemProps extends DialogSearchResultBaseDTO{
+export interface DialogDeliverSearchItemProps extends DialogSearchResultBaseDTO {
     deliver: DeliverDTO;
 }
-export interface DepositeTypeSearchItemProps extends DialogSearchResultBaseDTO{
+export interface DepositeTypeSearchItemProps extends DialogSearchResultBaseDTO {
     result: DepositeTypeDTO;
 }
 export interface DailogResultBaseDTO extends DialogSearchResultBaseDTO {
@@ -35,10 +36,26 @@ export interface DailogResultBaseDTO extends DialogSearchResultBaseDTO {
     searchRef: React.RefObject<HTMLDivElement>;
     handleClickOutside: (event: MouseEvent) => void;
 }
+export interface DialogModuleSearchItemProps<M extends keyof Modules> extends DialogSearchResultBaseDTO {
+    result: InstanceType<Modules[M]["Entity"]>;
+}
+export interface DialogModuleSerachResultDTO<M extends keyof Modules> extends DialogSearchResultBaseDTO {
+    results?: InstanceType<Modules[M]["DataAdapter"]>;
+}
+export interface DialogModuleDTO<M extends keyof Modules> extends DailogResultBaseDTO {
+    results?: InstanceType<Modules[M]["DataAdapter"]>;
+    listedData?: InstanceType<Modules[M]["DataAdapter"]>;
+    module: M;
+}
+export interface DialogModuleResultDTO<M extends keyof Modules> {
+    listedData: InstanceType<Modules[M]["DataAdapter"]>;
+    setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
+    module: M
+}
 export interface DialogDepositeTypeModuleDTO extends DailogResultBaseDTO {
     results?: DepositeTypesDTO;
     listedData?: DepositeTypes;
-    module:keyof Modules;
+    module: keyof Modules;
 }
 
 export interface DialogResultDTO extends DailogResultBaseDTO {

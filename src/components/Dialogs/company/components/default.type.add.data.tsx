@@ -2,9 +2,11 @@ import { Box, IconButton, Typography, Stack } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { theme, langPack } from "../../../../index.jsx";
 import React from "react";
-const Add: React.FC<{
+const Add = ({
+  setViewCreate,
+}: {
   setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setViewCreate }): JSX.Element => {
+}) => {
   return (
     <Box
       display="flex"
@@ -29,13 +31,14 @@ const Add: React.FC<{
           <AddCircleIcon sx={{ fontSize: 60 }} />
         </IconButton>
         <Typography variant="h6" color={theme.text}>
-          {langPack.add_a_deliver_title}
+          {langPack.default_add_title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {langPack.add_a_deliver_subtitle}
+          {langPack.default_add_subtitle}
         </Typography>
       </Stack>
     </Box>
   );
 };
+
 export default Add;

@@ -3,7 +3,7 @@ export default interface DepositeTypeDTO{
     company_id: number,
     name: string,
     about?: string,
-    current_price?: number,
+    current_price?: number | null,
     last_update: string,
     active: boolean,
     creation_date: string

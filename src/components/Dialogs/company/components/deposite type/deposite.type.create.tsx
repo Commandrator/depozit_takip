@@ -1,4 +1,4 @@
-import DialogCreateDTO from "../../../../interfaces/dialog.create.dto";
+import DialogCreateDTO from "../../../../../interfaces/dialog.create.dto.ts";
 import React from "react";
 import {
   Paper,
@@ -10,21 +10,24 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import { langPack, theme } from "../../../../index.jsx";
+import { langPack, theme } from "../../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Save } from "@mui/icons-material";
-import useDialogContext from "../../../../hooks/useDilaogContext.tsx";
-import useModule from "../../../../hooks/Modules/index.tsx";
-const Create: React.FC<DialogCreateDTO> = ({
-  selectedCompanyId,
-  setViewCreate,
-  dialogType,
-}) => {
-  const { create, isValidInput, errors, inputValue } = useDialogContext({
-    module: dialogType,
-    selectedCompanyId,
-  });
+import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
+import useModule from "../../../../../hooks/Modules/index.tsx";
+/**
+ *
+ * @param props Dolaylı aktarımda modül hata çıkartabildiği için doğrudan modül adı ile aktarım yaptım.
+ * @returns
+ */
+const Create = (props: DialogCreateDTO<"deposite_type">) => {
+  const { selectedCompanyId, setViewCreate, dialogType } = props;
   const { InputErrorAdapter } = useModule(dialogType);
+  const { create, isValidInput, errors, inputValue } =
+    useDialogContext<"deposite_type">({
+      module: dialogType,
+      selectedCompanyId,
+    });
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     await create(selectedCompanyId);

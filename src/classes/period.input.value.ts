@@ -1,7 +1,7 @@
 import { langPack } from "..";
 import type PeriodInputDTO from "../interfaces/period.dialog.input.dto";
 import type { PeriodInputErrorDTO } from "../interfaces/period.dialog.input.dto";
-export default class PeriodInput implements PeriodInputDTO {
+export class PeriodInput implements PeriodInputDTO {
     private currentYear = new Date().getFullYear();
     private nextYear = this.currentYear + 1;
     deadline: string = new Date(new Date().setFullYear(this.nextYear))
@@ -37,3 +37,4 @@ export class PeriodInputError implements PeriodInputErrorDTO {
         return !!(this.deadline || this.name);
     }
 }
+export default PeriodInput

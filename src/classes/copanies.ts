@@ -1,12 +1,12 @@
 import CompaniesDTO from "../interfaces/User.Companies.dto";
 import CompanyDTO from "../interfaces/User.Company.DTO";
 export class Companies {
-    companies: CompanyDTO[];
+    results: CompanyDTO[];
     total: number;
     constructor(parameters: CompaniesDTO) {
         if (parameters) {
             this.total = parameters.total;
-            this.companies = parameters.companies;
+            this.results = parameters.companies;
         }
     }
     normalize(str: string): string {
@@ -14,7 +14,7 @@ export class Companies {
     }
     getUniqueCompanys(): Companies {
         const seenNames = new Set<string>();
-        const uniqueCompanies = this.companies.filter(company => {
+        const uniqueCompanies = this.results.filter(company => {
             const normalized = this.normalize(company.name);
             if (seenNames.has(normalized)) {
                 return false;
