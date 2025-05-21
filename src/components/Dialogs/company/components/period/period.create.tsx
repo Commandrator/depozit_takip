@@ -5,15 +5,15 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Save } from "@mui/icons-material";
 import DialogCreateDTO from "../../../../../interfaces/dialog.create.dto.ts";
 import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
-const Create = (props: DialogCreateDTO<"period">) => {
-  const { selectedCompanyId, setViewCreate, dialogType } = props;
+const CreatePeriod = (props: DialogCreateDTO<"period">) => {
+  const { selectedCompanyId, setViewCreate, module } = props;
   const {
     create,
     errors,
     inputValue,
     isValidInput,
   } = useDialogContext<"period">({
-      module: dialogType,
+      module,
       selectedCompanyId,
     });
   const handleSave = async (e: React.FormEvent) => {
@@ -115,4 +115,4 @@ const Create = (props: DialogCreateDTO<"period">) => {
     </Stack>
   );
 };
-export default Create;
+export default CreatePeriod;

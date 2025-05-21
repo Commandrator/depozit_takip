@@ -3,6 +3,7 @@ import ContentProps from "../../../../interfaces/content.props";
 import useDialogContext from "../../../../hooks/useDilaogContext.tsx";
 import { Stack } from "@mui/material";
 import Result from "./defalut.type.dialog.result.module.tsx";
+import Create from "./default.type.dialog.create.module.tsx";
 const DefaultTypeDialog: React.FC<ContentProps> = ({
   selectedCompanyId,
   dialogType,
@@ -29,6 +30,9 @@ const DefaultTypeDialog: React.FC<ContentProps> = ({
     change,
   } = useDialogContext({ module: dialogType, selectedCompanyId });
   useEffect(() => {
+    setViewCreate(false);
+  }, [setViewCreate, dialogType]);
+  useEffect(() => {
     if (!listedData[dialogType]) {
       list(selectedCompanyId);
     }
@@ -41,12 +45,13 @@ const DefaultTypeDialog: React.FC<ContentProps> = ({
   return (
     <Stack spacing={2} sx={{ padding: "16px" }}>
       <Stack spacing={2} sx={{ padding: "16px" }}>
-        {viewCreate ? null : (
-          //   <Create
-          //     selectedCompanyId={selectedCompanyId}
-          //     setViewCreate={setViewCreate}
-          //     dialogType={dialogType}
-          //   />
+        {viewCreate ? (
+          <Create
+            module={dialogType}
+            selectedCompanyId={selectedCompanyId}
+            setViewCreate={setViewCreate}
+          />
+        ) : (
           <Result
             module={dialogType}
             viewResult={viewResult}

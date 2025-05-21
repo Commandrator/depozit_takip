@@ -15,15 +15,16 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Save } from "@mui/icons-material";
 import DialogCreateDTO from "../../../../../interfaces/dialog.create.dto.ts";
 import { DeliverInputError } from "../../../../../classes/deliver.input.values.ts";
+import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
 /**
  * # Personel oluşturma modülü
  *
  */
-const Create = (props: DialogCreateDTO<"personnel">) => {
-  const { selectedCompanyId, setViewCreate, dialogType } = props;
+const CreateDeliver = (props: DialogCreateDTO<"personnel">) => {
+  const { selectedCompanyId, setViewCreate, module } = props;
   const { create, isValidInput, errors, inputValue } =
     useDialogContext<"personnel">({
-      module: dialogType,
+      module,
       selectedCompanyId,
     });
   const handleSave = async (e: React.FormEvent) => {
@@ -141,4 +142,4 @@ const Create = (props: DialogCreateDTO<"personnel">) => {
     </form>
   );
 };
-export default Create;
+export default CreateDeliver;

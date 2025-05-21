@@ -20,12 +20,12 @@ import useModule from "../../../../../hooks/Modules/index.tsx";
  * @param props Dolaylı aktarımda modül hata çıkartabildiği için doğrudan modül adı ile aktarım yaptım.
  * @returns
  */
-const Create = (props: DialogCreateDTO<"deposite_type">) => {
-  const { selectedCompanyId, setViewCreate, dialogType } = props;
-  const { InputErrorAdapter } = useModule(dialogType);
+const CreateDepositeType = (props: DialogCreateDTO<"deposite_type">) => {
+  const { selectedCompanyId, setViewCreate, module } = props;
+  const { InputErrorAdapter } = useModule(module);
   const { create, isValidInput, errors, inputValue } =
     useDialogContext<"deposite_type">({
-      module: dialogType,
+      module,
       selectedCompanyId,
     });
   const handleSave = async (e: React.FormEvent) => {
@@ -153,4 +153,4 @@ const Create = (props: DialogCreateDTO<"deposite_type">) => {
     </form>
   );
 };
-export default Create;
+export default CreateDepositeType;
