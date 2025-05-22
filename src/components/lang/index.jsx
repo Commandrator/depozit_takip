@@ -24,8 +24,8 @@ const packages = {
     company_transactions: "Şirket İşlemleri",
     period_transactions: "Dönem İşlemleri",
     personel_transactions: "Personel İşlemleri",
-    merchant_transactions: "Cari İşlemleri",
-    merchant_type_transactions: "Cari Tipi İşlemleri",
+    customer_transactions: "Cari İşlemleri",
+    customer_type_transactions: "Cari Tipi İşlemleri",
     transactions: "İşlemler",
     create_company: "Şirket Oluştur",
     company_name: "Şirket Adı",
@@ -111,6 +111,9 @@ const packages = {
     default_add_title: "Kayıt bulunamadı",
     default_add_subtitle:
       "Yeni bir giriş eklemek için lütfen 'Oluştur' butonunu kullanın.",
+  customer_type_name_input_error: "İsim 1-50 karakter arasında olmalı ve yalnızca harf, rakam, boşluk ve geçerli semboller (.,()'-) içermelidir.",
+  customer_type_discount_input_error: "İndirim değeri bir sayı olmalı ve en fazla 3 ondalık basamak içermelidir (örneğin: 10 veya 10.123).",
+  customer_type_default_deadline_day_input_error: "Son teslim günü yalnızca tam sayı olmalıdır (örneğin: 1, 10, 30)."
   },
   en: {},
 };

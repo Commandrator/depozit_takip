@@ -9,16 +9,16 @@ import {
   Button,
   AccordionActions,
   TextField,
-  Switch,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import { langPack, theme } from "../../../../../index.jsx";
 import EditInput from "../default.type.edit.input.tsx";
 import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
-import DepositeTypeDTO from "../../../../../interfaces/deposite.types.dto.ts";
 import { DeaultInterface } from "../../../../../interfaces/Default.pros.ts";
+import CustomerTypeDTO from "../../../../../interfaces/customer.type.dto.ts";
+import SelectionItem from "../default.type.edit.seleciton.tsx";
 /**
- * # deposite Item Element
+ * # Deliver Item Element
  * ---
  * Personel işlemleri için kullanılacaktır.
  * ! EditDialgo için giden parametrelei isValid fonksiyonuna uygun olucak biçimde yeniden yapılandırlması sağlanacak
@@ -26,15 +26,14 @@ import { DeaultInterface } from "../../../../../interfaces/Default.pros.ts";
  * @param param0
  * @returns
  */
-export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
+const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
   result,
   module,
 }): JSX.Element | null => {
-  const { handleDeleteInput, deleteOption, delete_data, update } =
-    useDialogContext({
-      selectedCompanyId: String(result?.company_id ?? ""),
-      module,
-    });
+  const { handleDeleteInput, deleteOption, delete_data } = useDialogContext({
+    selectedCompanyId: String(result?.company_id ?? ""),
+    module,
+  });
   if (!result) return null;
   return (
     <Accordion
@@ -73,32 +72,15 @@ export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
             <Divider sx={{ borderColor: theme.text, borderWidth: 1 }} />
           </Typography>
         </div>
-        <Switch
-          checked={result.active}
-          onChange={() => {
-            update(String(result.company_id), String(result.id), {
-              active: !result.active,
-            });
-          }}
-          color="success"
-          onClick={(e) => e.stopPropagation()} // Accordion açılmasını engeller
-          onFocus={(e) => e.stopPropagation()} // Focus da tetiklenmesin
-          sx={{
-            position: "absolute",
-            right: 40,
-            top: "50%",
-            transform: "translateY(-50%)",
-          }}
-        />
       </AccordionSummary>
 
       <AccordionDetails>
         <EditInput
+          module={module}
           data={result}
           type="text"
           dataKey="name"
-          label={langPack.deposite_type_name}
-          module={module}
+          label={langPack.employee_name}
           required
         />
       </AccordionDetails>
@@ -106,9 +88,21 @@ export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
         <EditInput
           module={module}
           data={result}
-          type="text"
-          dataKey="about"
-          label={langPack.description}
+          type="number"
+          dataKey="discount"
+          label={langPack.employee_mail}
+        />
+      </AccordionDetails>
+      <AccordionDetails>
+        <SelectionItem
+          options={[
+            { label: "Sabit", value: "fixed" },
+            { label: "Yüzdelik", value: "percentage" },
+          ]}
+          module={module}
+          data={result}
+          dataKey="discount_type"
+          label={langPack.employee_mail}
         />
       </AccordionDetails>
       <AccordionDetails>
@@ -116,8 +110,8 @@ export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
           module={module}
           data={result}
           type="number"
-          dataKey="current_price"
-          label={langPack.price}
+          dataKey="default_deadline_day"
+          label={langPack.employee_mail}
         />
       </AccordionDetails>
       <AccordionDetails
@@ -150,8 +144,8 @@ export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
           component={ReactMarkdown}
           variant="body1"
         >
-          {langPack.deposite_delete_message.replace(
-            ":deposite_type_name:",
+          {langPack.deliver_delete_message.replace(
+            ":deliver_name:",
             result.name
           )}
         </Typography>
@@ -170,7 +164,7 @@ export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
         >
           <TextField
             size="small"
-            label={langPack.deposite_type}
+            label={langPack.employee_name}
             required
             placeholder={result.name}
             onChange={handleDeleteInput}
@@ -200,4 +194,4 @@ export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
     </Accordion>
   );
 };
-export default Item;
+export default CustomerTypeItem;

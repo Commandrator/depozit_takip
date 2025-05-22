@@ -29,24 +29,24 @@ const menuItems = [
       {
         id: "submenu-deposito-transactions",
         label: "deposite_transactions",
-        action: "merchant",
+        action: "deposite",
         icon: <CategoryIcon fontSize="small" />,
         content:null
       },  
       {
         id: "submenu-merchant-transactions",
-        label: "merchant_transactions",
-        action: "merchant",
+        label: "customer_transactions",
+        action: "customer",
         icon: <RecentActorsIcon fontSize="small" />,
         content:null
       },  
       
       {
-        id: "submenu-merchant-type-transactions",
-        label: "merchant_type_transactions",
-        action: "merchant_type",
+        id: "submenu-customer-type-transactions",
+        label: "customer_type_transactions",
+        action: "customer_type",
         icon: <StorefrontIcon fontSize="small" />,
-        content:null
+        content:DefaultTypeDialog
       },
       {
         id: "submenu-deposito-type-transactions",

@@ -13,14 +13,10 @@ import {
 import ReactMarkdown from "react-markdown";
 import { langPack, theme } from "../../../../../index.jsx";
 import EditInput from "../default.type.edit.input.tsx";
-import { Modules } from "../../../../../hooks/Modules/index.tsx";
 import PeriodDTO from "../../../../../interfaces/period.dto.ts";
 import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
-interface DeaultInterface {
-  result?: PeriodDTO;
-  module: keyof Modules;
-}
-const PeriodItem: React.FC<DeaultInterface> = ({ result, module }) => {
+import { DeaultInterface } from "../../../../../interfaces/Default.pros.ts";
+const PeriodItem: React.FC<DeaultInterface<PeriodDTO>> = ({ result, module }) => {
   const { handleDeleteInput, deleteOption, delete_data } = useDialogContext({
     selectedCompanyId: String(result?.company_id ?? ""),
     module,

@@ -14,9 +14,9 @@ import {
 import ReactMarkdown from "react-markdown";
 import { langPack, theme } from "../../../../../index.jsx";
 import EditInput from "../default.type.edit.input.tsx";
-import { Modules } from "../../../../../hooks/Modules/index.tsx";
 import useDialogContext from "../../../../../hooks/useDilaogContext.tsx";
 import DeliverDTO from "../../../../../interfaces/deliver.dto.ts";
+import { DeaultInterface } from "../../../../../interfaces/Default.pros.ts";
 /**
  * # Deliver Item Element
  * ---
@@ -26,11 +26,7 @@ import DeliverDTO from "../../../../../interfaces/deliver.dto.ts";
  * @param param0
  * @returns
  */
-interface DeaultInterface {
-  result?: DeliverDTO;
-  module: keyof Modules;
-}
-const DeliverItem: React.FC<DeaultInterface> = ({
+const DeliverItem: React.FC<DeaultInterface<DeliverDTO>> = ({
   result,
   module,
 }): JSX.Element | null => {

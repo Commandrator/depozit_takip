@@ -253,7 +253,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
     }
   };
   const isValidInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent,
     errorKey: string
   ) => {
     const target = e.target as HTMLInputElement;

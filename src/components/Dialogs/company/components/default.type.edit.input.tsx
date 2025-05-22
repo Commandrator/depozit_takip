@@ -27,7 +27,6 @@ const EditInput = <M extends keyof Modules>({
       module,
       selectedCompanyId: String(data.company_id),
     });
-
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <TextField
@@ -67,4 +66,4 @@ const EditInput = <M extends keyof Modules>({
     </Stack>
   );
 };
-export default EditInput;
+export default React.memo(EditInput);

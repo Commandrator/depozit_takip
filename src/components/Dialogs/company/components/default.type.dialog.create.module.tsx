@@ -31,7 +31,7 @@ const Create = <M extends keyof Modules>(props: DialogCreateDTO<M>) => {
           setViewCreate={setViewCreate}
         />
       );
-    case "merchant_type":
+    case "customer_type":
       break;
     default:
       return null;
