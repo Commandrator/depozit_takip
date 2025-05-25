@@ -26,7 +26,7 @@ export interface DepositeTypeErrorDTO {
   about: string;
   current_price?: number | string;
 }
-export interface CustomerTypeInutDTO{
+export interface CustomerTypeInputDTO {
   name: string,
   discount: number,
   default_deadline_day?: number,
@@ -34,6 +34,6 @@ export interface CustomerTypeInutDTO{
 }
 export interface CustomerTypeErrorDTO {
   name: string,
-  discount: string | number,
-  default_deadline_day?: string | number
+  discount: string,
+  default_deadline_day?: string
 } 

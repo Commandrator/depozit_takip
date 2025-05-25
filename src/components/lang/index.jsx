@@ -42,8 +42,6 @@ const packages = {
     back: "Geri",
     working_period: "Çalışma Dönemi",
     number_of_days_remaining: "Kalan Gün Sayısı",
-    period_delete_message:
-      '**UYARI**: Dönemi kalıcı olarak silmek için, sağ alt köşedeki "Dönem Başlığı" kısmına **:project_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
     add_a_period_title: "Henüz bir dönem bulunamadı",
     add_a_period_subtitle: "Oluşturmak için yukarıdaki butona tıklayın.",
     load_range: "Yükleme Aralığı",
@@ -69,8 +67,6 @@ const packages = {
     add_employee: "Personel Oluştur",
     add_a_deliver_title: "Henüz bir personel bulunamadı",
     add_a_deliver_subtitle: "Oluşturmak için yukarıdaki butona tıklayın.",
-    deliver_delete_message:
-      '**UYARI**: Personeli kalıcı olarak silmek için, sağ alt köşedeki "Dönem Başlığı" kısmına **:deliver_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
     employee_name: "Personel adı",
     employee_mail: "Personel Maili",
     employee_id: "Kullanıcı Adresi",
@@ -86,6 +82,12 @@ const packages = {
     module_notfount: "Modül bulunamadı: :name:",
     deposite_delete_message:
       '**UYARI**: Depozito Tipini kalıcı olarak silmek için, sağ alt köşedeki "Depozito Tipi" kısmına **:deposite_type_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
+    period_delete_message:
+      '**UYARI**: Dönemi kalıcı olarak silmek için, sağ alt köşedeki "Dönem Başlığı" kısmına **:project_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
+    deliver_delete_message:
+      '**UYARI**: Personeli kalıcı olarak silmek için, sağ alt köşedeki "Personel Adı" kısmına **:deliver_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
+    customer_type_delete_message:
+      '**UYARI**: Cari Tipini kalıcı olarak silmek için, sağ alt köşedeki "Cari Tipi" kısmına **:customer_type_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
     deposite_type: "Depozito Tipi",
     description: "Açıklama",
     deposite_type_name: "Depozito Tipi",
@@ -111,9 +113,18 @@ const packages = {
     default_add_title: "Kayıt bulunamadı",
     default_add_subtitle:
       "Yeni bir giriş eklemek için lütfen 'Oluştur' butonunu kullanın.",
-  customer_type_name_input_error: "İsim 1-50 karakter arasında olmalı ve yalnızca harf, rakam, boşluk ve geçerli semboller (.,()'-) içermelidir.",
-  customer_type_discount_input_error: "İndirim değeri bir sayı olmalı ve en fazla 3 ondalık basamak içermelidir (örneğin: 10 veya 10.123).",
-  customer_type_default_deadline_day_input_error: "Son teslim günü yalnızca tam sayı olmalıdır (örneğin: 1, 10, 30)."
+    customer_type_name_input_error:
+      "İsim 1-50 karakter arasında olmalı ve yalnızca harf, rakam, boşluk ve geçerli semboller (.,()'-) içermelidir.",
+    customer_type_discount_input_error:
+      "İndirim değeri bir sayı olmalı ve en fazla 3 ondalık basamak içermelidir (örneğin: 10 veya 10.123).",
+    customer_type_default_deadline_day_input_error:
+      "Son teslim günü yalnızca tam sayı olmalıdır (örneğin: 1, 10, 30).",
+    customer_type: "Cari Tipi",
+    discount: "İskonto",
+    discount_type: "İskonto Türü",
+    deadline_day: "son teslim günü",
+    fixed: "Sabit",
+    percentage: "Yüzdelik",
   },
   en: {},
 };

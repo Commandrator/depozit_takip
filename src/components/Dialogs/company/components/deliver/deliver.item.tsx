@@ -222,4 +222,4 @@ const DeliverItem: React.FC<DeaultInterface<DeliverDTO>> = ({
     </Accordion>
   );
 };
-export default DeliverItem;
+export default React.memo(DeliverItem);

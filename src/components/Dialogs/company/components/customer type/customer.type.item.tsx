@@ -80,7 +80,7 @@ const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
           data={result}
           type="text"
           dataKey="name"
-          label={langPack.employee_name}
+          label={langPack.customer_type}
           required
         />
       </AccordionDetails>
@@ -90,7 +90,7 @@ const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
           data={result}
           type="number"
           dataKey="discount"
-          label={langPack.employee_mail}
+          label={langPack.discount}
         />
       </AccordionDetails>
       <AccordionDetails>
@@ -102,7 +102,7 @@ const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
           module={module}
           data={result}
           dataKey="discount_type"
-          label={langPack.employee_mail}
+          label={langPack.discount_type}
         />
       </AccordionDetails>
       <AccordionDetails>
@@ -111,7 +111,7 @@ const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
           data={result}
           type="number"
           dataKey="default_deadline_day"
-          label={langPack.employee_mail}
+          label={langPack.deadline_day}
         />
       </AccordionDetails>
       <AccordionDetails
@@ -144,8 +144,8 @@ const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
           component={ReactMarkdown}
           variant="body1"
         >
-          {langPack.deliver_delete_message.replace(
-            ":deliver_name:",
+          {langPack.customer_type_delete_message.replace(
+            ":customer_type_name:",
             result.name
           )}
         </Typography>
@@ -164,7 +164,7 @@ const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
         >
           <TextField
             size="small"
-            label={langPack.employee_name}
+            label={langPack.customer_type}
             required
             placeholder={result.name}
             onChange={handleDeleteInput}
@@ -194,4 +194,4 @@ const CustomerTypeItem: React.FC<DeaultInterface<CustomerTypeDTO>> = ({
     </Accordion>
   );
 };
-export default CustomerTypeItem;
+export default React.memo(CustomerTypeItem);

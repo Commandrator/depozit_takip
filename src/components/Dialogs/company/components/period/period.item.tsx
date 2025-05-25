@@ -172,4 +172,4 @@ const PeriodItem: React.FC<DeaultInterface<PeriodDTO>> = ({ result, module }) =>
   );
 };
 export { PeriodItem };
-export default PeriodItem;
+export default React.memo(PeriodItem);

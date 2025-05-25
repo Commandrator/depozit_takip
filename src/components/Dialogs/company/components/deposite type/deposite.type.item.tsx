@@ -200,4 +200,4 @@ export const Item: React.FC<DeaultInterface<DepositeTypeDTO>> = ({
     </Accordion>
   );
 };
-export default Item;
+export default React.memo(Item);
