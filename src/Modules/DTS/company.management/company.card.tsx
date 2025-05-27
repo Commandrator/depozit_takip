@@ -5,7 +5,7 @@ import { langPack, theme } from "../../../index.jsx";
 import menuItems from "./items.tsx";
 import MenuGroup from "./company.card.group.tsx";
 const CompanyCard: React.FC<CompanyCardProps> = ({
-  company,
+  result,
   handleDialogAction,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -19,16 +19,16 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
     setAnchorEl(null);
   };
   const handleAction = (type: string) => {
-    handleDialogAction(type, company.id);
+    handleDialogAction(type, result.id);
     handleMenuClose();
   };
   return (
     <div className="w-full p-4 backdrop-blur-sm shadow-xl bg-opacity-15 hover:bg-opacity-25 bg-white">
       <div className="grid grid-cols-[1fr_auto] gap-2 items-start">
         <div>
-          <h1 className="text-md font-semibold">{company.name}</h1>
+          <h1 className="text-md font-semibold">{result.name}</h1>
           <hr className="my-1" />
-          <p>{company.about}</p>
+          <p>{result.about}</p>
         </div>
         <div>
           <Button variant="outlined" color="inherit" onClick={handleMenuOpen}>

@@ -6,13 +6,13 @@ export class Companies {
     constructor(parameters: CompaniesDTO) {
         if (parameters) {
             this.total = parameters.total;
-            this.results = parameters.companies;
+            this.results = parameters.results;
         }
     }
     normalize(str: string): string {
         return str.trim().toLocaleLowerCase("tr");
     }
-    getUniqueCompanys(): Companies {
+    getUnique(): Companies {
         const seenNames = new Set<string>();
         const uniqueCompanies = this.results.filter(company => {
             const normalized = this.normalize(company.name);
@@ -22,6 +22,6 @@ export class Companies {
             seenNames.add(normalized);
             return true;
         });
-        return new Companies({ companies: uniqueCompanies, total: this.total });
+        return new Companies({ results: uniqueCompanies, total: this.total });
     }
 }

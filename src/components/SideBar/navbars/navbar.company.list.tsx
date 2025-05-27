@@ -10,19 +10,19 @@ const CompanySearchList: React.FC<SearchResultProps> = ({
   value,
   submitSearch,
 }) => {
-  if (!results?.companies && results?.companies.length === 0) {
+  if (!results?.results && results?.results.length === 0) {
     return <Typography color="neutral">{langPack.no_results_found}</Typography>;
   }
   return (
     <List sx={{ padding: 0 }}>
-      {results?.companies?.map((company, index) => (
-        <React.Fragment key={company.id}>
+      {results?.results?.map((result, index) => (
+        <React.Fragment key={result.id}>
           <SerachItem
-            company={company}
+            results={result}
             value={value}
             submitSearch={submitSearch}
           />
-          {index < results.companies.length - 1 && <Divider />}
+          {index < results.results.length - 1 && <Divider />}
         </React.Fragment>
       ))}
       <ListItem>

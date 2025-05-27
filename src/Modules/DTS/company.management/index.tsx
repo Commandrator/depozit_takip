@@ -32,13 +32,13 @@ const CompanyMangement = () => {
     <div className="flex flex-col min-h-screen pt-32">
       <div className="flex-grow space-y-5">
         {companys &&
-          companys.results.map((company) => (
+          companys.results.map((result) => (
             <CompanyCard
-              company={company}
-              key={company.id}
+              result={result}
+              key={result.id}
               handleDialogAction={handleDialogAction}
             />
-          ))}
+          ))} 
         {dialogOpen &&
           CreatePortal(
             <DialogWithTab

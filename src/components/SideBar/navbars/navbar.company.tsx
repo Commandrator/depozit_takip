@@ -22,7 +22,7 @@ const CompanyNav = () => {
     submitSearch,
   } = useCompany();
   useEffect(() => {
-    if (!results?.companies || results.companies.length === 0) return;
+    if (!results?.results || results.results.length === 0) return;
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [results, handleClickOutside]);

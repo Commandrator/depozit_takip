@@ -13,4 +13,8 @@ const highlightSearchTerm = (text: string, searchTerm: string) => {
     )
   );
 };
+export const isExistTerm = (text: string, searchTerm: string) => {
+  const parts = text.split(new RegExp(`(${searchTerm})`, "gi"));
+  return parts.find(part => part.toLowerCase() === searchTerm.toLowerCase())
+}
 export default highlightSearchTerm;

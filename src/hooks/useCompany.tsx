@@ -1,12 +1,17 @@
 import { useCallback, useContext, useState, useRef } from "react";
 import AppContext from "../context/index.tsx";
-import returnSeverity from "./useAPI.ts";
+import returnSeverity, {
+  Method,
+  getOperationMessagesByStatus,
+  StatusToSeverity,
+} from "./useAPI.ts";
 import CompaniesDTO from "../interfaces/User.Companies.dto";
 import { Companies } from "../classes/copanies.ts";
 import { Role, RoleEnum } from "../interfaces/role.type.ts";
 import { SelectChangeEvent } from "@mui/material/Select";
 import CompanyDetail from "../classes/company.detail.ts";
 import { useSearchParams } from "react-router-dom";
+import { langPack } from "../index.jsx";
 const useCompany = () => {
   const {
     setOpen,
@@ -23,7 +28,8 @@ const useCompany = () => {
     selectedCompanyId,
     setSelectedCompanyId,
     setDialogOpen,
-  } = useContext(AppContext);
+  } = useContext(AppContext);  
+  const OperationMessagesByStatus = getOperationMessagesByStatus(langPack);
   const [searchParams, setSearchParams] = useSearchParams();
   const [companys, setCompanys] = useState<CompaniesDTO | null>();
   const [range, setRange] = useState<string>("10");
@@ -65,34 +71,38 @@ const useCompany = () => {
     }
   },[setCompanys, setChange, setOpen, setDetail, selectedOption, page, range]);
   const searchPreview = async (query: string) => {
-    try {
-      const params = new URLSearchParams();
-      params.set("min", String(0));
-      params.set("max", String(5));
-      params.set("q", query);
-      const response = await fetch(
-        `http://localhost:3000/app/admin/company?${params}`,
-        {
-          method: "GET",
+      try {
+        const params = new URLSearchParams({
+          min: "0",
+          max: "5",
+          q: query,
+          preview: "true",
+        });
+        const method: Method = "GET";
+        const url = new URL("http://localhost:3000/app/admin/company?");
+        url.search = params.toString();
+        const response = await fetch(url.toString(), {
+          method,
           headers: { "Content-Type": "application/json" },
           credentials: "include",
+        });
+        const result = await response.json();
+        if (response.ok) {
+          setResults(new Companies(result));
+          setViewResult(true);
+          return;
         }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setResults(new Companies(data).getUniqueCompanys());
-        setViewResult(true);
-      } else {
-        const message = await response.json();
-        let severity = returnSeverity(response.status);
+        const detail = {
+          message: result.message,
+          severity: StatusToSeverity[response.status],
+          title: OperationMessagesByStatus[method][response.status],
+        };
         setOpen(true);
-        setDetail({ ...message, title: "İşlemi başarısız", severity });
+        setDetail(detail);
+      } catch (error) {
+        console.error("Network Error:", error);
       }
-    } catch (error) {
-      console.error("Network Error:", error);
-      return null;
-    }
-  };
+    };
   const getCompanyDetail = useCallback(
     async (id) => {
       try {
