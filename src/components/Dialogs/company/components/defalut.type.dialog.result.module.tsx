@@ -147,15 +147,8 @@ const Result = <M extends keyof Modules>(props: DialogModuleDTO<M>) => {
           />
         </Stack>
       </Paper>
-      <div className="w-full flex justify-between items-center px-4 py-4">
-        <Typography
-          sx={{ color: theme.text }}
-          component={ReactMarkdown}
-          variant="body1"
-        >
-          {langPack.matching_result.replace(":total:", listedData.total)}
-        </Typography>
-        <div className="flex-1 flex justify-center">
+      <div className="w-full px-4 py-4 flex flex-col gap-4">
+        <div className="sm:hidden flex justify-center">
           <Pagination
             count={Math.max(1, Math.ceil(listedData.total / Number(range)))}
             size="small"
@@ -173,8 +166,36 @@ const Result = <M extends keyof Modules>(props: DialogModuleDTO<M>) => {
             onChange={handleChange}
           />
         </div>
-        <div>
-          <BasicSelect range={range} handleChangeRange={handleChangeRange} />
+        <div className="w-full flex flex-row items-start justify-between sm:justify-between sm:items-start">
+          <Typography
+            sx={{ color: theme.text }}
+            component={ReactMarkdown}
+            variant="body1"
+            className="text-left"
+          >
+            {langPack.matching_result.replace(":total:", listedData.total)}
+          </Typography>
+          <div className="hidden sm:flex justify-center flex-1">
+            <Pagination
+              count={Math.max(1, Math.ceil(listedData.total / Number(range)))}
+              size="small"
+              page={page}
+              sx={{
+                color: theme.menuItem,
+                "& .MuiPaginationItem-root": {
+                  color: theme.menuItem,
+                },
+                "& .Mui-selected": {
+                  color: theme.text,
+                  background: theme.menu.backgroundColor,
+                },
+              }}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex justify-end">
+            <BasicSelect range={range} handleChangeRange={handleChangeRange} />
+          </div>
         </div>
       </div>
     </Stack>

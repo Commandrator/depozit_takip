@@ -38,7 +38,7 @@ const menuItems = [
         label: "customer_transactions",
         action: "customer",
         icon: <RecentActorsIcon fontSize="small" />,
-        content:null
+        content:DefaultTypeDialog
       },  
       
       {

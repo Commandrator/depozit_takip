@@ -20,11 +20,9 @@ export class Deliver implements DeliverDTO {
 export class Delivers {
     results: DeliverDTO[] = [];
     total: number = 0;
-    constructor(parameters: DeliversDTO) {
-        if (parameters) {
-            this.total = parameters.total;
-            this.results = parameters.delivers;
-        }
+    constructor(parameters: DeliversDTO) {        
+        if (parameters.total !== undefined) this.total = parameters.total;
+        if (parameters.delivers !== undefined) this.results = parameters.delivers;
     }
     normalize(str: string): string {
         return str.trim().toLocaleLowerCase("tr");

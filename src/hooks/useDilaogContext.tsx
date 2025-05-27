@@ -74,6 +74,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
         });
         const result = await response.json();
         if (response.ok) {
+          console.log(result, new DataAdapter(result))
           setListedData((prev) => ({
             ...prev,
             [module]: new DataAdapter(result),

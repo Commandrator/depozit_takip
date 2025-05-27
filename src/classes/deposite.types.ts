@@ -26,8 +26,8 @@ export class DepositeTypes {
     total: number = 0;
     constructor(parameters?: DepositeTypesDTO) {
         if (parameters) {
-            this.total = parameters.total;
-            this.results = parameters.deposits;
+            if (parameters.total !== undefined) this.total = parameters.total;
+            if (parameters.deposits !== undefined) this.results = parameters.deposits;
         }
     }
     normalize(str: string): string {

@@ -3,11 +3,9 @@ import CompanyDTO from "../interfaces/User.Company.DTO";
 export class Companies {
     results: CompanyDTO[];
     total: number;
-    constructor(parameters: CompaniesDTO) {
-        if (parameters) {
-            this.total = parameters.total;
-            this.results = parameters.results;
-        }
+    constructor(parameters: CompaniesDTO) {        
+        if (parameters.total !== undefined) this.total = parameters.total;
+        if (parameters.results !== undefined) this.results = parameters.results;
     }
     normalize(str: string): string {
         return str.trim().toLocaleLowerCase("tr");

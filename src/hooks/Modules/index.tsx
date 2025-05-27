@@ -3,11 +3,13 @@ import period from "./preiod.module.ts";
 import personnel from "./personnel.module.ts";
 import customer_type from "./customer.type.module.ts";
 import { langPack } from "../../index.jsx";
+import customer from "./customer.module.ts";
 const modules = {
   deposite_type,
   period,
   personnel,
-  customer_type
+  customer_type,
+  customer
 };
 const useModule = (moduleName: keyof typeof modules) => {
   const selected = modules[moduleName];

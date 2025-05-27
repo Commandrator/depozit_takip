@@ -23,10 +23,8 @@ export class CustoemrTypes {
     results: CustomerTypeDTO[] = [];
     total: number = 0;
     constructor(parameters: CutromerTypes) {
-        if (parameters) {
-            this.total = parameters.total;
-            this.results = parameters.result;
-        }
+        if (parameters.total !== undefined) this.total = parameters.total;
+        if (parameters.result !== undefined) this.results = parameters.result;
     }
     normalize(str: string): string {
         return str.trim().toLocaleLowerCase("tr");

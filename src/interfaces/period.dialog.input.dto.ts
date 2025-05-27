@@ -37,3 +37,21 @@ export interface CustomerTypeErrorDTO {
   discount: string,
   default_deadline_day?: string
 } 
+export interface CustomerInputDTO{
+  name_surname: string;
+  note: string;
+  tc_id: string;
+  tax_id: string;
+  phone: string;
+  adres: string;
+  customer_type_id: string;
+  active:boolean
+}
+export interface CustomerErrorDTO{
+  name_surname: string;
+  note: string;
+  tc_id: string;
+  tax_id: string;
+  phone: string;
+  adres: string;
+}
