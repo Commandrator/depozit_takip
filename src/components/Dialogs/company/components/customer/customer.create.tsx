@@ -12,6 +12,8 @@ import {
   InputLabel,
   Skeleton,
   FormHelperText,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { langPack, theme } from "../../../../../index.jsx";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -123,11 +125,7 @@ const CreateCustomer: React.FC<DialogCreateDTO<"customer">> = (
             gap={2}
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Box
-              display="flex"
-              gap={1}
-              flexDirection="column"
-            >
+            <Box display="flex" gap={1} flexDirection="column">
               <FormControl
                 fullWidth
                 size="small"
@@ -183,7 +181,6 @@ const CreateCustomer: React.FC<DialogCreateDTO<"customer">> = (
                 label={langPack.tc_id}
                 inputProps={{ maxLength: 11 }}
                 type="text"
-                required
                 value={inputValue.tc_id}
                 onChange={(e) => isValidInput(e, "tc_id")}
                 error={!!errors.tc_id}
@@ -200,7 +197,6 @@ const CreateCustomer: React.FC<DialogCreateDTO<"customer">> = (
                 label={langPack.tax_id}
                 inputProps={{ maxLength: 10 }}
                 type="text"
-                required
                 value={inputValue.tax_id}
                 onChange={(e) => isValidInput(e, "tax_id")}
                 error={!!errors.tax_id}
@@ -228,7 +224,7 @@ const CreateCustomer: React.FC<DialogCreateDTO<"customer">> = (
                 "& .MuiInputBase-input": { color: theme.text },
               }}
             />
-          </Box>          
+          </Box>
           <Box
             display="flex"
             gap={2}
@@ -252,15 +248,23 @@ const CreateCustomer: React.FC<DialogCreateDTO<"customer">> = (
                 "& .MuiInputBase-input": { color: theme.text },
               }}
             />
-
           </Box>
         </Box>
-
-        <Box display="flex" justifyContent="flex-end">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <FormControlLabel
+            control={
+              <Switch
+                checked={inputValue.active}
+                onChange={(e) => isValidInput(e, "active")}
+              />
+            }
+            label={langPack.active}
+          />
           <Stack direction="row" spacing={1}>
             <Tooltip title={langPack.back}>
               <Button
                 fullWidth
+                type="button"
                 onClick={() => setViewCreate((prev) => !prev)}
                 variant="outlined"
                 color="inherit"
@@ -274,20 +278,22 @@ const CreateCustomer: React.FC<DialogCreateDTO<"customer">> = (
               </Button>
             </Tooltip>
             <Tooltip title={langPack.save}>
-              <Button
-                fullWidth
-                type="submit"
-                variant="outlined"
-                color="inherit"
-                startIcon={<Save />}
-                disabled={new InputErrorAdapter(inputValue).hasError()}
-                sx={{
-                  borderRadius: "20px",
-                  color: theme.text,
-                }}
-              >
-                {langPack.save}
-              </Button>
+              <span>
+                <Button
+                  fullWidth
+                  type="submit"
+                  variant="outlined"
+                  color="inherit"
+                  startIcon={<Save />}
+                  disabled={new InputErrorAdapter(inputValue).hasError()}
+                  sx={{
+                    borderRadius: "20px",
+                    color: theme.text,
+                  }}
+                >
+                  {langPack.save}
+                </Button>
+              </span>
             </Tooltip>
           </Stack>
         </Box>

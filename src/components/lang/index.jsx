@@ -88,6 +88,8 @@ const packages = {
       '**UYARI**: Personeli kalıcı olarak silmek için, sağ alt köşedeki "Personel Adı" kısmına **:deliver_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
     customer_type_delete_message:
       '**UYARI**: Cari Tipini kalıcı olarak silmek için, sağ alt köşedeki "Cari Tipi" kısmına **:customer_type_name:** yazmanız gerekir. Bu işlem geri alınamaz.',
+    customer_delete_message:
+      '**UYARI**: Cari\'yi kalıcı olarak silmek için, sağ alt köşedeki "Cari" kısmına **:customer:** yazmanız gerekir. Bu işlem geri alınamaz.',
     deposite_type: "Depozito Tipi",
     description: "Açıklama",
     deposite_type_name: "Depozito Tipi",
@@ -124,19 +126,23 @@ const packages = {
     discount_type: "İskonto Türü",
     deadline_day: "son teslim günü",
     fixed: "Sabit",
-    percentage: "Yüzdelik",    
-    customer_name_surname_error: "Ad soyad 2-50 karakter aralığında olmalı ve sadece harf, boşluk, kesme işareti (') içerebilir.",
+    percentage: "Yüzdelik",
+    customer_name_surname_error:
+      "Ad soyad 2-50 karakter aralığında olmalı ve sadece harf, boşluk, kesme işareti (') içerebilir.",
     customer_note_error: "Not en fazla 500 karakter olabilir.",
-    customer_tc_id_error: "T.C. Kimlik numarası 11 haneli olmalı ve 0 ile başlamamalıdır.",
-    customer_tax_id_error: "Vergi numarası 10 haneli sayısal bir değer olmalıdır.",
-    customer_phone_error: "Telefon numarası 10 haneli olmalıdır (örnek: 5XXXXXXXXX).",
+    customer_tc_id_error:
+      "T.C. Kimlik numarası 11 haneli olmalı ve 0 ile başlamamalıdır.",
+    customer_tax_id_error:
+      "Vergi numarası 10 haneli sayısal bir değer olmalıdır.",
+    customer_phone_error:
+      "Telefon numarası 10 haneli olmalıdır (örnek: 5XXXXXXXXX).",
     customer_adres_error: "Adres en az 5, en fazla 255 karakter olmalıdır.",
-    name_surname:"Adı Soyadı",
-    phone:"Telefon",
-    customer_customer_type_error:"Lütfen cari tipini seçin",
-    tc_id:"T.C. Kimlik Numarası",
-    tax_id:"Vergi Numarsı",
-    note:"Not"
+    name_surname: "Adı Soyadı",
+    phone: "Telefon",
+    customer_customer_type_error: "Lütfen cari tipini seçin",
+    tc_id: "T.C. Kimlik Numarası",
+    tax_id: "Vergi Numarsı",
+    note: "Not"
   },
   en: {},
 };

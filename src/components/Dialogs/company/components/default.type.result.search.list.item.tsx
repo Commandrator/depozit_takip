@@ -22,9 +22,8 @@ const SearchItem = <M extends keyof Modules>(
 };
 type ExtractEntity<M extends keyof Modules> = InstanceType<Modules[M]["Entity"]>;
 function getSearchField<M extends keyof Modules>(result: ExtractEntity<M>, module: M): string {
-  if (module === "personnel") {
-    return (result as any).employee;
-  }
+  if (module === "personnel") return (result as any).employee;
+  if (module === "customer") return (result as any).name_surname;
   return (result as any).name;
 }
 

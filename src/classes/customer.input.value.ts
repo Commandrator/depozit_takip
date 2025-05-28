@@ -30,7 +30,7 @@ export class CustomerInputErrorDTO implements CustomerErrorDTO {
     customer_type: string = "";
     private regex = {
         name_surname: /^[a-zA-ZÇŞĞÜÖİçşğüöı\s'-]{2,50}$/,
-        note: /^.{0,500}$/,
+        note: /^[\s\S]{0,500}$/,
         tc_id: /^[1-9]\d{10}$/,
         tax_id: /^\d{10}$/, 
         phone: /^\d{10}$/,

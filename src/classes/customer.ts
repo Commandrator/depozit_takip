@@ -1,5 +1,5 @@
 import CustomerTypeDTO from "../interfaces/customer.type.dto.ts";
-import CustomersDTO, { CustomerDTO } from "../interfaces/customerS.dto.ts";
+import CustomersDTO, { CustomerDTO } from "../interfaces/customers.dto.ts";
 export class Customer implements CustomerDTO {
     id: number;
     company_id: number;

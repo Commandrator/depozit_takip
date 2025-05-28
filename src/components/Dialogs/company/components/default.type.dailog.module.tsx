@@ -7,6 +7,10 @@ import Create from "./default.type.dialog.create.module.tsx";
 const DefaultTypeDialog: React.FC<ContentProps> = ({
   selectedCompanyId,
   dialogType,
+  subMenu,
+  setInternalDialogProcessID,
+  setInternalDialogType,
+  setOpenInternalDialog
 }) => {
   const {
     setViewCreate,
@@ -45,6 +49,7 @@ const DefaultTypeDialog: React.FC<ContentProps> = ({
   return (
     <Stack spacing={2} sx={{ padding: "16px" }}>
       <Stack spacing={2} sx={{ padding: "16px" }}>
+
         {viewCreate ? (
           <Create
             module={dialogType}
@@ -52,7 +57,11 @@ const DefaultTypeDialog: React.FC<ContentProps> = ({
             setViewCreate={setViewCreate}
           />
         ) : (
-          <Result
+          <Result          
+            subMenu={subMenu}
+            setInternalDialogProcessID={setInternalDialogProcessID}
+            setInternalDialogType={setInternalDialogType}
+            setOpenInternalDialog={setOpenInternalDialog}
             module={dialogType}
             viewResult={viewResult}
             range={range}

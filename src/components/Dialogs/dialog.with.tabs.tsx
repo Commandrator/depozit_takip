@@ -1,4 +1,4 @@
-import React, { createElement } from "react";
+import React, { createElement, useState } from "react";
 import {
   Button,
   Dialog,
@@ -8,26 +8,38 @@ import {
 } from "@mui/material";
 import { theme, langPack } from "../../index.jsx";
 import useDialog from "../../hooks/useDialog.tsx";
-import CompanyDialogProps from "../../interfaces/CompanyDialogProps.ts";
+import CompanyDialogProps, {
+  InternalDialogProps,
+} from "../../interfaces/CompanyDialogProps.ts";
 import { Close } from "@mui/icons-material";
 import DialogWithTabsMenu from "./dialog.with.tabs.menu.tsx";
+import DialogWithTabInternal from "./dailog.with.tabs.internal.tsx";
+import { SubMenu } from "../../interfaces/content.props.ts";
 const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
   const {
     dialogOpen,
     handleDialogClose,
     selectedCompanyId,
     dialogType,
-    company
+    company,
   } = props;
   const { mainTabIndex, handleMainChange, menuItem, handleClose } = useDialog({
     handleDialogClose,
     dialogType,
   });
-  const elementOption ={
+  const [openInternalDialog, setOpenInternalDialog] = useState<boolean>(false);
+  const [internalDialogType, setInternalDialogType] = useState<string>("info");
+  const [internalDialogProcessID, setInternalDialogProcessID] = useState<InternalDialogProps["process_id"]>(null);
+  const handeCloseInternalDialog = () => setOpenInternalDialog(false);
+  const elementOption = {
     company,
     selectedCompanyId,
     dialogType,
-  }
+    subMenu: menuItem?.subMenu[mainTabIndex],
+    setInternalDialogProcessID,
+    setInternalDialogType,
+    setOpenInternalDialog
+  };
   return (
     <Dialog
       open={dialogOpen}
@@ -49,14 +61,23 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
           menuItem={menuItem}
         />
       </DialogTitle>
-      <DialogContent sx={{ padding: 0 }}>
-        {menuItem &&
-          menuItem.subMenu[mainTabIndex].content &&
-          createElement(
+      {menuItem && menuItem.subMenu[mainTabIndex]?.content && (
+        <DialogContent sx={{ padding: 0 }}>
+          <DialogWithTabInternal
+            dialogOpen={openInternalDialog}
+            handleDialogClose={handeCloseInternalDialog}
+            selectedCompanyId={selectedCompanyId}
+            process_id={internalDialogProcessID}
+            dialogType={internalDialogType}
+            setDialogType={setInternalDialogType}
+            subMenu={menuItem.subMenu[mainTabIndex] as SubMenu}
+          />
+          {createElement(
             menuItem.subMenu[mainTabIndex].content as React.FC<any>,
             { ...elementOption }
           )}
-      </DialogContent>
+        </DialogContent>
+      )}
       <DialogActions
         sx={{
           backgroundColor: theme.menu.backgroundColor,

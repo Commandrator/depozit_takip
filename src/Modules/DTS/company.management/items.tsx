@@ -12,6 +12,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import CategoryIcon from '@mui/icons-material/Category';
 import DefaultTypeDialog from "../../../components/Dialogs/company/components/default.type.dailog.module.tsx";
+import { Edit } from "@mui/icons-material";
 /**
  * ŞUNUDA OKU!!
  *
@@ -25,28 +26,36 @@ const menuItems = [
     label: "commercial_operations",
     icon: <RecentActorsIcon fontSize="small" />,
     hide: false,
-    subMenu: [
-      {
-        id: "submenu-deposito-transactions",
-        label: "deposite_transactions",
-        action: "deposite",
-        icon: <CategoryIcon fontSize="small" />,
-        content:null
-      },  
+    subMenu: [ 
       {
         id: "submenu-merchant-transactions",
         label: "customer_transactions",
-        action: "customer",
+        action: "customer", 
         icon: <RecentActorsIcon fontSize="small" />,
-        content:DefaultTypeDialog
-      },  
-      
+        content:DefaultTypeDialog,
+        subMenu: [
+          {
+            id:"customer-edit",
+            label:"edit_content",
+            action: "customer",
+            icon: <Edit/>,
+            content:undefined
+          },
+          {
+            id: "submenu-deposito-transactions",
+            label: "deposite_transactions",
+            action: "deposite",
+            icon: <CategoryIcon fontSize="small" />,
+            content:undefined
+          },
+        ]
+      },        
       {
         id: "submenu-customer-type-transactions",
         label: "customer_type_transactions",
         action: "customer_type",
         icon: <StorefrontIcon fontSize="small" />,
-        content:DefaultTypeDialog
+        content:DefaultTypeDialog,
       },
       {
         id: "submenu-deposito-type-transactions",

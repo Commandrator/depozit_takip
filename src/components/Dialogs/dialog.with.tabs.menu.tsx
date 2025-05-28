@@ -1,32 +1,12 @@
 import { Tabs, Tab } from "@mui/material";
 import { theme, langPack } from "../../index.jsx";
-import React,{ ReactElement } from "react";
-
-interface SubMenuItem {
-  id: string;
-  label: string;
-  action: string;
-  icon?: ReactElement;
-}
-
-interface MenuItem {
-  id: string;
-  label: string;
-  icon?: ReactElement;
-  hide?: boolean;
-  subMenu: SubMenuItem[];
-}
-interface DialogWithTabsMenuProps {
-  mainTabIndex: number;
-  handleMainChange: (event: React.SyntheticEvent, newValue: number) => void;
-  menuItem?: MenuItem;
-}
+import { DialogWithTabsMenuProps } from "../../interfaces/dailog.with.tab.menu.item.dto.js";
 
 const DialogWithTabsMenu = ({ mainTabIndex, handleMainChange, menuItem }:DialogWithTabsMenuProps) => {
-  if (!menuItem) return null;
+  if (!menuItem?.subMenu || menuItem.subMenu.length === 0) return null;
   return (
     <Tabs
-      value={mainTabIndex}
+      value={mainTabIndex >= 0 ? mainTabIndex : 0}
       onChange={handleMainChange}
       variant="scrollable"
       scrollButtons="auto"

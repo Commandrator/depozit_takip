@@ -74,7 +74,6 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
         });
         const result = await response.json();
         if (response.ok) {
-          console.log(result, new DataAdapter(result))
           setListedData((prev) => ({
             ...prev,
             [module]: new DataAdapter(result),
@@ -224,6 +223,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       return;
     }
     try {
+      console.log(inputValue)
       const method: Method = "POST";
       const url = new URL(company_id, api);
       const response = await fetch(url.toString(), {
