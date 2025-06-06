@@ -44,9 +44,9 @@ const Result = <M extends keyof Modules>(props: DialogModuleDTO<M>) => {
     submitSearch,
     module,
     subMenu,
-    setInternalDialogProcessID,
     setInternalDialogType,
-    setOpenInternalDialog
+    setOpenInternalDialog,
+    setInternalDialogResult
   } = props;
   useEffect(() => {
     if (!results?.results || results.results.length === 0) return;
@@ -149,9 +149,9 @@ const Result = <M extends keyof Modules>(props: DialogModuleDTO<M>) => {
             setViewCreate={setViewCreate}
             module={module}
             subMenu={subMenu}
-            setInternalDialogProcessID={setInternalDialogProcessID}
             setInternalDialogType={setInternalDialogType}
             setOpenInternalDialog={setOpenInternalDialog}
+            setInternalDialogResult={setInternalDialogResult}
           />
         </Stack>
       </Paper>

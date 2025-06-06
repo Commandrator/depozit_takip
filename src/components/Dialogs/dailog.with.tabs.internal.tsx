@@ -11,14 +11,15 @@ import { InternalDialogProps } from "../../interfaces/CompanyDialogProps.ts";
 import { Close } from "@mui/icons-material";
 import DialogWithTabsMenu from "./dialog.with.tabs.menu.tsx";
 import { MenuItem } from "../../interfaces/dailog.with.tab.menu.item.dto.ts";
-const DialogWithTabInternal: React.FC<InternalDialogProps> = (props) => {
+import { Modules } from "../../hooks/Modules/index.tsx";
+const DialogWithTabInternal =  <M extends keyof Modules> (props : InternalDialogProps<M>) => {
   const {
     dialogOpen,
     handleDialogClose,
     selectedCompanyId,
-    process_id,
     dialogType,
     subMenu,
+    internalDialogResult,
     setDialogType
   } = props;
     const findIndex = (aciton: string) => {
@@ -49,7 +50,7 @@ const DialogWithTabInternal: React.FC<InternalDialogProps> = (props) => {
   const elementOption = {
     selectedCompanyId,
     dialogType,
-    process_id,
+    result:internalDialogResult
   };
   if (!subMenu.subMenu || subMenu.subMenu.length === 0) return null;
   return (

@@ -6,7 +6,6 @@ import { DepositeTypeDTO, DepositeTypesDTO } from "./deposite.types.dto.ts";
 import { Modules } from "../hooks/Modules/index.tsx";
 import { DepositeTypes } from "../classes/deposite.types.ts";
 import { SubMenu } from "./content.props.ts";
-import { InternalDialogProps } from "./CompanyDialogProps.ts";
 export interface DialogSearchResultBaseDTO {
     value: string;
     submitSearch: (name?: string) => void;    
@@ -48,19 +47,19 @@ export interface DialogModuleDTO<M extends keyof Modules> extends DailogResultBa
     results?: InstanceType<Modules[M]["DataAdapter"]>;
     listedData?: InstanceType<Modules[M]["DataAdapter"]>;
     module: M;   
-    subMenu?: SubMenu[];   
-    setInternalDialogProcessID: React.Dispatch<React.SetStateAction<InternalDialogProps["process_id"]>>;
+    subMenu?: SubMenu<M>[];   
     setInternalDialogType: React.Dispatch<React.SetStateAction<string>>;
     setOpenInternalDialog: React.Dispatch<React.SetStateAction<boolean>>;
+    setInternalDialogResult: React.Dispatch<React.SetStateAction<Record<string, M>>>;
 }
 export interface DialogModuleResultDTO<M extends keyof Modules> {
     listedData: InstanceType<Modules[M]["DataAdapter"]>;
     setViewCreate: React.Dispatch<React.SetStateAction<boolean>>;
     module: M
-    subMenu?: SubMenu[];   
-    setInternalDialogProcessID: React.Dispatch<React.SetStateAction<InternalDialogProps["process_id"]>>;
+    subMenu?: SubMenu<M>[];       
     setInternalDialogType: React.Dispatch<React.SetStateAction<string>>;
     setOpenInternalDialog: React.Dispatch<React.SetStateAction<boolean>>;
+    setInternalDialogResult: React.Dispatch<React.SetStateAction<Record<string, M>>>;
 }
 export interface DialogDepositeTypeModuleDTO extends DailogResultBaseDTO {
     results?: DepositeTypesDTO;

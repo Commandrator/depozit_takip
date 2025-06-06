@@ -28,8 +28,8 @@ const CustomerItem: React.FC<DeaultInterface<CustomerDTO>> = ({
   module,
   setOpenInternalDialog,
   setInternalDialogType,
-  setInternalDialogProcessID
-}): JSX.Element | null => {
+  setInternalDialogResult
+}): JSX.Element | null => { 
   const { handleDeleteInput, deleteOption, delete_data, update } =
     useDialogContext({
       selectedCompanyId: String(result?.company_id ?? ""),
@@ -39,9 +39,9 @@ const CustomerItem: React.FC<DeaultInterface<CustomerDTO>> = ({
     fixed: langPack.fixed,
     percentage: langPack.percentage,
   };
-  const handleOpen = (dialog_type, process_id) => {
+  const handleOpen = (dialog_type) => {
     setInternalDialogType(dialog_type)
-    setInternalDialogProcessID(process_id)
+    if (result) setInternalDialogResult(prev => ({ ...prev, [dialog_type]: result }));
     setOpenInternalDialog(true)
   }
   if (!result) return null;
@@ -160,7 +160,7 @@ const CustomerItem: React.FC<DeaultInterface<CustomerDTO>> = ({
               color="inherit"
               size="small"
               className="flex-shrink-0 w-full md:w-auto"
-              onClick={() => handleOpen("deposite",result.id)}
+              onClick={() => handleOpen("deposite")}
               startIcon={<CategoryIcon/>}
             >
               {langPack.deposite_transactions}
@@ -170,7 +170,7 @@ const CustomerItem: React.FC<DeaultInterface<CustomerDTO>> = ({
               color="inherit" 
               size="small"
               className="flex-shrink-0 w-full md:w-auto"
-              onClick={() => handleOpen("customer-edit",result.id)}
+              onClick={() => handleOpen("customer")}
             >
               {langPack.edit}
             </Button>

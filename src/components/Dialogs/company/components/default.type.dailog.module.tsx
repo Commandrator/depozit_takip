@@ -4,14 +4,15 @@ import useDialogContext from "../../../../hooks/useDilaogContext.tsx";
 import { Stack } from "@mui/material";
 import Result from "./defalut.type.dialog.result.module.tsx";
 import Create from "./default.type.dialog.create.module.tsx";
-const DefaultTypeDialog: React.FC<ContentProps> = ({
+import { Modules } from "../../../../hooks/Modules/index.tsx";
+const DefaultTypeDialog = <M extends keyof Modules>({
   selectedCompanyId,
   dialogType,
   subMenu,
-  setInternalDialogProcessID,
   setInternalDialogType,
-  setOpenInternalDialog
-}) => {
+  setOpenInternalDialog,
+  setInternalDialogResult
+}:ContentProps<M>) => {
   const {
     setViewCreate,
     viewCreate,
@@ -49,7 +50,6 @@ const DefaultTypeDialog: React.FC<ContentProps> = ({
   return (
     <Stack spacing={2} sx={{ padding: "16px" }}>
       <Stack spacing={2} sx={{ padding: "16px" }}>
-
         {viewCreate ? (
           <Create
             module={dialogType}
@@ -57,11 +57,11 @@ const DefaultTypeDialog: React.FC<ContentProps> = ({
             setViewCreate={setViewCreate}
           />
         ) : (
-          <Result          
+          <Result              
             subMenu={subMenu}
-            setInternalDialogProcessID={setInternalDialogProcessID}
             setInternalDialogType={setInternalDialogType}
             setOpenInternalDialog={setOpenInternalDialog}
+            setInternalDialogResult={setInternalDialogResult}
             module={dialogType}
             viewResult={viewResult}
             range={range}

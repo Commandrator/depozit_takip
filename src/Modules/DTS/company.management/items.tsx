@@ -13,6 +13,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import CategoryIcon from '@mui/icons-material/Category';
 import DefaultTypeDialog from "../../../components/Dialogs/company/components/default.type.dailog.module.tsx";
 import { Edit } from "@mui/icons-material";
+import CustomerEdit from "../../../components/Dialogs/company/components/customer/customer.edit.tsx";
 /**
  * ŞUNUDA OKU!!
  *
@@ -39,7 +40,7 @@ const menuItems = [
             label:"edit_content",
             action: "customer",
             icon: <Edit/>,
-            content:undefined
+            content:CustomerEdit
           },
           {
             id: "submenu-deposito-transactions",

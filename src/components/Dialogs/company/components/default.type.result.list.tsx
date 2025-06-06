@@ -15,9 +15,9 @@ const ResultList = <M extends keyof Modules>(
     setViewCreate,
     module,
     subMenu,
-    setInternalDialogProcessID,
     setInternalDialogType,
     setOpenInternalDialog,
+    setInternalDialogResult
   } = props;
   if (listedData.results.length === 0)
     return <Add setViewCreate={setViewCreate} />;
@@ -32,9 +32,9 @@ const ResultList = <M extends keyof Modules>(
           result={result}
           module={module}
           subMenu={subMenu}
-          setInternalDialogProcessID={setInternalDialogProcessID}
           setInternalDialogType={setInternalDialogType}
           setOpenInternalDialog={setOpenInternalDialog}
+          setInternalDialogResult={setInternalDialogResult}
         />
       ));
     case "deposite_type":
@@ -44,9 +44,9 @@ const ResultList = <M extends keyof Modules>(
           result={result}
           module={module}
           subMenu={subMenu}
-          setInternalDialogProcessID={setInternalDialogProcessID}
           setInternalDialogType={setInternalDialogType}
           setOpenInternalDialog={setOpenInternalDialog}
+          setInternalDialogResult={setInternalDialogResult}
         />
       ));
     case "period":
@@ -56,7 +56,6 @@ const ResultList = <M extends keyof Modules>(
           result={result}
           module={module}
           subMenu={subMenu}
-          setInternalDialogProcessID={setInternalDialogProcessID}
           setInternalDialogType={setInternalDialogType}
           setOpenInternalDialog={setOpenInternalDialog}
         />
@@ -68,9 +67,9 @@ const ResultList = <M extends keyof Modules>(
           result={result}
           module={module}
           subMenu={subMenu}
-          setInternalDialogProcessID={setInternalDialogProcessID}
           setInternalDialogType={setInternalDialogType}
           setOpenInternalDialog={setOpenInternalDialog}
+          setInternalDialogResult={setInternalDialogResult}
         />
       ));
     case "customer":
@@ -80,9 +79,9 @@ const ResultList = <M extends keyof Modules>(
           result={result}
           module={module}
           subMenu={subMenu}
-          setInternalDialogProcessID={setInternalDialogProcessID}
           setInternalDialogType={setInternalDialogType}
           setOpenInternalDialog={setOpenInternalDialog}
+          setInternalDialogResult={setInternalDialogResult}
         />
       ));
     default:

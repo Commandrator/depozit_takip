@@ -20,5 +20,4 @@ document.body.appendChild(root);
 const langPack = packages[browserLanguage] ?? packages["tr"]; 
 const theme = palette[mediaQuery ? "dark" : "light"];
 export { theme, langPack };
-
 export default mediaQuery;

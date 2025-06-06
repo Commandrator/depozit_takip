@@ -8,13 +8,12 @@ import {
 } from "@mui/material";
 import { theme, langPack } from "../../index.jsx";
 import useDialog from "../../hooks/useDialog.tsx";
-import CompanyDialogProps, {
-  InternalDialogProps,
-} from "../../interfaces/CompanyDialogProps.ts";
+import CompanyDialogProps from "../../interfaces/CompanyDialogProps.ts";
 import { Close } from "@mui/icons-material";
 import DialogWithTabsMenu from "./dialog.with.tabs.menu.tsx";
 import DialogWithTabInternal from "./dailog.with.tabs.internal.tsx";
 import { SubMenu } from "../../interfaces/content.props.ts";
+import useModule, { Modules } from "../../hooks/Modules/index.tsx";
 const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
   const {
     dialogOpen,
@@ -27,18 +26,20 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
     handleDialogClose,
     dialogType,
   });
+  const [internalDialogType, setInternalDialogType] = useState<string>(dialogType);
+  const {  DataAdapter } =useModule(internalDialogType as keyof Modules);      
+  type DataInstance = InstanceType<typeof DataAdapter>;
+  const [internalDialogResult, setInternalDialogResult] = useState<Record<string, DataInstance>>({});
   const [openInternalDialog, setOpenInternalDialog] = useState<boolean>(false);
-  const [internalDialogType, setInternalDialogType] = useState<string>("info");
-  const [internalDialogProcessID, setInternalDialogProcessID] = useState<InternalDialogProps["process_id"]>(null);
   const handeCloseInternalDialog = () => setOpenInternalDialog(false);
   const elementOption = {
     company,
     selectedCompanyId,
     dialogType,
     subMenu: menuItem?.subMenu[mainTabIndex],
-    setInternalDialogProcessID,
     setInternalDialogType,
-    setOpenInternalDialog
+    setOpenInternalDialog,
+    setInternalDialogResult 
   };
   return (
     <Dialog
@@ -64,10 +65,10 @@ const DialogWithTab: React.FC<CompanyDialogProps> = (props) => {
       {menuItem && menuItem.subMenu[mainTabIndex]?.content && (
         <DialogContent sx={{ padding: 0 }}>
           <DialogWithTabInternal
+            internalDialogResult={internalDialogResult[internalDialogType]}
             dialogOpen={openInternalDialog}
             handleDialogClose={handeCloseInternalDialog}
             selectedCompanyId={selectedCompanyId}
-            process_id={internalDialogProcessID}
             dialogType={internalDialogType}
             setDialogType={setInternalDialogType}
             subMenu={menuItem.subMenu[mainTabIndex] as SubMenu}

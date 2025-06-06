@@ -1,3 +1,4 @@
+import { Modules } from "../hooks/Modules";
 import { CompanyDTO } from "./CompanyDTO";
 import { SubMenu } from "./content.props";
 
@@ -9,12 +10,12 @@ export default interface CompanyDialogProps {
   company?: CompanyDTO;
   subMenu?:SubMenu;
 }
-export interface InternalDialogProps {
+export interface InternalDialogProps<M extends keyof Modules> {
   dialogOpen: boolean;
   handleDialogClose: () => void;
   selectedCompanyId?: number | null;
-  process_id?:number | string |null;
   dialogType: string;
   setDialogType:React.Dispatch<React.SetStateAction<string>>;
   subMenu:SubMenu;
+  internalDialogResult: InstanceType<Modules[M]["DataAdapter"]>
 }

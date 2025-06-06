@@ -223,7 +223,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
       return;
     }
     try {
-      console.log(inputValue)
+      console.log(inputValue);
       const method: Method = "POST";
       const url = new URL(company_id, api);
       const response = await fetch(url.toString(), {
@@ -254,7 +254,9 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
     }
   };
   const isValidInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent,
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent,
     errorKey: string
   ) => {
     const target = e.target as HTMLInputElement;
@@ -357,7 +359,7 @@ const useDialogContext = <M extends keyof Modules>(props: UseProps<M>) => {
     deleteOption,
     setDeleteOption,
     handleDeleteInput,
-    update,
+    update
   };
 };
 export default useDialogContext;
